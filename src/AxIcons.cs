@@ -49,6 +49,9 @@ public static class AxIcons
     /// <summary>Галочка.</summary>
     public static Geometry Check { get; } = P("M3.5 8.5l3 3 6-7");
 
+    /// <summary>Крестик: закрыть, сбросить.</summary>
+    public static Geometry Close { get; } = P("M4 4l8 8M12 4l-8 8");
+
     /// <summary>Стрелка загрузки.</summary>
     public static Geometry Download { get; } = P("M8 3v7M5 7.5l3 3 3-3M3.5 12.5h9");
 
