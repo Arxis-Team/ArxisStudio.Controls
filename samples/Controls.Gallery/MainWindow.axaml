@@ -3,10 +3,10 @@
         xmlns:ax="using:ArxisStudio.Controls"
         x:Class="Controls.Gallery.MainWindow"
         Title="ArxisStudio.Controls — Gallery"
-        Width="900" Height="760">
+        Width="980" Height="820">
 
   <ScrollViewer>
-    <StackPanel Margin="28,24" Spacing="18" MaxWidth="760">
+    <StackPanel Margin="28,24" Spacing="16" MaxWidth="860">
 
       <DockPanel>
         <ax:AxSegmentedControl x:Name="ThemeSwitch" DockPanel.Dock="Right"
@@ -16,81 +16,98 @@
         </ax:AxSegmentedControl>
         <StackPanel>
           <TextBlock FontSize="16" FontWeight="SemiBold">ArxisStudio.Controls</TextBlock>
-          <TextBlock Classes="dimmer" FontSize="11.5">Галерея контролов в теме Arxis</TextBlock>
+          <TextBlock Classes="dimmer" FontSize="11.5">Галерея контролов в теме Arxis · метрики Int UI</TextBlock>
         </StackPanel>
       </DockPanel>
 
-      <TextBlock Classes="section">BUTTONS</TextBlock>
+      <ax:AxGroupHeader Content="Кнопки"/>
       <StackPanel Orientation="Horizontal" Spacing="10">
         <ax:AxButton Classes="accent">New Project</ax:AxButton>
         <ax:AxButton>Open</ax:AxButton>
-        <ax:AxButton>Clone from Git</ax:AxButton>
         <ax:AxButton Classes="ghost">Ghost</ax:AxButton>
         <ax:AxButton IsEnabled="False">Disabled</ax:AxButton>
         <ax:AxButton Classes="icon">
-          <Path Data="M 8 3.5 V 12.5 M 3.5 8 H 12.5" Stroke="{DynamicResource AxFg2Brush}"
-                StrokeThickness="1.3" StrokeLineCap="Round" Width="13" Height="13" Stretch="Uniform"/>
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}" Width="13" Height="13"/>
         </ax:AxButton>
         <ax:AxButton Classes="icon danger">
-          <Path Data="M 4.5 4.5 L 11.5 11.5 M 11.5 4.5 L 4.5 11.5" Stroke="{Binding $parent[ax:AxButton].Foreground}"
-                StrokeThickness="1.3" StrokeLineCap="Round" Width="13" Height="13" Stretch="Uniform"/>
+          <ax:AxIcon Data="M 4.5 4.5 L 11.5 11.5 M 11.5 4.5 L 4.5 11.5" Width="12" Height="12"
+                     Foreground="{Binding $parent[ax:AxButton].Foreground}"/>
         </ax:AxButton>
       </StackPanel>
+      <TextBlock Classes="dimmer" FontSize="11">Tab-ом по кнопкам видно контур фокуса 2px, как в Int UI</TextBlock>
 
-      <TextBlock Classes="section">INPUTS</TextBlock>
+      <ax:AxGroupHeader Content="Поля ввода"/>
       <StackPanel Orientation="Horizontal" Spacing="10">
-        <ax:AxTextBox Width="220" PlaceholderText="Введите имя проекта"/>
-        <ax:AxSearchField Width="220" PlaceholderText="Search projects"/>
-        <ax:AxComboBox Width="170" PlaceholderText="Density" SelectedIndex="0">
+        <ax:AxTextBox Width="200" PlaceholderText="Имя проекта"/>
+        <ax:AxSearchField Width="200" PlaceholderText="Поиск"/>
+        <ax:AxTextBox Width="160" Classes="error" Text="неверное значение"/>
+        <ax:AxTextBox Width="140" IsEnabled="False" Text="выключено"/>
+      </StackPanel>
+      <ax:AxTextArea Width="420" HorizontalAlignment="Left"
+                     PlaceholderText="Многострочное поле: описание, заметка, шаблон письма"/>
+
+      <ax:AxGroupHeader Content="Выбор"/>
+      <StackPanel Orientation="Horizontal" Spacing="20" VerticalAlignment="Center">
+        <ax:AxCheckBox IsChecked="True">Автосохранение</ax:AxCheckBox>
+        <ax:AxCheckBox>Сетка канваса</ax:AxCheckBox>
+        <StackPanel Spacing="6">
+          <ax:AxRadioButton GroupName="build" IsChecked="True">Debug</ax:AxRadioButton>
+          <ax:AxRadioButton GroupName="build">Release</ax:AxRadioButton>
+        </StackPanel>
+        <ax:AxToggleSwitch IsChecked="True"/>
+        <ax:AxComboBox Width="150" SelectedIndex="0">
           <ax:AxComboBoxItem>Compact</ax:AxComboBoxItem>
           <ax:AxComboBoxItem>Regular</ax:AxComboBoxItem>
-          <ax:AxComboBoxItem>Spacious</ax:AxComboBoxItem>
         </ax:AxComboBox>
       </StackPanel>
 
-      <TextBlock Classes="section">SELECTION</TextBlock>
-      <StackPanel Orientation="Horizontal" Spacing="18" VerticalAlignment="Center">
-        <ax:AxCheckBox IsChecked="True">Автосохранение</ax:AxCheckBox>
-        <ax:AxCheckBox>Показывать сетку канваса</ax:AxCheckBox>
-        <ax:AxToggleSwitch IsChecked="True"/>
-        <ax:AxToggleSwitch/>
-        <ax:AxSegmentedControl SelectedIndex="0">
-          <ax:AxSegmentItem>Design</ax:AxSegmentItem>
-          <ax:AxSegmentItem>XAML</ax:AxSegmentItem>
-          <ax:AxSegmentItem>Split</ax:AxSegmentItem>
-        </ax:AxSegmentedControl>
+      <ax:AxGroupHeader Content="Вкладки документов"/>
+      <ax:AxTabStrip SelectedIndex="0">
+        <ax:AxTabItem Icon="{x:Static ax:AxIcons.Window}" IconBrush="{DynamicResource AxAccBrush}">MainWindow.axaml</ax:AxTabItem>
+        <ax:AxTabItem Icon="{x:Static ax:AxIcons.Document}" IconBrush="{DynamicResource AxGrnBrush}" IsModified="True">ChatViewModel.cs</ax:AxTabItem>
+        <ax:AxTabItem Icon="{x:Static ax:AxIcons.Document}" IconBrush="{DynamicResource AxGrnBrush}">Program.cs</ax:AxTabItem>
+      </ax:AxTabStrip>
+
+      <ax:AxGroupHeader Content="Дерево"/>
+      <ax:AxCard Padding="4" HorizontalAlignment="Left" Width="300">
+        <ax:AxTreeView MaxHeight="170">
+          <ax:AxTreeViewItem Header="MainWindow" IsExpanded="True">
+            <ax:AxTreeViewItem Header="Root" IsExpanded="True">
+              <ax:AxTreeViewItem Header="Sidebar"/>
+              <ax:AxTreeViewItem Header="ChatView" IsExpanded="True">
+                <ax:AxTreeViewItem Header="Composer"/>
+                <ax:AxTreeViewItem Header="SendButton" IsSelected="True"/>
+              </ax:AxTreeViewItem>
+            </ax:AxTreeViewItem>
+          </ax:AxTreeViewItem>
+        </ax:AxTreeView>
+      </ax:AxCard>
+
+      <ax:AxGroupHeader Content="Сообщения"/>
+      <StackPanel Spacing="8">
+        <ax:AxBanner Severity="Information" Content="Шаблоны берутся из установленных пакетов dotnet new"/>
+        <ax:AxBanner Severity="Success" Content="Проект создан и открыт"/>
+        <ax:AxBanner Severity="Warning" Content="Проект не восстановлен: часть пакетов недоступна">
+          <ax:AxBanner.Actions>
+            <ax:AxLink>Восстановить</ax:AxLink>
+          </ax:AxBanner.Actions>
+        </ax:AxBanner>
+        <ax:AxBanner Severity="Error" Content="Сборка не удалась: CS0103 — имя не существует в текущем контексте"/>
       </StackPanel>
 
-      <TextBlock Classes="section">CHIPS · BADGES · PROGRESS</TextBlock>
-      <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+      <ax:AxGroupHeader Content="Прочее"/>
+      <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+        <ax:AxLink>Документация</ax:AxLink>
+        <ax:AxLink IsVisited="True">Посещённая ссылка</ax:AxLink>
         <ax:AxChip>Avalonia 12.1</ax:AxChip>
         <ax:AxChip Classes="accent">Accent</ax:AxChip>
         <ax:AxChip Classes="kbd">Enter</ax:AxChip>
-        <ax:AxBadge>3</ax:AxBadge>
-        <ax:AxBadge>128</ax:AxBadge>
-        <ax:AxProgressBar Width="220" Minimum="0" Maximum="100" Value="42"/>
-        <TextBlock Classes="mono dim" FontSize="12">42%</TextBlock>
+        <ax:AxBadge>7</ax:AxBadge>
+        <ax:AxDivider Orientation="Vertical" Height="20"/>
+        <ax:AxProgressBar Width="140" Minimum="0" Maximum="100" Value="42"/>
+        <ax:AxSlider Width="140" Minimum="0" Maximum="100" Value="60"/>
+        <ax:AxAvatar Initials="ВЧ" Width="28" Height="28" FontSize="11"/>
       </StackPanel>
-
-      <TextBlock Classes="section">LIST</TextBlock>
-      <ax:AxCard Padding="6">
-        <ax:AxListBox SelectedIndex="0" MaxHeight="180">
-          <ax:AxListBoxItem>ВолнаЧат — мессенджер</ax:AxListBoxItem>
-          <ax:AxListBoxItem>Кино+ — медиаплеер</ax:AxListBoxItem>
-          <ax:AxListBoxItem>Дельта — планировщик</ax:AxListBoxItem>
-          <ax:AxListBoxItem>Сметчик PRO</ax:AxListBoxItem>
-          <ax:AxListBoxItem>Домовая книга</ax:AxListBoxItem>
-        </ax:AxListBox>
-      </ax:AxCard>
-
-      <TextBlock Classes="section">CARD</TextBlock>
-      <ax:AxCard>
-        <StackPanel Spacing="6">
-          <TextBlock FontWeight="SemiBold" FontSize="13">Пустое приложение</TextBlock>
-          <TextBlock Classes="dimmer" FontSize="11.5">Окно + MVVM каркас проекта</TextBlock>
-          <TextBlock Classes="mono dimmer" FontSize="11">~/projects/wave-chat</TextBlock>
-        </StackPanel>
-      </ax:AxCard>
 
     </StackPanel>
   </ScrollViewer>
