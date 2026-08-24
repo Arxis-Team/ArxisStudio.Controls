@@ -25,6 +25,22 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxChip` | `ContentControl` | чип-метка; классы `accent`, `kbd` |
 | `AxCard` | `ContentControl` | карточка-контейнер |
 | `AxProgressBar` | `ProgressBar` | тонкий индикатор (4px) |
+| `AxAvatar` | `TemplatedControl` | плитка с инициалами; класс `round` |
+| `AxIcon` | `TemplatedControl` | контурная иконка 16×16; пути — в `AxIcons` |
+| `AxTextArea` | `AxTextBox` | многострочное поле |
+| `AxLink` | `Button` | ссылка; состояние «посещённая» |
+| `AxRadioButton` | `RadioButton` | выбор одного варианта |
+| `AxDivider` | `TemplatedControl` | линия в пиксель, горизонтальная или вертикальная |
+| `AxGroupHeader` | `ContentControl` | заголовок секции с линией |
+| `AxBanner` | `ContentControl` | сообщение: информация, успех, предупреждение, ошибка |
+| `AxTabStrip` / `AxTabItem` | `ListBox` | вкладки документов: значок, метка правок, закрытие |
+| `AxTreeView` / `AxTreeViewItem` | `TreeView` | дерево иерархии и файлов |
+| `AxSlider` | `Slider` | ползунок значения |
+
+Метрики и состояния — по **Int UI**, дизайн-системе IntelliJ: строка 24, контур
+фокуса 2px, скругление 4, кнопка 28 высотой. У каждого интерактивного контрола
+есть наведение, нажатие, фокус и выключенное состояние; у полей ввода — ещё
+классы `error` и `warning`.
 
 Набор растёт по потребностям экранов студии (план M0–M7 — в `docs/plan.md`
 главного репозитория ArxisStudio).
