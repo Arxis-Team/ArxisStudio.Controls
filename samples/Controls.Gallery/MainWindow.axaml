@@ -1,0 +1,98 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ax="using:ArxisStudio.Controls"
+        x:Class="Controls.Gallery.MainWindow"
+        Title="ArxisStudio.Controls — Gallery"
+        Width="900" Height="760">
+
+  <ScrollViewer>
+    <StackPanel Margin="28,24" Spacing="18" MaxWidth="760">
+
+      <DockPanel>
+        <ax:AxSegmentedControl x:Name="ThemeSwitch" DockPanel.Dock="Right"
+                               SelectionChanged="OnThemeChanged">
+          <ax:AxSegmentItem>Dark</ax:AxSegmentItem>
+          <ax:AxSegmentItem>Light</ax:AxSegmentItem>
+        </ax:AxSegmentedControl>
+        <StackPanel>
+          <TextBlock FontSize="16" FontWeight="SemiBold">ArxisStudio.Controls</TextBlock>
+          <TextBlock Classes="dimmer" FontSize="11.5">Галерея контролов в теме Arxis</TextBlock>
+        </StackPanel>
+      </DockPanel>
+
+      <TextBlock Classes="section">BUTTONS</TextBlock>
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <ax:AxButton Classes="accent">New Project</ax:AxButton>
+        <ax:AxButton>Open</ax:AxButton>
+        <ax:AxButton>Clone from Git</ax:AxButton>
+        <ax:AxButton Classes="ghost">Ghost</ax:AxButton>
+        <ax:AxButton IsEnabled="False">Disabled</ax:AxButton>
+        <ax:AxButton Classes="icon">
+          <Path Data="M 8 3.5 V 12.5 M 3.5 8 H 12.5" Stroke="{DynamicResource AxFg2Brush}"
+                StrokeThickness="1.3" StrokeLineCap="Round" Width="13" Height="13" Stretch="Uniform"/>
+        </ax:AxButton>
+        <ax:AxButton Classes="icon danger">
+          <Path Data="M 4.5 4.5 L 11.5 11.5 M 11.5 4.5 L 4.5 11.5" Stroke="{Binding $parent[ax:AxButton].Foreground}"
+                StrokeThickness="1.3" StrokeLineCap="Round" Width="13" Height="13" Stretch="Uniform"/>
+        </ax:AxButton>
+      </StackPanel>
+
+      <TextBlock Classes="section">INPUTS</TextBlock>
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <ax:AxTextBox Width="220" PlaceholderText="Введите имя проекта"/>
+        <ax:AxSearchField Width="220" PlaceholderText="Search projects"/>
+        <ax:AxComboBox Width="170" PlaceholderText="Density" SelectedIndex="0">
+          <ax:AxComboBoxItem>Compact</ax:AxComboBoxItem>
+          <ax:AxComboBoxItem>Regular</ax:AxComboBoxItem>
+          <ax:AxComboBoxItem>Spacious</ax:AxComboBoxItem>
+        </ax:AxComboBox>
+      </StackPanel>
+
+      <TextBlock Classes="section">SELECTION</TextBlock>
+      <StackPanel Orientation="Horizontal" Spacing="18" VerticalAlignment="Center">
+        <ax:AxCheckBox IsChecked="True">Автосохранение</ax:AxCheckBox>
+        <ax:AxCheckBox>Показывать сетку канваса</ax:AxCheckBox>
+        <ax:AxToggleSwitch IsChecked="True"/>
+        <ax:AxToggleSwitch/>
+        <ax:AxSegmentedControl SelectedIndex="0">
+          <ax:AxSegmentItem>Design</ax:AxSegmentItem>
+          <ax:AxSegmentItem>XAML</ax:AxSegmentItem>
+          <ax:AxSegmentItem>Split</ax:AxSegmentItem>
+        </ax:AxSegmentedControl>
+      </StackPanel>
+
+      <TextBlock Classes="section">CHIPS · BADGES · PROGRESS</TextBlock>
+      <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+        <ax:AxChip>Avalonia 12.1</ax:AxChip>
+        <ax:AxChip Classes="accent">Accent</ax:AxChip>
+        <ax:AxChip Classes="kbd">Enter</ax:AxChip>
+        <ax:AxBadge>3</ax:AxBadge>
+        <ax:AxBadge>128</ax:AxBadge>
+        <ax:AxProgressBar Width="220" Minimum="0" Maximum="100" Value="42"/>
+        <TextBlock Classes="mono dim" FontSize="12">42%</TextBlock>
+      </StackPanel>
+
+      <TextBlock Classes="section">LIST</TextBlock>
+      <ax:AxCard Padding="6">
+        <ax:AxListBox SelectedIndex="0" MaxHeight="180">
+          <ax:AxListBoxItem>ВолнаЧат — мессенджер</ax:AxListBoxItem>
+          <ax:AxListBoxItem>Кино+ — медиаплеер</ax:AxListBoxItem>
+          <ax:AxListBoxItem>Дельта — планировщик</ax:AxListBoxItem>
+          <ax:AxListBoxItem>Сметчик PRO</ax:AxListBoxItem>
+          <ax:AxListBoxItem>Домовая книга</ax:AxListBoxItem>
+        </ax:AxListBox>
+      </ax:AxCard>
+
+      <TextBlock Classes="section">CARD</TextBlock>
+      <ax:AxCard>
+        <StackPanel Spacing="6">
+          <TextBlock FontWeight="SemiBold" FontSize="13">Пустое приложение</TextBlock>
+          <TextBlock Classes="dimmer" FontSize="11.5">Окно + MVVM каркас проекта</TextBlock>
+          <TextBlock Classes="mono dimmer" FontSize="11">~/projects/wave-chat</TextBlock>
+        </StackPanel>
+      </ax:AxCard>
+
+    </StackPanel>
+  </ScrollViewer>
+
+</Window>

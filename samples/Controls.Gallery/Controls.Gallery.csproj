@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <!--
+        Галерея показывает контролы в теме «Arxis», поэтому ожидает репозиторий темы
+        рядом с этим (тем же соглашением тема ожидает рядом контролы).
+    -->
+    <PropertyGroup>
+        <ThemesRepositoryRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../../ArxisStudio.Themes.Arxis/'))</ThemesRepositoryRoot>
+        <ThemesProject>$(ThemesRepositoryRoot)src/ArxisStudio.Themes.Arxis.csproj</ThemesProject>
+    </PropertyGroup>
+
+    <Target Name="CheckThemesIsBesideUs" BeforeTargets="CollectPackageReferences;ResolveProjectReferences">
+        <Error
+            Condition="!Exists('$(ThemesProject)')"
+            Text="Controls.Gallery показывает контролы в теме ArxisStudio.Themes.Arxis и ожидает этот репозиторий рядом, в '$(ThemesRepositoryRoot)'. Клонируйте его туда." />
+    </Target>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia"/>
+        <PackageReference Include="Avalonia.Desktop"/>
+        <PackageReference Include="Avalonia.Fonts.Inter"/>
+        <PackageReference Include="Avalonia.Themes.Fluent"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../../src/ArxisStudio.Controls.csproj"/>
+        <ProjectReference Include="$(ThemesProject)"/>
+    </ItemGroup>
+
+</Project>

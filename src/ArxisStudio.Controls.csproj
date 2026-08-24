@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- Avalonia 12 не поставляет netstandard2.0-сборки: минимальный TFM — net8.0. -->
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>ArxisStudio.Controls</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <!--
+        Единственный упаковываемый проект решения. Версия 0.x осознанно: публичная
+        поверхность ещё растёт вместе с экранами студии.
+    -->
+    <PropertyGroup>
+        <IsPackable>true</IsPackable>
+        <PackageId>ArxisStudio.Controls</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>ArxisStudio</Authors>
+        <Company>ArxisStudio</Company>
+        <Copyright>Copyright (c) 2026 ArxisStudio</Copyright>
+        <Product>ArxisStudio.Controls</Product>
+        <Description>Библиотека контролов ArxisStudio — виджеты, из которых строится интерфейс студии и её плагинов. Контролы lookless: внешний вид задаёт тема (ArxisStudio.Themes.*).</Description>
+        <PackageTags>avalonia;controls;ide;arxisstudio</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="/"/>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/Controls.Gallery/Controls.Gallery.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ArxisStudio.Controls.csproj" />
+  </Folder>
+  <Project Path="../ArxisStudio.Themes.Arxis/src/ArxisStudio.Themes.Arxis.csproj" />
+</Solution>
