@@ -90,7 +90,7 @@
 
     <!-- Поле ввода -->
     <ax:AxGroupHeader Content="Поле ввода"/>
-    <StackPanel Spacing="8" MaxWidth="360" HorizontalAlignment="Left">
+    <StackPanel Spacing="8" Width="360" HorizontalAlignment="Left">
       <ax:AxTextBox Text="ChatView" PlaceholderText="Имя формы"/>
       <ax:AxTextBox PlaceholderText="Плейсхолдер читается вместо подписи"/>
       <StackPanel Spacing="3">
@@ -233,7 +233,7 @@
 
     <!-- Прогресс-бар -->
     <ax:AxGroupHeader Content="Прогресс-бар"/>
-    <StackPanel Spacing="8" MaxWidth="360" HorizontalAlignment="Left">
+    <StackPanel Spacing="8" Width="360" HorizontalAlignment="Left">
       <StackPanel Spacing="4">
         <TextBlock Classes="dim" FontSize="11.5" Text="Сборка ChatApp"/>
         <ax:AxProgressBar Minimum="0" Maximum="100" Value="64"/>
@@ -253,13 +253,14 @@
 
     <!-- Контекстное меню -->
     <ax:AxGroupHeader Content="Контекстное меню"/>
-    <ax:AxButton x:Name="MenuAnchor" Click="OnOpenMenu">Открыть меню</ax:AxButton>
+    <ax:AxButton x:Name="MenuAnchor" HorizontalAlignment="Left" Click="OnOpenMenu">Открыть меню</ax:AxButton>
 
     <!-- Попап со списком -->
     <ax:AxGroupHeader Content="Попап поиска"/>
     <ax:AxQuickSearch x:Name="QuickSearch"
                       HorizontalAlignment="Left"
                       Text="chat"
+                      SelectedItem="ChatView.axaml · Views"
                       PlaceholderText="Класс, файл, символ"
                       Hints="↑↓ выбор · ↵ открыть · esc"/>
 
@@ -280,7 +281,7 @@
 
     <!-- Таблица -->
     <ax:AxGroupHeader Content="Таблица"/>
-    <ax:AxDataGrid MaxWidth="520" HorizontalAlignment="Left">
+    <ax:AxDataGrid Width="520" HorizontalAlignment="Left">
       <ax:AxDataGrid.Header>
         <Grid ColumnDefinitions="180,90,110,*">
           <TextBlock Text="Форма"/>
@@ -371,22 +372,51 @@
     <!-- Tool Window -->
     <ax:AxGroupHeader Content="Tool Window"/>
     <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="False">
+      <ax:AxToolWindow.Actions>
+        <StackPanel Orientation="Horizontal" Spacing="2">
+          <ax:AxButton Classes="icon">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+          </ax:AxButton>
+          <ax:AxButton Classes="icon">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+          </ax:AxButton>
+        </StackPanel>
+      </ax:AxToolWindow.Actions>
       <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Label only"/>
     </ax:AxToolWindow>
     <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="True">
       <ax:AxToolWindow.Actions>
-        <ax:AxButton Classes="icon">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.CollapseAll}"/>
-        </ax:AxButton>
+        <StackPanel Orientation="Horizontal" Spacing="2">
+          <ax:AxButton Classes="icon">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+          </ax:AxButton>
+          <ax:AxButton Classes="icon">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+          </ax:AxButton>
+        </StackPanel>
       </ax:AxToolWindow.Actions>
       <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Label with separator"/>
+    </ax:AxToolWindow>
+    <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="True">
+      <ax:AxToolWindow.Tabs>
+        <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0">
+          <ax:AxTabItem Content="Проект"/>
+          <ax:AxTabItem Content="Консоль"/>
+        </ax:AxTabStrip>
+      </ax:AxToolWindow.Tabs>
+      <ax:AxToolWindow.Actions>
+        <ax:AxButton Classes="icon">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+        </ax:AxButton>
+      </ax:AxToolWindow.Actions>
+      <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Tabs"/>
     </ax:AxToolWindow>
 
     <!-- Скроллбар -->
     <ax:AxGroupHeader Content="Скроллбар · 8"/>
     <Border BorderBrush="{DynamicResource AxBrdBrush}" BorderThickness="1"
             CornerRadius="{DynamicResource AxCornerRadius}"
-            Height="90" MaxWidth="360" HorizontalAlignment="Left">
+            Height="90" Width="360" HorizontalAlignment="Left">
       <ScrollViewer VerticalScrollBarVisibility="Visible">
         <StackPanel Margin="10">
           <TextBlock Text="Строка 1"/><TextBlock Text="Строка 2"/><TextBlock Text="Строка 3"/>
@@ -405,7 +435,7 @@
       <ax:AxChip Classes="accent">выбранная</ax:AxChip>
       <ax:AxBadge>7</ax:AxBadge>
     </StackPanel>
-    <ax:AxCodeBlock x:Name="Code" MaxWidth="440" HorizontalAlignment="Left"/>
+    <ax:AxCodeBlock x:Name="Code" Width="440" HorizontalAlignment="Left"/>
 
     <!-- Заголовок группы -->
     <ax:AxGroupHeader Content="Заголовок группы"/>
