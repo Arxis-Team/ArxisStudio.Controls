@@ -61,7 +61,11 @@ public class AxWindowControls : TemplatedControl
     {
         base.OnAttachedToVisualTree(e);
 
-        IsVisible = IsSupported;
+        // Прятать себя контрол вправе только там, где кнопки рисует система:
+        // присваивание IsVisible — локальное значение, а оно старше привязки
+        // из шаблона, и ShowWindowControls="False" переставал что-либо значить.
+        if (!IsSupported)
+            IsVisible = false;
 
         _window = this.FindAncestorOfType<Window>();
         if (_window is not null)
