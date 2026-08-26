@@ -1,151 +1,52 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ax="using:ArxisStudio.Controls"
+        xmlns:g="using:Controls.Gallery"
         x:Class="Controls.Gallery.MainWindow"
         Title="ArxisStudio.Controls — Gallery"
-        Width="980" Height="820">
+        Width="1560" Height="900">
 
-  <ScrollViewer>
-    <StackPanel Margin="28,24" Spacing="16" MaxWidth="860">
-
+  <!--
+      Галерея повторяет страницу «20 Контролы» дизайн-проекта: одни и те же
+      карточки в светлой и тёмной половинах рядом — темы задают
+      ThemeVariantScope, поэтому сверка с design/20 Controls.dc.html идёт
+      на одном экране. Наведение, нажатие и Tab-фокус живые.
+  -->
+  <DockPanel>
+    <Border DockPanel.Dock="Top"
+            Background="{DynamicResource AxBg2Brush}"
+            BorderBrush="{DynamicResource AxBrdBrush}"
+            BorderThickness="0,0,0,1"
+            Padding="22,10">
       <DockPanel>
-        <ax:AxSegmentedControl x:Name="ThemeSwitch" DockPanel.Dock="Right"
-                               SelectionChanged="OnThemeChanged">
-          <ax:AxSegmentItem>Dark</ax:AxSegmentItem>
+        <ax:AxSegmentedControl x:Name="PanelsSwitch" DockPanel.Dock="Right"
+                               SelectionChanged="OnPanelsChanged">
+          <ax:AxSegmentItem>Обе</ax:AxSegmentItem>
           <ax:AxSegmentItem>Light</ax:AxSegmentItem>
+          <ax:AxSegmentItem>Dark</ax:AxSegmentItem>
         </ax:AxSegmentedControl>
         <StackPanel>
-          <TextBlock FontSize="16" FontWeight="SemiBold">ArxisStudio.Controls</TextBlock>
-          <TextBlock Classes="dimmer" FontSize="11.5">Галерея контролов в теме Arxis · метрики Int UI</TextBlock>
+          <TextBlock FontSize="16" FontWeight="SemiBold" Text="ArxisStudio.Controls"/>
+          <TextBlock Classes="dim" FontSize="11.5"
+                     Text="Галерея: каждая карточка страницы «Контролы» в Light и Dark"/>
         </StackPanel>
       </DockPanel>
+    </Border>
 
-      <ax:AxGroupHeader Content="Кнопки"/>
-      <StackPanel Orientation="Horizontal" Spacing="10">
-        <ax:AxButton Classes="accent">New Project</ax:AxButton>
-        <ax:AxButton>Open</ax:AxButton>
-        <ax:AxButton Classes="ghost">Ghost</ax:AxButton>
-        <ax:AxButton IsEnabled="False">Disabled</ax:AxButton>
-        <ax:AxButton Classes="icon">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}" Width="13" Height="13"/>
-        </ax:AxButton>
-        <ax:AxButton Classes="icon danger">
-          <ax:AxIcon Data="M 4.5 4.5 L 11.5 11.5 M 11.5 4.5 L 4.5 11.5" Width="12" Height="12"
-                     Foreground="{Binding $parent[ax:AxButton].Foreground}"/>
-        </ax:AxButton>
-      </StackPanel>
-      <TextBlock Classes="dimmer" FontSize="11">Tab-ом по кнопкам видно контур фокуса 2px, как в Int UI</TextBlock>
-
-      <ax:AxGroupHeader Content="Поля ввода"/>
-      <StackPanel Orientation="Horizontal" Spacing="10">
-        <ax:AxTextBox Width="200" PlaceholderText="Имя проекта"/>
-        <ax:AxSearchField Width="200" PlaceholderText="Поиск"/>
-        <ax:AxTextBox Width="160" Classes="error" Text="неверное значение"/>
-        <ax:AxTextBox Width="140" IsEnabled="False" Text="выключено"/>
-      </StackPanel>
-      <ax:AxTextArea Width="420" HorizontalAlignment="Left"
-                     PlaceholderText="Многострочное поле: описание, заметка, шаблон письма"/>
-
-      <ax:AxGroupHeader Content="Выбор"/>
-      <StackPanel Orientation="Horizontal" Spacing="20" VerticalAlignment="Center">
-        <ax:AxCheckBox IsChecked="True">Автосохранение</ax:AxCheckBox>
-        <ax:AxCheckBox>Сетка канваса</ax:AxCheckBox>
-        <StackPanel Spacing="6">
-          <ax:AxRadioButton GroupName="build" IsChecked="True">Debug</ax:AxRadioButton>
-          <ax:AxRadioButton GroupName="build">Release</ax:AxRadioButton>
-        </StackPanel>
-        <ax:AxToggleSwitch IsChecked="True"/>
-        <ax:AxComboBox Width="150" SelectedIndex="0">
-          <ax:AxComboBoxItem>Compact</ax:AxComboBoxItem>
-          <ax:AxComboBoxItem>Regular</ax:AxComboBoxItem>
-        </ax:AxComboBox>
-      </StackPanel>
-
-      <ax:AxGroupHeader Content="Вкладки документов"/>
-      <ax:AxTabStrip SelectedIndex="0">
-        <ax:AxTabItem Icon="{x:Static ax:AxIcons.Window}" IconBrush="{DynamicResource AxAccBrush}">MainWindow.axaml</ax:AxTabItem>
-        <ax:AxTabItem Icon="{x:Static ax:AxIcons.Document}" IconBrush="{DynamicResource AxGrnBrush}" IsModified="True">ChatViewModel.cs</ax:AxTabItem>
-        <ax:AxTabItem Icon="{x:Static ax:AxIcons.Document}" IconBrush="{DynamicResource AxGrnBrush}">Program.cs</ax:AxTabItem>
-      </ax:AxTabStrip>
-
-      <ax:AxGroupHeader Content="Панели инструментов"/>
-      <StackPanel Orientation="Horizontal" Spacing="12">
-        <ax:AxToolWindow Width="250" Height="120" Title="Только заголовок" ShowHeaderSeparator="False">
-          <ax:AxToolWindow.Actions>
-            <ax:AxButton Classes="icon">
-              <ax:AxIcon Data="M 4 8 H 12" Width="13" Height="13" StrokeThickness="1.3"/>
-            </ax:AxButton>
-          </ax:AxToolWindow.Actions>
-          <TextBlock Classes="dimmer" FontSize="11.5" Margin="12,10" Text="Содержимое панели"/>
-        </ax:AxToolWindow>
-
-        <ax:AxToolWindow Width="250" Height="120" Title="С разделителем">
-          <ax:AxToolWindow.Actions>
-            <ax:AxButton Classes="icon">
-              <ax:AxIcon Data="{x:Static ax:AxIcons.Settings}" Width="13" Height="13"/>
-            </ax:AxButton>
-          </ax:AxToolWindow.Actions>
-          <TextBlock Classes="dimmer" FontSize="11.5" Margin="12,10" Text="Содержимое панели"/>
-        </ax:AxToolWindow>
-
-        <ax:AxToolWindow Width="300" Height="120" Title="Проект">
-          <ax:AxToolWindow.Tabs>
-            <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0">
-              <ax:AxTabItem Classes="compact" IsClosable="False">Консоль</ax:AxTabItem>
-              <ax:AxTabItem Classes="compact" IsClosable="False">Проблемы</ax:AxTabItem>
-            </ax:AxTabStrip>
-          </ax:AxToolWindow.Tabs>
-          <ax:AxToolWindow.Actions>
-            <ax:AxButton Classes="icon">
-              <ax:AxIcon Data="M 4 8 H 12" Width="13" Height="13" StrokeThickness="1.3"/>
-            </ax:AxButton>
-          </ax:AxToolWindow.Actions>
-          <TextBlock Classes="dimmer" FontSize="11.5" Margin="12,10" Text="Вкладки живут в шапке"/>
-        </ax:AxToolWindow>
-      </StackPanel>
-
-      <ax:AxGroupHeader Content="Дерево"/>
-      <ax:AxCard Padding="4" HorizontalAlignment="Left" Width="300">
-        <ax:AxTreeView MaxHeight="170">
-          <ax:AxTreeViewItem Header="MainWindow" IsExpanded="True">
-            <ax:AxTreeViewItem Header="Root" IsExpanded="True">
-              <ax:AxTreeViewItem Header="Sidebar"/>
-              <ax:AxTreeViewItem Header="ChatView" IsExpanded="True">
-                <ax:AxTreeViewItem Header="Composer"/>
-                <ax:AxTreeViewItem Header="SendButton" IsSelected="True"/>
-              </ax:AxTreeViewItem>
-            </ax:AxTreeViewItem>
-          </ax:AxTreeViewItem>
-        </ax:AxTreeView>
-      </ax:AxCard>
-
-      <ax:AxGroupHeader Content="Сообщения"/>
-      <StackPanel Spacing="8">
-        <ax:AxBanner Severity="Information" Content="Шаблоны берутся из установленных пакетов dotnet new"/>
-        <ax:AxBanner Severity="Success" Content="Проект создан и открыт"/>
-        <ax:AxBanner Severity="Warning" Content="Проект не восстановлен: часть пакетов недоступна">
-          <ax:AxBanner.Actions>
-            <ax:AxLink>Восстановить</ax:AxLink>
-          </ax:AxBanner.Actions>
-        </ax:AxBanner>
-        <ax:AxBanner Severity="Error" Content="Сборка не удалась: CS0103 — имя не существует в текущем контексте"/>
-      </StackPanel>
-
-      <ax:AxGroupHeader Content="Прочее"/>
-      <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
-        <ax:AxLink>Документация</ax:AxLink>
-        <ax:AxLink IsVisited="True">Посещённая ссылка</ax:AxLink>
-        <ax:AxChip>Avalonia 12.1</ax:AxChip>
-        <ax:AxChip Classes="accent">Accent</ax:AxChip>
-        <ax:AxChip Classes="kbd">Enter</ax:AxChip>
-        <ax:AxBadge>7</ax:AxBadge>
-        <ax:AxDivider Orientation="Vertical" Height="20"/>
-        <ax:AxProgressBar Width="140" Minimum="0" Maximum="100" Value="42"/>
-        <ax:AxSlider Width="140" Minimum="0" Maximum="100" Value="60"/>
-        <ax:AxAvatar Initials="ВЧ" Width="28" Height="28" FontSize="11"/>
-      </StackPanel>
-
-    </StackPanel>
-  </ScrollViewer>
+    <ScrollViewer>
+      <Grid ColumnDefinitions="*,*">
+        <ThemeVariantScope x:Name="LightHalf" RequestedThemeVariant="Light">
+          <Border Background="{DynamicResource AxBg1Brush}">
+            <g:GalleryCards/>
+          </Border>
+        </ThemeVariantScope>
+        <ThemeVariantScope x:Name="DarkHalf" Grid.Column="1" RequestedThemeVariant="Dark">
+          <Border Background="{DynamicResource AxBg1Brush}">
+            <g:GalleryCards/>
+          </Border>
+        </ThemeVariantScope>
+      </Grid>
+    </ScrollViewer>
+  </DockPanel>
 
 </Window>

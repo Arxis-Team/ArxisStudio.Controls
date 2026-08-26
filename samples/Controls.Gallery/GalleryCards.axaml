@@ -1,0 +1,429 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ax="using:ArxisStudio.Controls"
+             x:Class="Controls.Gallery.GalleryCards">
+
+  <!--
+      Карточки страницы «20 Контролы» дизайн-проекта, в её порядке. Контрол
+      создаётся дважды — в светлой и тёмной половинах окна, — поэтому
+      содержимое вынесено в UserControl: правка карточки видна в обеих темах.
+      Наведение, нажатие и фокус здесь живые, а не нарисованные: Tab обходит
+      карточки с видимым кольцом.
+  -->
+  <StackPanel Margin="22,18" Spacing="14">
+
+    <!-- Кнопки -->
+    <ax:AxGroupHeader Content="Кнопки"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <ax:AxButton Classes="accent">Button</ax:AxButton>
+      <ax:AxButton>Button</ax:AxButton>
+      <ax:AxButton Classes="ghost">Button</ax:AxButton>
+      <ax:AxButton Classes="danger">Delete</ax:AxButton>
+      <ax:AxButton IsEnabled="False">Button</ax:AxButton>
+      <ax:AxButton Classes="icon" ToolTip.Tip="Собрать проект">
+        <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+      </ax:AxButton>
+    </StackPanel>
+
+    <!-- Компактная кнопка -->
+    <ax:AxGroupHeader Content="Компактная кнопка · 24"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <ax:AxButton Classes="compact">Slim</ax:AxButton>
+      <ax:AxButton Classes="compact ghost">Slim</ax:AxButton>
+      <ax:AxButton Classes="compact" IsEnabled="False">Slim</ax:AxButton>
+    </StackPanel>
+
+    <!-- Кнопка с меню -->
+    <ax:AxGroupHeader Content="Кнопка с меню"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <ax:AxSplitButton Classes="accent" Content="Run">
+        <ax:AxSplitButton.Flyout>
+          <ax:AxMenuFlyout>
+            <MenuItem Header="Run ChatApp"/>
+            <MenuItem Header="Run с отладкой"/>
+          </ax:AxMenuFlyout>
+        </ax:AxSplitButton.Flyout>
+      </ax:AxSplitButton>
+      <ax:AxSplitButton Content="Run"/>
+      <ax:AxSplitButton Content="Run" IsEnabled="False"/>
+    </StackPanel>
+
+    <!-- Дропдаун -->
+    <ax:AxGroupHeader Content="Дропдаун"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <ax:AxDropDownButton Content="Debug">
+        <ax:AxDropDownButton.Flyout>
+          <ax:AxMenuFlyout>
+            <MenuItem Header="Debug"/>
+            <MenuItem Header="Release"/>
+          </ax:AxMenuFlyout>
+        </ax:AxDropDownButton.Flyout>
+      </ax:AxDropDownButton>
+      <ax:AxDropDownButton Content="Debug" IsEnabled="False"/>
+    </StackPanel>
+
+    <!-- Чекбокс -->
+    <ax:AxGroupHeader Content="Чекбокс"/>
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <ax:AxCheckBox>Unchecked</ax:AxCheckBox>
+      <ax:AxCheckBox IsChecked="True">Checked</ax:AxCheckBox>
+      <ax:AxCheckBox IsThreeState="True" IsChecked="{x:Null}">Indeterminate</ax:AxCheckBox>
+      <ax:AxCheckBox Classes="error">Invalid</ax:AxCheckBox>
+      <ax:AxCheckBox IsEnabled="False" IsChecked="True">Disabled</ax:AxCheckBox>
+    </StackPanel>
+
+    <!-- Радиокнопка -->
+    <ax:AxGroupHeader Content="Радиокнопка"/>
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <ax:AxRadioButton IsChecked="True">On</ax:AxRadioButton>
+      <ax:AxRadioButton>Off</ax:AxRadioButton>
+      <ax:AxRadioButton IsEnabled="False">Disabled</ax:AxRadioButton>
+    </StackPanel>
+
+    <!-- Переключатель -->
+    <ax:AxGroupHeader Content="Переключатель · 30×17"/>
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <ax:AxToggleSwitch IsChecked="True" Content="On"/>
+      <ax:AxToggleSwitch Content="Off"/>
+      <ax:AxToggleSwitch IsChecked="True" IsEnabled="False" Content="Disabled"/>
+    </StackPanel>
+
+    <!-- Поле ввода -->
+    <ax:AxGroupHeader Content="Поле ввода"/>
+    <StackPanel Spacing="8" MaxWidth="360" HorizontalAlignment="Left">
+      <ax:AxTextBox Text="ChatView" PlaceholderText="Имя формы"/>
+      <ax:AxTextBox PlaceholderText="Плейсхолдер читается вместо подписи"/>
+      <StackPanel Spacing="3">
+        <ax:AxTextBox Classes="error" Text="Chat View!"/>
+        <TextBlock Classes="bad" FontSize="11.5" Text="Имя не может содержать пробелы"/>
+      </StackPanel>
+      <ax:AxTextBox Classes="warning" Text="chatview"/>
+      <ax:AxTextBox IsEnabled="False" Text="ChatView"/>
+      <ax:AxTextBox Classes="compact" Text="Компактное · 24"/>
+    </StackPanel>
+
+    <!-- Поиск -->
+    <ax:AxGroupHeader Content="Поиск"/>
+    <ax:AxSearchField Width="340" HorizontalAlignment="Left" PlaceholderText="Search projects"/>
+
+    <!-- Многострочное поле -->
+    <ax:AxGroupHeader Content="Многострочное поле"/>
+    <ax:AxTextArea Width="360" HorizontalAlignment="Left"
+                   PlaceholderText="Описание, заметка, шаблон письма"/>
+
+    <!-- Комбобокс -->
+    <ax:AxGroupHeader Content="Комбобокс"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <ax:AxComboBox Width="170" SelectedIndex="0">
+        <ax:AxComboBoxItem>net8.0-desktop</ax:AxComboBoxItem>
+        <ax:AxComboBoxItem>net8.0-android</ax:AxComboBoxItem>
+        <ax:AxComboBoxItem>net8.0-ios</ax:AxComboBoxItem>
+        <ax:AxComboBoxItem>net8.0-browser</ax:AxComboBoxItem>
+      </ax:AxComboBox>
+      <ax:AxComboBox Classes="compact" Width="150" SelectedIndex="0">
+        <ax:AxComboBoxItem>Компактный · 24</ax:AxComboBoxItem>
+      </ax:AxComboBox>
+      <ax:AxComboBox Width="130" PlaceholderText="Выключен" IsEnabled="False"/>
+    </StackPanel>
+
+    <!-- Сегментированный контрол -->
+    <ax:AxGroupHeader Content="Сегментированный контрол"/>
+    <ax:AxSegmentedControl SelectedIndex="0">
+      <ax:AxSegmentItem>Дизайн</ax:AxSegmentItem>
+      <ax:AxSegmentItem>XAML</ax:AxSegmentItem>
+      <ax:AxSegmentItem>Разделить</ax:AxSegmentItem>
+    </ax:AxSegmentedControl>
+
+    <!-- Вкладки -->
+    <ax:AxGroupHeader Content="Вкладки"/>
+    <ax:AxTabStrip SelectedIndex="0">
+      <ax:AxTabItem Content="Свойства" IsClosable="False"/>
+      <ax:AxTabItem Content="События" IsClosable="False"/>
+      <ax:AxTabItem Content="Стили" IsClosable="False"/>
+      <ax:AxTabItem Content="Ресурсы" IsClosable="False"/>
+    </ax:AxTabStrip>
+    <ax:AxTabStrip SelectedIndex="0">
+      <ax:AxTabItem Content="MainWindow.axaml"
+                    Icon="{x:Static ax:AxIcons.DocumentCode}"/>
+      <ax:AxTabItem Content="ChatView.axaml" IsModified="True"
+                    Icon="{x:Static ax:AxIcons.DocumentCode}"/>
+    </ax:AxTabStrip>
+
+    <!-- Ссылки -->
+    <ax:AxGroupHeader Content="Ссылки"/>
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <ax:AxLink Content="Документация"/>
+      <ax:AxLink Content="Документация" IsVisited="True"/>
+      <StackPanel Orientation="Horizontal" Spacing="4">
+        <ax:AxLink Content="avaloniaui.net"/>
+        <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ExternalLink}"
+                   Foreground="{DynamicResource AxLinkBrush}" VerticalAlignment="Center"/>
+      </StackPanel>
+      <ax:AxLink Content="Документация" IsEnabled="False"/>
+    </StackPanel>
+
+    <!-- Баннеры -->
+    <ax:AxGroupHeader Content="Баннеры"/>
+    <StackPanel Spacing="8">
+      <ax:AxBanner Severity="Information"
+                   Content="Доступно обновление Arxis SDK 1.4.2 — новые контролы Avalonia.">
+        <ax:AxBanner.Actions>
+          <ax:AxButton Classes="compact">Обновить</ax:AxButton>
+        </ax:AxBanner.Actions>
+      </ax:AxBanner>
+      <ax:AxBanner Severity="Success"
+                   Content="Проект ChatApp успешно собран — 0 ошибок, 0 предупреждений."/>
+      <ax:AxBanner Severity="Warning"
+                   Content="Не выбран стартовый проект. Запуск недоступен.">
+        <ax:AxBanner.Actions>
+          <ax:AxButton Classes="compact">Выбрать</ax:AxButton>
+        </ax:AxBanner.Actions>
+      </ax:AxBanner>
+      <ax:AxBanner Severity="Error"
+                   Content="Ошибка привязки: свойство «UserName» не найдено в ChatViewModel.">
+        <ax:AxBanner.Actions>
+          <ax:AxButton Classes="compact">Показать</ax:AxButton>
+        </ax:AxBanner.Actions>
+      </ax:AxBanner>
+    </StackPanel>
+
+    <!-- Уведомления -->
+    <ax:AxGroupHeader Content="Уведомления"/>
+    <ax:AxNotificationCard Severity="Success"
+                           Title="Сборка завершена"
+                           Content="ChatApp собран за 2,4 с. Готов к запуску на net8.0-desktop."
+                           HorizontalAlignment="Left">
+      <ax:AxNotificationCard.Actions>
+        <StackPanel Orientation="Horizontal" Spacing="14">
+          <ax:AxLink Content="Запустить"/>
+          <ax:AxLink Content="Показать журнал"/>
+        </StackPanel>
+      </ax:AxNotificationCard.Actions>
+    </ax:AxNotificationCard>
+
+    <!-- Диалоги -->
+    <ax:AxGroupHeader Content="Диалоги"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <ax:AxButton Click="OnOpenDialog">Сохранить изменения?</ax:AxButton>
+      <ax:AxButton Click="OnOpenDangerDialog">Удалить форму…</ax:AxButton>
+    </StackPanel>
+
+    <!-- Тултипы -->
+    <ax:AxGroupHeader Content="Тултипы"/>
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <ax:AxButton ToolTip.Tip="Собрать проект">Наведи и подожди</ax:AxButton>
+      <ax:AxButton>
+        <ToolTip.Tip>
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="Собрать проект"/>
+            <TextBlock Classes="dim" Text="⌘ F9"/>
+          </StackPanel>
+        </ToolTip.Tip>
+        С шорткатом
+      </ax:AxButton>
+    </StackPanel>
+    <ax:AxTeachingTip Title="Быстрый предпросмотр"
+                      StepText="1/3"
+                      HorizontalAlignment="Left"
+                      Content="Нажмите ⌘P, чтобы открыть форму в живом режиме без сборки.">
+      <ax:AxTeachingTip.Actions>
+        <ax:AxButton Classes="compact">Понятно</ax:AxButton>
+      </ax:AxTeachingTip.Actions>
+    </ax:AxTeachingTip>
+
+    <!-- Прогресс-бар -->
+    <ax:AxGroupHeader Content="Прогресс-бар"/>
+    <StackPanel Spacing="8" MaxWidth="360" HorizontalAlignment="Left">
+      <StackPanel Spacing="4">
+        <TextBlock Classes="dim" FontSize="11.5" Text="Сборка ChatApp"/>
+        <ax:AxProgressBar Minimum="0" Maximum="100" Value="64"/>
+      </StackPanel>
+      <StackPanel Spacing="4">
+        <TextBlock Classes="dim" FontSize="11.5" Text="Индексация проекта…"/>
+        <ax:AxProgressBar IsIndeterminate="True"/>
+      </StackPanel>
+    </StackPanel>
+
+    <!-- Лоадер -->
+    <ax:AxGroupHeader Content="Лоадер"/>
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <ax:AxSpinner/>
+      <TextBlock Classes="dim" VerticalAlignment="Center" Text="Индексация…"/>
+    </StackPanel>
+
+    <!-- Контекстное меню -->
+    <ax:AxGroupHeader Content="Контекстное меню"/>
+    <ax:AxButton x:Name="MenuAnchor" Click="OnOpenMenu">Открыть меню</ax:AxButton>
+
+    <!-- Попап со списком -->
+    <ax:AxGroupHeader Content="Попап поиска"/>
+    <ax:AxQuickSearch x:Name="QuickSearch"
+                      HorizontalAlignment="Left"
+                      Text="chat"
+                      PlaceholderText="Класс, файл, символ"
+                      Hints="↑↓ выбор · ↵ открыть · esc"/>
+
+    <!-- Дерево -->
+    <ax:AxGroupHeader Content="Дерево"/>
+    <ax:AxTreeView>
+      <ax:AxTreeViewItem Header="ChatApp" IsExpanded="True">
+        <ax:AxTreeViewItem Header="Views" IsExpanded="True">
+          <ax:AxTreeViewItem Header="MainWindow.axaml"/>
+          <ax:AxTreeViewItem Header="ChatView.axaml"/>
+        </ax:AxTreeViewItem>
+        <ax:AxTreeViewItem Header="ViewModels">
+          <ax:AxTreeViewItem Header="ChatViewModel.cs"/>
+        </ax:AxTreeViewItem>
+        <ax:AxTreeViewItem Header="App.axaml"/>
+      </ax:AxTreeViewItem>
+    </ax:AxTreeView>
+
+    <!-- Таблица -->
+    <ax:AxGroupHeader Content="Таблица"/>
+    <ax:AxDataGrid MaxWidth="520" HorizontalAlignment="Left">
+      <ax:AxDataGrid.Header>
+        <Grid ColumnDefinitions="180,90,110,*">
+          <TextBlock Text="Форма"/>
+          <TextBlock Grid.Column="1" Text="Контролов"/>
+          <TextBlock Grid.Column="2" Text="Изменена"/>
+          <TextBlock Grid.Column="3" Text="Статус"/>
+        </Grid>
+      </ax:AxDataGrid.Header>
+      <ax:AxListBoxItem>
+        <Grid ColumnDefinitions="172,90,110,*">
+          <TextBlock Text="MainWindow.axaml"/>
+          <TextBlock Grid.Column="1" Text="12"/>
+          <TextBlock Grid.Column="2" Text="сегодня 14:02"/>
+          <TextBlock Grid.Column="3" Classes="ok" Text="Собрана"/>
+        </Grid>
+      </ax:AxListBoxItem>
+      <ax:AxListBoxItem>
+        <Grid ColumnDefinitions="172,90,110,*">
+          <TextBlock Text="ChatView.axaml"/>
+          <TextBlock Grid.Column="1" Text="23"/>
+          <TextBlock Grid.Column="2" Text="сегодня 14:21"/>
+          <TextBlock Grid.Column="3" Classes="ok" Text="Собрана"/>
+        </Grid>
+      </ax:AxListBoxItem>
+      <ax:AxListBoxItem>
+        <Grid ColumnDefinitions="172,90,110,*">
+          <TextBlock Text="LoginView.axaml"/>
+          <TextBlock Grid.Column="1" Text="9"/>
+          <TextBlock Grid.Column="2" Text="вчера 18:47"/>
+          <TextBlock Grid.Column="3" Classes="bad" Text="Ошибка привязки"/>
+        </Grid>
+      </ax:AxListBoxItem>
+      <ax:AxListBoxItem>
+        <Grid ColumnDefinitions="172,90,110,*">
+          <TextBlock Text="SettingsView.axaml"/>
+          <TextBlock Grid.Column="1" Text="17"/>
+          <TextBlock Grid.Column="2" Text="12 авг"/>
+          <TextBlock Grid.Column="3" Classes="dim" Text="Черновик"/>
+        </Grid>
+      </ax:AxListBoxItem>
+    </ax:AxDataGrid>
+
+    <!-- Тулбар -->
+    <ax:AxGroupHeader Content="Тулбар"/>
+    <ax:AxToolBar>
+      <ax:AxToolBar.LeftContent>
+        <StackPanel Orientation="Horizontal" Spacing="2">
+          <ax:AxButton Classes="icon" ToolTip.Tip="Отменить">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Undo}"/>
+          </ax:AxButton>
+          <ax:AxButton Classes="icon" ToolTip.Tip="Вернуть">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Redo}"/>
+          </ax:AxButton>
+          <ax:AxButton Classes="icon" IsEnabled="False">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Refresh}"/>
+          </ax:AxButton>
+        </StackPanel>
+      </ax:AxToolBar.LeftContent>
+      <ax:AxToolBar.CenterContent>
+        <ax:AxDropDownButton Content="ВолнаЧат.Desktop"/>
+      </ax:AxToolBar.CenterContent>
+      <ax:AxToolBar.RightContent>
+        <StackPanel Orientation="Horizontal" Spacing="2">
+          <ax:AxButton Classes="icon">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Play}" IsFilled="True"
+                       Foreground="{DynamicResource AxGrnBrush}"/>
+          </ax:AxButton>
+          <ax:AxButton Classes="icon">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Debug}"/>
+          </ax:AxButton>
+        </StackPanel>
+      </ax:AxToolBar.RightContent>
+    </ax:AxToolBar>
+
+    <!-- Хлебные крошки -->
+    <ax:AxGroupHeader Content="Хлебные крошки"/>
+    <ax:AxBreadcrumbBar>
+      <ax:AxBreadcrumbItem Content="ВолнаЧат"/>
+      <ax:AxBreadcrumbItem Content="Views"/>
+      <ax:AxBreadcrumbItem Classes="current" Content="LoginView.axaml"/>
+    </ax:AxBreadcrumbBar>
+    <ax:AxBreadcrumbBar>
+      <ax:AxBreadcrumbItem Content="Grid"/>
+      <ax:AxBreadcrumbItem Content="StackPanel"/>
+      <ax:AxBreadcrumbItem Classes="error" Content="SendButton"/>
+    </ax:AxBreadcrumbBar>
+
+    <!-- Tool Window -->
+    <ax:AxGroupHeader Content="Tool Window"/>
+    <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="False">
+      <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Label only"/>
+    </ax:AxToolWindow>
+    <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="True">
+      <ax:AxToolWindow.Actions>
+        <ax:AxButton Classes="icon">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.CollapseAll}"/>
+        </ax:AxButton>
+      </ax:AxToolWindow.Actions>
+      <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Label with separator"/>
+    </ax:AxToolWindow>
+
+    <!-- Скроллбар -->
+    <ax:AxGroupHeader Content="Скроллбар · 8"/>
+    <Border BorderBrush="{DynamicResource AxBrdBrush}" BorderThickness="1"
+            CornerRadius="{DynamicResource AxCornerRadius}"
+            Height="90" MaxWidth="360" HorizontalAlignment="Left">
+      <ScrollViewer VerticalScrollBarVisibility="Visible">
+        <StackPanel Margin="10">
+          <TextBlock Text="Строка 1"/><TextBlock Text="Строка 2"/><TextBlock Text="Строка 3"/>
+          <TextBlock Text="Строка 4"/><TextBlock Text="Строка 5"/><TextBlock Text="Строка 6"/>
+          <TextBlock Text="Строка 7"/><TextBlock Text="Строка 8"/>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+
+    <!-- Шорткаты и код -->
+    <ax:AxGroupHeader Content="Шорткаты и код"/>
+    <StackPanel Orientation="Horizontal" Spacing="6">
+      <ax:AxChip Classes="kbd">Shift</ax:AxChip>
+      <ax:AxChip Classes="kbd">F10</ax:AxChip>
+      <ax:AxChip>метка</ax:AxChip>
+      <ax:AxChip Classes="accent">выбранная</ax:AxChip>
+      <ax:AxBadge>7</ax:AxBadge>
+    </StackPanel>
+    <ax:AxCodeBlock x:Name="Code" MaxWidth="440" HorizontalAlignment="Left"/>
+
+    <!-- Заголовок группы -->
+    <ax:AxGroupHeader Content="Заголовок группы"/>
+    <StackPanel Spacing="8">
+      <ax:AxGroupHeader Content="Внешний вид"/>
+      <ax:AxGroupHeader Content="Привязки"/>
+    </StackPanel>
+
+    <!-- Примитивы M0, которых нет на странице карточками -->
+    <ax:AxGroupHeader Content="Примитивы"/>
+    <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+      <ax:AxAvatar Initials="ВЧ"/>
+      <ax:AxSlider Width="140" Minimum="0" Maximum="100" Value="60"/>
+      <ax:AxDivider Orientation="Vertical" Height="20"/>
+      <ax:AxCard Padding="10">
+        <TextBlock Classes="dim" FontSize="11.5" Text="Карточка"/>
+      </ax:AxCard>
+    </StackPanel>
+
+  </StackPanel>
+</UserControl>

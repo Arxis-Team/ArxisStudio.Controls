@@ -16,7 +16,7 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxButton` | `Button` | классы: `accent`, `ghost`, `icon`, `danger` |
 | `AxTextBox` | `TextBox` | однострочное поле ввода |
 | `AxSearchField` | `AxTextBox` | поле поиска со значком-лупой |
-| `AxCheckBox` | `CheckBox` | флажок 14×14 |
+| `AxCheckBox` | `CheckBox` | флажок 16×16 |
 | `AxToggleSwitch` | `ToggleButton` | тумблер 30×17 |
 | `AxComboBox` / `AxComboBoxItem` | `ComboBox` | выпадающий список |
 | `AxListBox` / `AxListBoxItem` | `ListBox` | список с выделением строк |

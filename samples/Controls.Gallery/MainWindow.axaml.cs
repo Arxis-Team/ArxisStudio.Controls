@@ -1,21 +1,26 @@
-using Avalonia;
 using Avalonia.Controls;
- 
-using Avalonia.Styling;
 
 namespace Controls.Gallery;
 
+/// <summary>
+/// Окно галереи: светлая и тёмная половины рядом, как на странице
+/// «20 Контролы» дизайн-проекта; переключатель прячет одну из них.
+/// </summary>
 public partial class MainWindow : Window
 {
+    /// <summary>Создаёт окно с обеими половинами.</summary>
     public MainWindow()
     {
         InitializeComponent();
-        ThemeSwitch.SelectedIndex = 0;
+        PanelsSwitch.SelectedIndex = 0;
     }
 
-    private void OnThemeChanged(object? sender, SelectionChangedEventArgs e)
+    private void OnPanelsChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (Application.Current is { } app)
-            app.RequestedThemeVariant = ThemeSwitch.SelectedIndex == 1 ? ThemeVariant.Light : ThemeVariant.Dark;
+        if (LightHalf is null || DarkHalf is null)
+            return;
+
+        LightHalf.IsVisible = PanelsSwitch.SelectedIndex != 2;
+        DarkHalf.IsVisible = PanelsSwitch.SelectedIndex != 1;
     }
 }
