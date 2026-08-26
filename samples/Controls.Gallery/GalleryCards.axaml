@@ -279,6 +279,15 @@
       </ax:AxTreeViewItem>
     </ax:AxTreeView>
 
+    <!-- Список: та же строка 24, что и в дереве, но без отступов уровня -->
+    <ax:AxGroupHeader Content="Список"/>
+    <ax:AxListBox Width="260" HorizontalAlignment="Left" SelectedIndex="1">
+      <ax:AxListBoxItem Content="MainWindow.axaml"/>
+      <ax:AxListBoxItem Content="ChatView.axaml"/>
+      <ax:AxListBoxItem Content="LoginView.axaml"/>
+      <ax:AxListBoxItem Content="SettingsView.axaml" IsEnabled="False"/>
+    </ax:AxListBox>
+
     <!-- Таблица -->
     <ax:AxGroupHeader Content="Таблица"/>
     <ax:AxDataGrid Width="520" HorizontalAlignment="Left">
@@ -355,6 +364,28 @@
         </StackPanel>
       </ax:AxToolBar.RightContent>
     </ax:AxToolBar>
+
+    <!--
+        Тулбар окна: в Int UI отдельного системного заголовка у главного окна
+        нет — строка с проектом и есть заголовок.
+
+        Кнопки окна тут стоят отдельным AxWindowControls и не принимают
+        нажатий: свои кнопки полоса вешает на то окно, в котором стоит, и в
+        галерее «закрыть» закрыло бы саму галерею. Карточка показывает вид,
+        а не поведение.
+    -->
+    <ax:AxGroupHeader Content="Тулбар окна"/>
+    <ax:AxTitleBar Width="520" HorizontalAlignment="Left" ShowWindowControls="False">
+      <DockPanel Margin="10,0">
+        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Window}"/>
+          <TextBlock Text="ВолнаЧат" VerticalAlignment="Center"/>
+          <ax:AxChip Content="Debug"/>
+        </StackPanel>
+        <ax:AxWindowControls DockPanel.Dock="Right" IsHitTestVisible="False"/>
+        <Panel/>
+      </DockPanel>
+    </ax:AxTitleBar>
 
     <!-- Хлебные крошки -->
     <ax:AxGroupHeader Content="Хлебные крошки"/>
@@ -442,6 +473,17 @@
     <StackPanel Spacing="8">
       <ax:AxGroupHeader Content="Внешний вид"/>
       <ax:AxGroupHeader Content="Привязки"/>
+    </StackPanel>
+
+    <!-- Разделители: линия в пиксель, обе ориентации -->
+    <ax:AxGroupHeader Content="Разделители"/>
+    <StackPanel Spacing="10">
+      <ax:AxDivider Width="260" HorizontalAlignment="Left"/>
+      <StackPanel Orientation="Horizontal" Spacing="10" Height="20">
+        <TextBlock Classes="dim" Text="слева" VerticalAlignment="Center"/>
+        <ax:AxDivider Orientation="Vertical"/>
+        <TextBlock Classes="dim" Text="справа" VerticalAlignment="Center"/>
+      </StackPanel>
     </StackPanel>
 
     <!-- Примитивы M0, которых нет на странице карточками -->

@@ -90,26 +90,26 @@ public partial class GalleryCards : UserControl
     {
         var menu = new AxMenuFlyout();
 
-        menu.Items.Add(new MenuItem
+        menu.Items.Add(new AxMenuItem
         {
             Header = "Добавить контрол",
             Icon = new AxIcon { Data = AxIcons.Plus },
             InputGesture = new Avalonia.Input.KeyGesture(Avalonia.Input.Key.N, Avalonia.Input.KeyModifiers.Control),
         });
-        menu.Items.Add(new MenuItem
+        menu.Items.Add(new AxMenuItem
         {
             Header = "Переименовать",
             Icon = new AxIcon { Data = AxIcons.Edit },
             InputGesture = new Avalonia.Input.KeyGesture(Avalonia.Input.Key.F2),
         });
 
-        var wrap = new MenuItem { Header = "Обернуть в панель" };
-        wrap.Items.Add(new MenuItem { Header = "StackPanel" });
-        wrap.Items.Add(new MenuItem { Header = "Grid" });
+        var wrap = new AxMenuItem { Header = "Обернуть в панель" };
+        wrap.Items.Add(new AxMenuItem { Header = "StackPanel" });
+        wrap.Items.Add(new AxMenuItem { Header = "Grid" });
         menu.Items.Add(wrap);
 
         menu.Items.Add(new Separator());
-        menu.Items.Add(new MenuItem
+        menu.Items.Add(new AxMenuItem
         {
             Header = "Заблокировать слой",
             IsEnabled = false,
@@ -117,7 +117,7 @@ public partial class GalleryCards : UserControl
         });
         menu.Items.Add(new Separator());
 
-        var delete = new MenuItem
+        var delete = new AxMenuItem
         {
             Header = "Удалить",
             Icon = new AxIcon { Data = AxIcons.Trash },
