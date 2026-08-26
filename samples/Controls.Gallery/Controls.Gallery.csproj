@@ -27,6 +27,19 @@
         <PackageReference Include="Avalonia.Themes.Fluent"/>
     </ItemGroup>
 
+    <!--
+        AvaDevTools — дерево элементов, стили, раскладка и конечная точка MCP на
+        петле. Оснастка отладочная: в Release её нет, поэтому и ссылка, и весь
+        код обращения к ней закрыты условием.
+
+        Порт свой, не студийный: галерея и студия открываются рядом, и один
+        порт на двоих означал бы, что подключение достаётся тому, кто успел
+        первым.
+    -->
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+        <PackageReference Include="AvaDevTools"/>
+    </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="../../src/ArxisStudio.Controls.csproj"/>
         <ProjectReference Include="$(ThemesProject)"/>
