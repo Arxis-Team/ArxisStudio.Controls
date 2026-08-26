@@ -29,6 +29,7 @@ public class AxDialog : Window
     public AxDialog()
     {
         WindowDecorations = WindowDecorations.None;
+        // Тень лежит за краем карточки, поэтому окну нужен прозрачный фон.
         TransparencyLevelHint = [WindowTransparencyLevel.Transparent];
         Background = null;
         SizeToContent = SizeToContent.WidthAndHeight;
@@ -50,6 +51,16 @@ public class AxDialog : Window
         get => GetValue(FooterContentProperty);
         set => SetValue(FooterContentProperty, value);
     }
+
+    /// <summary>
+    /// Ключ стиля — свой.
+    /// </summary>
+    /// <remarks>
+    /// Иначе диалог берёт шаблон базового <see cref="Window"/>: тот подменяет
+    /// ключ собой, чтобы наследники окон не оставались без чрома. Нам это как
+    /// раз мешает — шаблон диалога рисует карточку с шапкой и полосой кнопок.
+    /// </remarks>
+    protected override Type StyleKeyOverride => typeof(AxDialog);
 
     /// <inheritdoc cref="IsCloseVisibleProperty"/>
     public bool IsCloseVisible

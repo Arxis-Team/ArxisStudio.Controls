@@ -55,7 +55,7 @@ public partial class GalleryCards : UserControl
         buttons.Children.Add(save);
         dialog.Buttons = buttons;
 
-        if (VisualRoot is Window owner)
+        if (TopLevel.GetTopLevel(this) is Window owner)
             await dialog.ShowDialog(owner);
     }
 
@@ -82,7 +82,7 @@ public partial class GalleryCards : UserControl
         buttons.Children.Add(delete);
         dialog.Buttons = buttons;
 
-        if (VisualRoot is Window owner)
+        if (TopLevel.GetTopLevel(this) is Window owner)
             await dialog.ShowDialog(owner);
     }
 
