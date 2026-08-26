@@ -34,7 +34,12 @@
     </Border>
 
     <ScrollViewer>
-      <Grid ColumnDefinitions="*,*">
+      <!--
+          Сетка названа, потому что переключатель двигает её колонки: спрятать
+          половину мало — колонка осталась бы держать половину окна, и
+          оставшаяся тема показывалась бы на половине, а рядом пустота.
+      -->
+      <Grid x:Name="Halves" ColumnDefinitions="*,*">
         <ThemeVariantScope x:Name="LightHalf" RequestedThemeVariant="Light">
           <Border Background="{DynamicResource AxBg1Brush}">
             <g:GalleryCards/>
