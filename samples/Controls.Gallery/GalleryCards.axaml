@@ -275,7 +275,7 @@
       <ax:AxBanner Severity="Information"
                    Content="Доступно обновление Arxis SDK 1.4.2 — новые контролы Avalonia.">
         <ax:AxBanner.Actions>
-          <ax:AxButton Classes="compact">Обновить</ax:AxButton>
+          <ax:AxLink Content="Обновить"/>
         </ax:AxBanner.Actions>
       </ax:AxBanner>
       <ax:AxBanner Severity="Success"
@@ -283,13 +283,13 @@
       <ax:AxBanner Severity="Warning"
                    Content="Не выбран стартовый проект. Запуск недоступен.">
         <ax:AxBanner.Actions>
-          <ax:AxButton Classes="compact">Выбрать</ax:AxButton>
+          <ax:AxLink Content="Выбрать"/>
         </ax:AxBanner.Actions>
       </ax:AxBanner>
       <ax:AxBanner Severity="Error"
                    Content="Ошибка привязки: свойство «UserName» не найдено в ChatViewModel.">
         <ax:AxBanner.Actions>
-          <ax:AxButton Classes="compact">Показать</ax:AxButton>
+          <ax:AxLink Content="Показать"/>
         </ax:AxBanner.Actions>
       </ax:AxBanner>
     </StackPanel>
