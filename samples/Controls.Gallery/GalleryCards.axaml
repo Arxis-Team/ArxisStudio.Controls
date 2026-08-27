@@ -944,15 +944,30 @@
       </StackPanel>
     </StackPanel>
 
-    <!-- Примитивы M0, которых нет на странице карточками -->
+    <!--
+        Примитивы: контролы из списка M0, которым карточки в проекте не
+        досталось. Единственное, что проект о них говорит, — решение раздела 6
+        приёмки про монограммы, и оно показано отдельной строкой.
+    -->
     <ax:AxGroupHeader Content="Примитивы"/>
     <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
       <ax:AxAvatar Initials="ВЧ"/>
+      <ax:AxAvatar Classes="round" Initials="МК"/>
       <ax:AxSlider Width="140" Minimum="0" Maximum="100" Value="60"/>
       <ax:AxDivider Orientation="Vertical" Height="20"/>
       <ax:AxCard Padding="10">
         <TextBlock Classes="dim" FontSize="11.5" Text="Карточка"/>
       </ax:AxCard>
+    </StackPanel>
+    <!--
+        Цветные монограммы: раздел 6 приёмки запрещает ставить их на AxOrg /
+        AxGrn / AxPur / AxRed — белые инициалы дают там 2,68…3,69:1.
+    -->
+    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+      <ax:AxAvatar Classes="orange" Initials="Ор"/>
+      <ax:AxAvatar Classes="green" Initials="Зл"/>
+      <ax:AxAvatar Classes="purple" Initials="Фл"/>
+      <ax:AxAvatar Classes="red" Initials="Кр"/>
     </StackPanel>
 
   </StackPanel>
