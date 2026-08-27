@@ -20,11 +20,16 @@
             Text="Controls.Gallery показывает контролы в теме ArxisStudio.Themes.Arxis и ожидает этот репозиторий рядом, в '$(ThemesRepositoryRoot)'. Клонируйте его туда." />
     </Target>
 
+    <!--
+        Ни темы Fluent, ни пакета со шрифтом здесь нет. Всё, что рисует
+        галерея, — контролы Ax* и шесть базовых типов, которые тема Arxis
+        покрывает сама: ContextMenu, MenuFlyoutPresenter, MenuItem, ScrollBar,
+        Separator, ToolTip. Шрифт приезжает вместе с темой: ключ AxFontFamily
+        объявлен там же.
+    -->
     <ItemGroup>
         <PackageReference Include="Avalonia"/>
         <PackageReference Include="Avalonia.Desktop"/>
-        <PackageReference Include="Avalonia.Fonts.Inter"/>
-        <PackageReference Include="Avalonia.Themes.Fluent"/>
     </ItemGroup>
 
     <!--
