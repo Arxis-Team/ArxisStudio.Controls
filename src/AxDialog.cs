@@ -21,6 +21,21 @@ public class AxDialog : Window
     public static readonly StyledProperty<object?> FooterContentProperty =
         AvaloniaProperty.Register<AxDialog, object?>(nameof(FooterContent));
 
+    /// <summary>
+    /// Значок слева от заголовка: диалог становится алертом.
+    /// </summary>
+    /// <remarks>
+    /// Имя своё, не Icon: у окна такое свойство уже есть — значок в панели
+    /// задач, и подменять его собой нельзя.
+    /// </remarks>
+    /// <remarks>
+    /// Со значком шапка не нужна: заголовок и текст встают колонкой рядом с
+    /// ним, как в карточке «Диалоги». Крестика у алерта тоже нет — уйти из
+    /// него можно только кнопкой, и это часть смысла: решение обязательно.
+    /// </remarks>
+    public static readonly StyledProperty<object?> AlertIconProperty =
+        AvaloniaProperty.Register<AxDialog, object?>(nameof(AlertIcon));
+
     /// <summary>Показывать крестик закрытия в заголовке.</summary>
     public static readonly StyledProperty<bool> IsCloseVisibleProperty =
         AvaloniaProperty.Register<AxDialog, bool>(nameof(IsCloseVisible), true);
@@ -43,6 +58,25 @@ public class AxDialog : Window
     {
         get => GetValue(ButtonsProperty);
         set => SetValue(ButtonsProperty, value);
+    }
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        // Значок поднимает состояние, а не тема смотрит на свойство: по
+        // состоянию тема переключает и шапку, и отбивку тела разом, а
+        // селектора «свойство не пусто» в Avalonia нет.
+        if (change.Property == AlertIconProperty)
+            PseudoClasses.Set(":alert", change.NewValue is not null);
+    }
+
+    /// <inheritdoc cref="AlertIconProperty"/>
+    public object? AlertIcon
+    {
+        get => GetValue(AlertIconProperty);
+        set => SetValue(AlertIconProperty, value);
     }
 
     /// <inheritdoc cref="FooterContentProperty"/>

@@ -102,6 +102,9 @@ public partial class GalleryCards : UserControl
 
     private async void OnOpenDialog(object? sender, RoutedEventArgs e)
     {
+        // Ширину задаёт содержимое: диалог растёт под текст (SizeToContent), и
+        // число на окне он бы просто не заметил. Карточка даёт 400 на всю
+        // карточку — за вычетом отбивки 16 с боков это 368 на текст.
         var dialog = new AxDialog
         {
             Title = "Сохранить изменения?",
@@ -109,7 +112,7 @@ public partial class GalleryCards : UserControl
             {
                 Text = "MainWindow.axaml изменён. Сохранить файл перед закрытием редактора?",
                 TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                MaxWidth = 360,
+                Width = 368,
             },
             FooterContent = new AxCheckBox { Content = "Больше не спрашивать" },
         };
@@ -128,16 +131,41 @@ public partial class GalleryCards : UserControl
             await dialog.ShowDialog(owner);
     }
 
+    /// <summary>
+    /// Знак алерта: треугольник предупреждения на жёлтом.
+    /// </summary>
+    /// <remarks>
+    /// Кисть берётся ресурсом темы, а не разово через Application: у варианта
+    /// свои значения, и снятое заранее не переключилось бы вместе с темой — а
+    /// без кисти путь не рисуется вовсе.
+    ///
+    /// Двадцать восемь — размер из карточки. Это не глиф в ряду иконок, а знак
+    /// на весь диалог, и клетка набора ему не указ.
+    /// </remarks>
+    private static AxIcon Sign()
+    {
+        var sign = new AxIcon { Width = 28, Height = 28, Data = AxIcons.WarningTriangle };
+
+        sign[!AxIcon.ForegroundProperty] = new Avalonia.Markup.Xaml.MarkupExtensions.DynamicResourceExtension("AxYelBrush");
+
+        return sign;
+    }
+
     private async void OnOpenDangerDialog(object? sender, RoutedEventArgs e)
     {
+        // Алерт: значок вместо шапки. Треугольник крупнее клетки набора —
+        // это не глиф в ряду иконок, а знак на весь диалог, и карточка даёт
+        // ему 28. Размер ставит потребитель: тема о нём ничего не знает.
         var dialog = new AxDialog
         {
             Title = "Удалить форму LoginView.axaml?",
+            AlertIcon = Sign(),
             Content = new TextBlock
             {
                 Text = "Форма и её привязки будут удалены из проекта. Действие нельзя отменить.",
                 TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                MaxWidth = 340,
+                // 360 карточки минус отбивка 16 с боков, значок 28 и зазор 12.
+                Width = 288,
             },
         };
 
