@@ -464,9 +464,13 @@
 
     <!-- Таблица -->
     <ax:AxGroupHeader Content="Таблица"/>
-    <ax:AxDataGrid Width="520" HorizontalAlignment="Left">
+    <!--
+        Колонки долевые, как в карточке: 2fr 1fr 1fr 1fr. Ширины таблице не
+        задаём — в карточке она занимает всю половину.
+    -->
+    <ax:AxDataGrid SelectedIndex="1">
       <ax:AxDataGrid.Header>
-        <Grid ColumnDefinitions="180,90,110,*">
+        <Grid ColumnDefinitions="2*,*,*,*">
           <TextBlock Text="Форма"/>
           <TextBlock Grid.Column="1" Text="Контролов"/>
           <TextBlock Grid.Column="2" Text="Изменена"/>
@@ -474,7 +478,7 @@
         </Grid>
       </ax:AxDataGrid.Header>
       <ax:AxListBoxItem>
-        <Grid ColumnDefinitions="172,90,110,*">
+        <Grid ColumnDefinitions="2*,*,*,*">
           <TextBlock Text="MainWindow.axaml"/>
           <TextBlock Grid.Column="1" Text="12"/>
           <TextBlock Grid.Column="2" Text="сегодня 14:02"/>
@@ -482,7 +486,7 @@
         </Grid>
       </ax:AxListBoxItem>
       <ax:AxListBoxItem>
-        <Grid ColumnDefinitions="172,90,110,*">
+        <Grid ColumnDefinitions="2*,*,*,*">
           <TextBlock Text="ChatView.axaml"/>
           <TextBlock Grid.Column="1" Text="23"/>
           <TextBlock Grid.Column="2" Text="сегодня 14:21"/>
@@ -490,7 +494,7 @@
         </Grid>
       </ax:AxListBoxItem>
       <ax:AxListBoxItem>
-        <Grid ColumnDefinitions="172,90,110,*">
+        <Grid ColumnDefinitions="2*,*,*,*">
           <TextBlock Text="LoginView.axaml"/>
           <TextBlock Grid.Column="1" Text="9"/>
           <TextBlock Grid.Column="2" Text="вчера 18:47"/>
@@ -498,7 +502,7 @@
         </Grid>
       </ax:AxListBoxItem>
       <ax:AxListBoxItem>
-        <Grid ColumnDefinitions="172,90,110,*">
+        <Grid ColumnDefinitions="2*,*,*,*">
           <TextBlock Text="SettingsView.axaml"/>
           <TextBlock Grid.Column="1" Text="17"/>
           <TextBlock Grid.Column="2" Text="12 авг"/>
