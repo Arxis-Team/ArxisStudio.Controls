@@ -11,8 +11,15 @@ namespace ArxisStudio.Controls;
 /// </summary>
 public sealed class AxTreeIndentConverter : IValueConverter
 {
-    /// <summary>Ширина одного уровня вложенности.</summary>
-    public const double LevelWidth = 14;
+    /// <summary>
+    /// Ширина одного уровня вложенности.
+    /// </summary>
+    /// <remarks>
+    /// 18: карточка «Дерево» проекта отбивает уровни как 8 → 26 → 44, считая
+    /// от левого края строки. Шаг меньше сбивает лестницу, и на глубине третьего
+    /// уровня дерево перестаёт читаться как дерево.
+    /// </remarks>
+    public const double LevelWidth = 18;
 
     /// <summary>Общий экземпляр для шаблонов.</summary>
     public static AxTreeIndentConverter Instance { get; } = new();
