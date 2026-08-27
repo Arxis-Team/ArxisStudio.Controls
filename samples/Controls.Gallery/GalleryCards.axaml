@@ -914,9 +914,14 @@
 
     <!-- Заголовок группы -->
     <ax:AxGroupHeader Content="Заголовок группы"/>
-    <StackPanel Spacing="8">
+    <!--
+        Три заголовка карточки: обычный, сворачиваемый раскрытый со счётчиком и
+        сворачиваемый свёрнутый.
+    -->
+    <StackPanel Spacing="16">
       <ax:AxGroupHeader Content="Внешний вид"/>
-      <ax:AxGroupHeader Content="Привязки"/>
+      <ax:AxGroupHeader Content="Привязки" IsCollapsible="True" Counter="3"/>
+      <ax:AxGroupHeader Content="Дополнительно" IsCollapsible="True" IsExpanded="False"/>
     </StackPanel>
 
     <!-- Разделители: линия в пиксель, обе ориентации -->
