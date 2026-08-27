@@ -439,11 +439,17 @@
       </StackPanel>
     </StackPanel>
 
-    <!-- Лоадер -->
+    <!-- Лоадер: два размера карточки — 16 вторичным и 24 акцентом. -->
     <ax:AxGroupHeader Content="Лоадер"/>
-    <StackPanel Orientation="Horizontal" Spacing="8">
-      <ax:AxSpinner/>
-      <TextBlock Classes="dim" VerticalAlignment="Center" Text="Индексация…"/>
+    <StackPanel Orientation="Horizontal" Spacing="24" VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <ax:AxSpinner/>
+        <TextBlock Classes="dim" VerticalAlignment="Center" Text="Индексация…"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <ax:AxSpinner Classes="large"/>
+        <TextBlock Classes="dim" VerticalAlignment="Center" Text="Загрузка предпросмотра"/>
+      </StackPanel>
     </StackPanel>
 
     <!-- Контекстное меню -->
