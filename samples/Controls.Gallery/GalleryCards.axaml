@@ -600,7 +600,7 @@
       </StackPanel>
 
       <!-- Разделитель группы: 1 на 22 цветом рамки. -->
-      <Border Width="1" Height="22" Background="{DynamicResource AxBrdBrush}"/>
+      <ax:AxDivider Orientation="Vertical" Height="22"/>
 
       <StackPanel Orientation="Horizontal" Spacing="2">
         <ax:AxButton Classes="icon" ToolTip.Tip="Свернуть всё">
@@ -661,7 +661,12 @@
               </StackPanel>
             </Border>
             <ax:AxIcon Data="{x:Static ax:AxIcons.Split}"/>
-            <Border Width="1" Height="20" Background="{DynamicResource AxBg4Brush}"/>
+            <!--
+                Разделитель внутри полосы идёт цветом нажатия, а не рамки: в
+                карточке он на ступень заметнее, чем линии снаружи её.
+            -->
+            <ax:AxDivider Orientation="Vertical" Height="20"
+                          Background="{DynamicResource AxBg4Brush}"/>
             <ax:AxWindowControls IsHitTestVisible="False"/>
           </StackPanel>
         </ax:AxToolBar.RightContent>
@@ -924,7 +929,11 @@
       <ax:AxGroupHeader Content="Дополнительно" IsCollapsible="True" IsExpanded="False"/>
     </StackPanel>
 
-    <!-- Разделители: линия в пиксель, обе ориентации -->
+    <!--
+        Разделители. Своей карточки в проекте у них нет — есть строка инвентаря
+        «линия в пиксель, обе ориентации» и роль токена AxBrd из раздела 3.
+        Живьём разделители видно в тулбаре, в таблице и под шапкой панели.
+    -->
     <ax:AxGroupHeader Content="Разделители"/>
     <StackPanel Spacing="10">
       <ax:AxDivider Width="260" HorizontalAlignment="Left"/>
