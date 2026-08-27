@@ -3,6 +3,48 @@
              xmlns:ax="using:ArxisStudio.Controls"
              x:Class="Controls.Gallery.GalleryCards">
 
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <!--
+            Буквы на плашке типа файла. Своего ключа у этого цвета в проекте
+            нет: плашка живёт только внутри карточки дерева, и там взяты
+            AxBlue4 в светлой и AxBlue10 в тёмной. Через AxAcc не выразить —
+            в тёмной он остаётся #3574F0 и на AxInfoBackground не читается.
+        -->
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="{StaticResource AxBlue4}"/>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="{StaticResource AxBlue10}"/>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <!--
+        Плашка типа файла: карточка проекта ставит её слева от имени вместо
+        глифа. Размеры — по таблице ключей: AxIconSize, AxCornerRadiusSmall
+        («бейджи, значки типов файлов»), AxFontSizeCaption («бейджи, счётчики»)
+        вместо 9px, проставленных в карточке мимо шкалы. Своего контрола под
+        плашку проект не заводит — поэтому она собрана здесь, в витрине.
+    -->
+    <Style Selector="Border.file-badge">
+      <Setter Property="Width" Value="{DynamicResource AxIconSize}"/>
+      <Setter Property="Height" Value="{DynamicResource AxIconSize}"/>
+      <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadiusSmall}"/>
+      <Setter Property="Background" Value="{DynamicResource AxInfoBackgroundBrush}"/>
+    </Style>
+    <Style Selector="Border.file-badge > TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource GalleryFileBadgeBrush}"/>
+      <Setter Property="FontSize" Value="{DynamicResource AxFontSizeCaption}"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+  </UserControl.Styles>
+
   <!--
       Карточки страницы «20 Контролы» дизайн-проекта, в её порядке. Контрол
       создаётся дважды — в светлой и тёмной половинах окна, — поэтому
@@ -373,16 +415,41 @@
 
     <!-- Дерево -->
     <ax:AxGroupHeader Content="Дерево"/>
-    <ax:AxTreeView>
+    <!--
+        Дерево проекта: у папок глиф, у файлов плашка типа — так его рисует
+        карточка проекта. Выбрана строка ChatView.axaml, как в макете.
+    -->
+    <ax:AxTreeView SelectedItem="{Binding #SelectedFile}">
       <ax:AxTreeViewItem Header="ChatApp" IsExpanded="True">
+        <ax:AxTreeViewItem.Icon>
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+        </ax:AxTreeViewItem.Icon>
         <ax:AxTreeViewItem Header="Views" IsExpanded="True">
-          <ax:AxTreeViewItem Header="MainWindow.axaml"/>
-          <ax:AxTreeViewItem Header="ChatView.axaml"/>
+          <ax:AxTreeViewItem.Icon>
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+          </ax:AxTreeViewItem.Icon>
+          <ax:AxTreeViewItem x:Name="SelectedFile" Header="ChatView.axaml">
+            <ax:AxTreeViewItem.Icon>
+              <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
+            </ax:AxTreeViewItem.Icon>
+          </ax:AxTreeViewItem>
+          <ax:AxTreeViewItem Header="MainWindow.axaml">
+            <ax:AxTreeViewItem.Icon>
+              <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
+            </ax:AxTreeViewItem.Icon>
+          </ax:AxTreeViewItem>
         </ax:AxTreeViewItem>
         <ax:AxTreeViewItem Header="ViewModels">
+          <ax:AxTreeViewItem.Icon>
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+          </ax:AxTreeViewItem.Icon>
           <ax:AxTreeViewItem Header="ChatViewModel.cs"/>
         </ax:AxTreeViewItem>
-        <ax:AxTreeViewItem Header="App.axaml"/>
+        <ax:AxTreeViewItem Header="App.axaml">
+          <ax:AxTreeViewItem.Icon>
+            <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
+          </ax:AxTreeViewItem.Icon>
+        </ax:AxTreeViewItem>
       </ax:AxTreeViewItem>
     </ax:AxTreeView>
 
