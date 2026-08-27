@@ -36,6 +36,38 @@
       <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadiusSmall}"/>
       <Setter Property="Background" Value="{DynamicResource AxInfoBackgroundBrush}"/>
     </Style>
+    <!--
+        Значок проекта в полосе окна: 24 на 24 акцентной заливкой, белые буквы.
+        Радиус в карточке 6, а в шкале его нет (3 / 4 / 8) — взят контрольный;
+        кегль 11 тоже мимо шкалы, взят кегль бейджа.
+    -->
+    <Style Selector="Border.project-badge">
+      <Setter Property="Width" Value="{DynamicResource AxControlHeightCompact}"/>
+      <Setter Property="Height" Value="{DynamicResource AxControlHeightCompact}"/>
+      <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadius}"/>
+      <Setter Property="Background" Value="{DynamicResource AxAccBrush}"/>
+    </Style>
+    <Style Selector="Border.project-badge > TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource AxOnAccBrush}"/>
+      <Setter Property="FontSize" Value="{DynamicResource AxFontSizeCaption}"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!--
+        Виджет запуска: полоса высотой в контрол на подложке первого уровня.
+        Радиус в карточке 6 — тот же случай, взят контрольный.
+    -->
+    <Style Selector="Border.run-widget">
+      <Setter Property="Height" Value="{DynamicResource AxControlHeight}"/>
+      <Setter Property="Padding" Value="8,0"/>
+      <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadius}"/>
+      <Setter Property="Background" Value="{DynamicResource AxBg1Brush}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource AxBrd2Brush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
     <Style Selector="Border.file-badge > TextBlock">
       <Setter Property="Foreground" Value="{DynamicResource GalleryFileBadgeBrush}"/>
       <Setter Property="FontSize" Value="{DynamicResource AxFontSizeCaption}"/>
@@ -513,35 +545,114 @@
 
     <!-- Тулбар -->
     <ax:AxGroupHeader Content="Тулбар"/>
-    <ax:AxToolBar>
-      <ax:AxToolBar.LeftContent>
-        <StackPanel Orientation="Horizontal" Spacing="2">
-          <ax:AxButton Classes="icon" ToolTip.Tip="Отменить">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Undo}"/>
-          </ax:AxButton>
-          <ax:AxButton Classes="icon" ToolTip.Tip="Вернуть">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Redo}"/>
-          </ax:AxButton>
-          <ax:AxButton Classes="icon" IsEnabled="False">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Refresh}"/>
-          </ax:AxButton>
-        </StackPanel>
-      </ax:AxToolBar.LeftContent>
-      <ax:AxToolBar.CenterContent>
-        <ax:AxDropDownButton Content="ВолнаЧат.Desktop"/>
-      </ax:AxToolBar.CenterContent>
-      <ax:AxToolBar.RightContent>
-        <StackPanel Orientation="Horizontal" Spacing="2">
-          <ax:AxButton Classes="icon">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Play}" IsFilled="True"
-                       Foreground="{DynamicResource AxGrnBrush}"/>
-          </ax:AxButton>
-          <ax:AxButton Classes="icon">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Debug}"/>
-          </ax:AxButton>
-        </StackPanel>
-      </ax:AxToolBar.RightContent>
-    </ax:AxToolBar>
+    <!--
+        Первый ряд карточки: иконочная кнопка в пяти состояниях и группа из
+        трёх. Наведение, нажатие и включённость проставлены псевдоклассами —
+        живое окно показало бы одно состояние за раз.
+
+        Кнопка идёт 24 на 24: столько объявляет компонент AxButton. Карточка
+        рисует её 28, но компонент над карточкой — так решено в проекте.
+    -->
+    <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
+      <StackPanel Spacing="4" HorizontalAlignment="Center">
+        <ax:AxButton Classes="icon" HorizontalAlignment="Center">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+        </ax:AxButton>
+        <TextBlock Classes="dim small" Text="Default" HorizontalAlignment="Center"/>
+      </StackPanel>
+      <StackPanel Spacing="4" HorizontalAlignment="Center">
+        <ax:AxButton x:Name="HoveredTool" Classes="icon" HorizontalAlignment="Center">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+        </ax:AxButton>
+        <TextBlock Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
+      </StackPanel>
+      <StackPanel Spacing="4" HorizontalAlignment="Center">
+        <ax:AxButton x:Name="PressedTool" Classes="icon" HorizontalAlignment="Center">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+        </ax:AxButton>
+        <TextBlock Classes="dim small" Text="Pressed" HorizontalAlignment="Center"/>
+      </StackPanel>
+      <StackPanel Spacing="4" HorizontalAlignment="Center">
+        <ax:AxButton x:Name="SelectedTool" Classes="icon" HorizontalAlignment="Center">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.List}"/>
+        </ax:AxButton>
+        <TextBlock Classes="dim small" Text="Selected" HorizontalAlignment="Center"/>
+      </StackPanel>
+      <StackPanel Spacing="4" HorizontalAlignment="Center">
+        <ax:AxButton Classes="icon" IsEnabled="False" HorizontalAlignment="Center">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+        </ax:AxButton>
+        <TextBlock Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+      </StackPanel>
+
+      <!-- Разделитель группы: 1 на 22 цветом рамки. -->
+      <Border Width="1" Height="22" Background="{DynamicResource AxBrdBrush}"/>
+
+      <StackPanel Orientation="Horizontal" Spacing="2">
+        <ax:AxButton Classes="icon" ToolTip.Tip="Свернуть всё">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+        </ax:AxButton>
+        <ax:AxButton Classes="icon" ToolTip.Tip="Фильтр">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Filter}"/>
+        </ax:AxButton>
+        <ax:AxButton Classes="icon" ToolTip.Tip="Ещё">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.MoreHorizontal}" IsFilled="True"/>
+        </ax:AxButton>
+      </StackPanel>
+    </StackPanel>
+
+    <!--
+        Второй ряд: полоса окна целиком — проект, ветка, конфигурация, виджет
+        запуска и кнопки окна. В Int UI отдельного системного заголовка у
+        главного окна нет, эта полоса и есть заголовок.
+
+        Кнопки окна тут не принимают нажатий: свои кнопки полоса вешает на то
+        окно, в котором стоит, и в галерее «закрыть» закрыло бы саму галерею.
+        Карточка показывает вид, а не поведение.
+    -->
+    <ax:AxTitleBar ShowWindowControls="False">
+      <ax:AxToolBar Margin="12,0">
+        <ax:AxToolBar.LeftContent>
+          <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+            <Border Classes="project-badge"><TextBlock Text="Ax"/></Border>
+            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+              <TextBlock Text="ВолнаЧат" FontWeight="SemiBold" VerticalAlignment="Center"/>
+              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+              <ax:AxIcon Data="{x:Static ax:AxIcons.Branch}"/>
+              <TextBlock Classes="dim" Text="main" VerticalAlignment="Center"/>
+              <TextBlock Classes="dim" Text="↑2" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+              <TextBlock Classes="dim" Text="Desktop · Debug" VerticalAlignment="Center"/>
+              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+            </StackPanel>
+          </StackPanel>
+        </ax:AxToolBar.LeftContent>
+        <ax:AxToolBar.RightContent>
+          <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Search}"/>
+            <!--
+                Виджет запуска: конфигурация, которую сейчас запустят. Своего
+                контрола под него проект не заводит, поэтому он собран здесь.
+            -->
+            <Border Classes="run-widget">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.Play}" IsFilled="True"
+                           Foreground="{DynamicResource AxGrnBrush}"/>
+                <ax:AxIcon Data="{x:Static ax:AxIcons.Refresh}"/>
+                <TextBlock Text="ВолнаЧат.Desktop" VerticalAlignment="Center"/>
+                <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+              </StackPanel>
+            </Border>
+            <ax:AxIcon Data="{x:Static ax:AxIcons.Split}"/>
+            <Border Width="1" Height="20" Background="{DynamicResource AxBg4Brush}"/>
+            <ax:AxWindowControls IsHitTestVisible="False"/>
+          </StackPanel>
+        </ax:AxToolBar.RightContent>
+      </ax:AxToolBar>
+    </ax:AxTitleBar>
 
     <!--
         Тулбар окна: в Int UI отдельного системного заголовка у главного окна

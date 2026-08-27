@@ -29,9 +29,25 @@ public partial class GalleryCards : UserControl
     /// <summary>
     /// Показывает звено под курсором, не двигая настоящий курсор.
     /// </summary>
-    private static void Hover(AxBreadcrumbItem link) =>
-        link.AttachedToVisualTree += (_, _) =>
-            ((Avalonia.Controls.IPseudoClasses)link.Classes).Set(":pointerover", true);
+    /// <summary>
+    /// Ставит контролу состояние тем же псевдоклассом, каким его включает тема.
+    /// </summary>
+    /// <remarks>
+    /// Метка ставится отложенно и возвращается после каждого события указателя.
+    /// Наведение и нажатие контрол считает сам: на подключении к дереву он
+    /// пересчитывает их и стирает чужую метку, а проведя над карточкой курсором,
+    /// стирает её насовсем — половина витрины так и осталась бы без состояния.
+    /// </remarks>
+    private static void Pin(Control control, string state)
+    {
+        void Set() => Avalonia.Threading.Dispatcher.UIThread.Post(
+            () => ((Avalonia.Controls.IPseudoClasses)control.Classes).Set(state, true),
+            Avalonia.Threading.DispatcherPriority.Loaded);
+
+        control.AttachedToVisualTree += (_, _) => Set();
+        control.PointerExited += (_, _) => Set();
+        control.PointerReleased += (_, _) => Set();
+    }
 
     /// <summary>Создаёт карточки и наполняет блок кода примером разметки.</summary>
     public GalleryCards()
@@ -45,7 +61,13 @@ public partial class GalleryCards : UserControl
         Show(FocusedField);
         Show(InvalidFocusedField);
         Show(FocusedSearch);
-        Hover(HoveredCrumb);
+        Pin(HoveredCrumb, ":pointerover");
+
+        // Ряд состояний иконочной кнопки в тулбаре: живое окно показало бы
+        // одно состояние за раз, а карточка требует все пять сразу.
+        Pin(HoveredTool, ":pointerover");
+        Pin(PressedTool, ":pressed");
+        Pin(SelectedTool, ":selected");
 
         QuickSearch.ItemsSource = new[]
         {
