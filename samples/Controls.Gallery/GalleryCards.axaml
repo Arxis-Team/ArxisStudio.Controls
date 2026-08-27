@@ -145,9 +145,49 @@
       <ax:AxTextBox Classes="compact" Text="Компактное · 24"/>
     </StackPanel>
 
-    <!-- Поиск -->
+    <!--
+        Поиск — карточка «Search · поле и строка поиска в редакторе»: поле в
+        покое, поле в фокусе с крестиком очистки и строка поиска редактора.
+
+        Строка редактора собрана из готовых контролов: раздел 8 закрепляет за
+        «Поиском» только AxSearchField, своего контрола под неё проект не
+        заводит, и заводить его здесь значило бы решать за владельца зоны.
+    -->
     <ax:AxGroupHeader Content="Поиск"/>
-    <ax:AxSearchField Width="340" HorizontalAlignment="Left" PlaceholderText="Search projects"/>
+    <StackPanel Spacing="14">
+      <ax:AxSearchField Width="240" HorizontalAlignment="Left" PlaceholderText="Поиск"/>
+
+      <ax:AxSearchField x:Name="FocusedSearch" Width="240" HorizontalAlignment="Left" Text="send">
+        <ax:AxSearchField.InnerRightContent>
+          <ax:AxButton Classes="icon" AutomationProperties.Name="Очистить">
+            <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.Close}"/>
+          </ax:AxButton>
+        </ax:AxSearchField.InnerRightContent>
+      </ax:AxSearchField>
+
+      <Border Height="32" CornerRadius="6" Padding="10,0"
+              Background="{DynamicResource AxBg2Brush}"
+              BorderBrush="{DynamicResource AxBrd2Brush}"
+              BorderThickness="1">
+        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <ax:AxIcon Data="{x:Static ax:AxIcons.Search}"/>
+          <TextBlock Text="message" VerticalAlignment="Center"/>
+          <!-- Учитывать регистр: включено — своей плашкой, выключено — просто текст. -->
+          <ax:AxChip Content="Aa" VerticalAlignment="Center"/>
+          <TextBlock Classes="dim" Text=".*" VerticalAlignment="Center"/>
+          <TextBlock Classes="dim small" Text="3/14" VerticalAlignment="Center"/>
+          <ax:AxButton Classes="icon" AutomationProperties.Name="Предыдущее">
+            <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronUp}"/>
+          </ax:AxButton>
+          <ax:AxButton Classes="icon" AutomationProperties.Name="Следующее">
+            <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+          </ax:AxButton>
+          <ax:AxButton Classes="icon" AutomationProperties.Name="Закрыть поиск">
+            <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.Close}"/>
+          </ax:AxButton>
+        </StackPanel>
+      </Border>
+    </StackPanel>
 
     <!-- Многострочное поле -->
     <ax:AxGroupHeader Content="Многострочное поле"/>

@@ -20,7 +20,11 @@ public partial class GalleryCards : UserControl
     /// пустыми — фокус в окне один.
     /// </remarks>
     private static void Show(AxTextBox field) =>
-        ((Avalonia.Controls.IPseudoClasses)field.Classes).Set(":focus", true);
+        // При появлении, а не в конструкторе: поставленный слишком рано
+        // псевдокласс у поля поиска не удерживался — его внутренняя кнопка
+        // очистки при подключении пересчитывает состояние фокуса.
+        field.AttachedToVisualTree += (_, _) =>
+            ((Avalonia.Controls.IPseudoClasses)field.Classes).Set(":focus", true);
 
     /// <summary>Создаёт карточки и наполняет блок кода примером разметки.</summary>
     public GalleryCards()
@@ -33,6 +37,7 @@ public partial class GalleryCards : UserControl
         // видно ровно то, что она делает на :focus.
         Show(FocusedField);
         Show(InvalidFocusedField);
+        Show(FocusedSearch);
 
         QuickSearch.ItemsSource = new[]
         {
