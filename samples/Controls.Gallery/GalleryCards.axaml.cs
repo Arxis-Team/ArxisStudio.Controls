@@ -1,6 +1,7 @@
 using ArxisStudio.Controls;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 
 namespace Controls.Gallery;
 
@@ -68,6 +69,20 @@ public partial class GalleryCards : UserControl
         Pin(HoveredTool, ":pointerover");
         Pin(PressedTool, ":pressed");
         Pin(SelectedTool, ":selected");
+
+        // Развёрнутый скроллбар второй области: разворот поднимает сама
+        // область прокрутки под курсором, а карточка показывает оба состояния
+        // сразу — курсор в живом окне один.
+        // Полосы ищем на каждом пересчёте разметки: на подключении к дереву
+        // шаблон области ещё не развёрнут, и искать в ней нечего, а сама
+        // область поднимает и опускает разворот, пока курсор ходит по окну.
+        // Повторная установка того же значения ничего не делает.
+        ExpandedScroll.LayoutUpdated += (_, _) =>
+        {
+            foreach (var bar in ExpandedScroll.GetVisualDescendants()
+                         .OfType<Avalonia.Controls.Primitives.ScrollBar>())
+                ((Avalonia.Controls.IPseudoClasses)bar.Classes).Set(":expanded", true);
+        };
 
         QuickSearch.ItemsSource = new[]
         {

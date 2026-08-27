@@ -37,6 +37,20 @@
       <Setter Property="Background" Value="{DynamicResource AxInfoBackgroundBrush}"/>
     </Style>
     <!--
+        Область прокрутки карточки: 110 в высоту, на утопленной подложке —
+        та же полоса, что под деревом контролов. Радиус в карточке 6, а в
+        шкале его нет (3 / 4 / 8), взят контрольный.
+    -->
+    <Style Selector="Border.scroll-pane">
+      <Setter Property="Height" Value="110"/>
+      <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadius}"/>
+      <Setter Property="Background" Value="{DynamicResource AxBgSunkenBrush}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource AxBrdBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="ClipToBounds" Value="True"/>
+    </Style>
+
+    <!--
         Значок проекта в полосе окна: 24 на 24 акцентной заливкой, белые буквы.
         Радиус в карточке 6, а в шкале его нет (3 / 4 / 8) — взят контрольный;
         кегль 11 тоже мимо шкалы, взят кегль бейджа.
@@ -839,18 +853,37 @@
     </UniformGrid>
 
     <!-- Скроллбар -->
-    <ax:AxGroupHeader Content="Скроллбар · 8"/>
-    <Border BorderBrush="{DynamicResource AxBrdBrush}" BorderThickness="1"
-            CornerRadius="{DynamicResource AxCornerRadius}"
-            Height="90" Width="360" HorizontalAlignment="Left">
-      <ScrollViewer VerticalScrollBarVisibility="Visible">
-        <StackPanel Margin="10">
-          <TextBlock Text="Строка 1"/><TextBlock Text="Строка 2"/><TextBlock Text="Строка 3"/>
-          <TextBlock Text="Строка 4"/><TextBlock Text="Строка 5"/><TextBlock Text="Строка 6"/>
-          <TextBlock Text="Строка 7"/><TextBlock Text="Строка 8"/>
-        </StackPanel>
-      </ScrollViewer>
-    </Border>
+    <ax:AxGroupHeader Content="Скроллбар"/>
+    <!--
+        Две области рядом, как в карточке: в покое и под курсором. Разворот
+        второй проставлен псевдоклассом — курсор в живом окне один, а карточка
+        показывает оба состояния сразу. Горизонтальная полоса в карточке видна
+        только у развёрнутой, поэтому содержимое второй шире области.
+    -->
+    <UniformGrid Columns="2" Margin="0,0,-24,0">
+      <Border Classes="scroll-pane" Margin="0,0,24,0">
+        <ScrollViewer VerticalScrollBarVisibility="Visible">
+          <StackPanel Margin="10">
+            <TextBlock Classes="dim" Text="Default"/>
+            <TextBlock Text="Строка 2"/><TextBlock Text="Строка 3"/>
+            <TextBlock Text="Строка 4"/><TextBlock Text="Строка 5"/>
+            <TextBlock Text="Строка 6"/><TextBlock Text="Строка 7"/>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+      <Border Classes="scroll-pane" Margin="0,0,24,0">
+        <ScrollViewer x:Name="ExpandedScroll"
+                      VerticalScrollBarVisibility="Visible"
+                      HorizontalScrollBarVisibility="Visible">
+          <StackPanel Margin="10">
+            <TextBlock Classes="dim" Text="Hovered"/>
+            <TextBlock Text="Строка 2"/><TextBlock Text="Строка 3"/>
+            <TextBlock Text="Строка 4"/><TextBlock Text="Строка 5"/>
+            <TextBlock Text="Строка 6, которая не помещается по ширине области"/>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+    </UniformGrid>
 
     <!-- Шорткаты и код -->
     <ax:AxGroupHeader Content="Шорткаты и код"/>
