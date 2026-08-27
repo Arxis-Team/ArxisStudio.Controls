@@ -4,6 +4,7 @@
              x:Class="Controls.Gallery.App"
              RequestedThemeVariant="Dark">
   <Application.Styles>
+    <FluentTheme/>
     <themes:ArxisTheme/>
   </Application.Styles>
 </Application>

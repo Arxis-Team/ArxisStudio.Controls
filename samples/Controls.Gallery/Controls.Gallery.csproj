@@ -21,15 +21,21 @@
     </Target>
 
     <!--
-        Ни темы Fluent, ни пакета со шрифтом здесь нет. Всё, что рисует
-        галерея, — контролы Ax* и шесть базовых типов, которые тема Arxis
-        покрывает сама: ContextMenu, MenuFlyoutPresenter, MenuItem, ScrollBar,
-        Separator, ToolTip. Шрифт приезжает вместе с темой: ключ AxFontFamily
-        объявлен там же.
+        Тема Fluent стоит слоем ниже «Arxis» и закрывает те базовые контролы,
+        до которых библиотека пока не дошла: своих у неё Ax*-контролы и семь
+        базовых типов — ContextMenu, MenuFlyoutPresenter, MenuItem, ScrollBar,
+        ScrollViewer, Separator, ToolTip. Когда список закроется целиком,
+        Fluent отсюда уйдёт; до тех пор его отсутствие видно не сразу —
+        ScrollViewer без темы, например, рисует содержимое и молча теряет
+        прокрутку.
+
+        Шрифта здесь нет: ключ AxFontFamily объявлен в теме, оттуда пакет и
+        приезжает. Приложению остаётся вызвать WithInterFont().
     -->
     <ItemGroup>
         <PackageReference Include="Avalonia"/>
         <PackageReference Include="Avalonia.Desktop"/>
+        <PackageReference Include="Avalonia.Themes.Fluent"/>
     </ItemGroup>
 
     <!--
