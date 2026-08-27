@@ -567,16 +567,89 @@
 
     <!-- Хлебные крошки -->
     <ax:AxGroupHeader Content="Хлебные крошки"/>
-    <ax:AxBreadcrumbBar>
-      <ax:AxBreadcrumbItem Content="ВолнаЧат"/>
-      <ax:AxBreadcrumbItem Content="Views"/>
-      <ax:AxBreadcrumbItem Classes="current" Content="LoginView.axaml"/>
-    </ax:AxBreadcrumbBar>
-    <ax:AxBreadcrumbBar>
-      <ax:AxBreadcrumbItem Content="Grid"/>
-      <ax:AxBreadcrumbItem Content="StackPanel"/>
-      <ax:AxBreadcrumbItem Classes="error" Content="SendButton"/>
-    </ax:AxBreadcrumbBar>
+    <!--
+        Четыре ряда карточки проекта, в её порядке и с её подписями.
+    -->
+    <StackPanel Spacing="18">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="dim small" Text="Путь к файлу"/>
+        <ax:AxBreadcrumbBar>
+          <ax:AxBreadcrumbItem Content="ВолнаЧат">
+            <ax:AxBreadcrumbItem.Icon>
+              <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+            </ax:AxBreadcrumbItem.Icon>
+          </ax:AxBreadcrumbItem>
+          <!-- Звено под курсором: в карточке оно показано с плашкой. -->
+          <ax:AxBreadcrumbItem x:Name="HoveredCrumb" Content="Views">
+            <ax:AxBreadcrumbItem.Icon>
+              <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+            </ax:AxBreadcrumbItem.Icon>
+          </ax:AxBreadcrumbItem>
+          <ax:AxBreadcrumbItem Classes="current" Content="ChatView.axaml">
+            <ax:AxBreadcrumbItem.Icon>
+              <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
+            </ax:AxBreadcrumbItem.Icon>
+          </ax:AxBreadcrumbItem>
+        </ax:AxBreadcrumbBar>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="dim small" Text="С выпадающим списком и усечением"/>
+        <ax:AxBreadcrumbBar>
+          <ax:AxBreadcrumbItem>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="ВолнаЧат" VerticalAlignment="Center"/>
+              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"
+                         Foreground="{DynamicResource AxFg2Brush}"/>
+            </StackPanel>
+          </ax:AxBreadcrumbItem>
+          <ax:AxBreadcrumbItem Content="…"/>
+          <ax:AxBreadcrumbItem>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="Views" VerticalAlignment="Center"/>
+              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"
+                         Foreground="{DynamicResource AxFg2Brush}"/>
+            </StackPanel>
+          </ax:AxBreadcrumbItem>
+          <ax:AxBreadcrumbItem Classes="current">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="ChatView.axaml" VerticalAlignment="Center"/>
+              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"
+                         Foreground="{DynamicResource AxFg2Brush}"/>
+            </StackPanel>
+          </ax:AxBreadcrumbItem>
+        </ax:AxBreadcrumbBar>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="dim small" Text="Дерево контролов в дизайнере"/>
+        <ax:AxBreadcrumbBar Classes="framed" HorizontalAlignment="Left">
+          <ax:AxBreadcrumbItem Content="Window">
+            <ax:AxBreadcrumbItem.Icon>
+              <!--
+                  Скобки: этот глиф нарисован в карточке крошек, но зона иконок
+                  его не публикует — в AxIcons его нет и завести нельзя, набор
+                  сверяется с зоной один в один. Пока рисуем здесь, по правилам
+                  набора: клетка 16, обводка 1.2.
+              -->
+              <ax:AxIcon Data="M6.5 3H5.5A1.5 1.5 0 0 0 4 4.5v2A1.5 1.5 0 0 1 2.5 8A1.5 1.5 0 0 1 4 9.5v2A1.5 1.5 0 0 0 5.5 13h1 M9.5 3h1A1.5 1.5 0 0 1 12 4.5v2A1.5 1.5 0 0 0 13.5 8A1.5 1.5 0 0 0 12 9.5v2A1.5 1.5 0 0 1 10.5 13h-1"/>
+            </ax:AxBreadcrumbItem.Icon>
+          </ax:AxBreadcrumbItem>
+          <ax:AxBreadcrumbItem Content="Grid"/>
+          <ax:AxBreadcrumbItem Content="StackPanel"/>
+          <ax:AxBreadcrumbItem Classes="current" Content="SendButton"/>
+        </ax:AxBreadcrumbBar>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Classes="dim small" Text="Ошибка в пути и неактивные звенья"/>
+        <ax:AxBreadcrumbBar>
+          <ax:AxBreadcrumbItem IsEnabled="False" Content="ВолнаЧат"/>
+          <ax:AxBreadcrumbItem IsEnabled="False" Content="Views"/>
+          <ax:AxBreadcrumbItem Classes="error" Content="LoginView.axaml"/>
+        </ax:AxBreadcrumbBar>
+      </StackPanel>
+    </StackPanel>
 
     <!-- Tool Window -->
     <ax:AxGroupHeader Content="Tool Window"/>

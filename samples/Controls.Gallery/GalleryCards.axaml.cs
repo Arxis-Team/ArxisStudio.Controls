@@ -26,6 +26,13 @@ public partial class GalleryCards : UserControl
         field.AttachedToVisualTree += (_, _) =>
             ((Avalonia.Controls.IPseudoClasses)field.Classes).Set(":focus", true);
 
+    /// <summary>
+    /// Показывает звено под курсором, не двигая настоящий курсор.
+    /// </summary>
+    private static void Hover(AxBreadcrumbItem link) =>
+        link.AttachedToVisualTree += (_, _) =>
+            ((Avalonia.Controls.IPseudoClasses)link.Classes).Set(":pointerover", true);
+
     /// <summary>Создаёт карточки и наполняет блок кода примером разметки.</summary>
     public GalleryCards()
     {
@@ -38,6 +45,7 @@ public partial class GalleryCards : UserControl
         Show(FocusedField);
         Show(InvalidFocusedField);
         Show(FocusedSearch);
+        Hover(HoveredCrumb);
 
         QuickSearch.ItemsSource = new[]
         {
