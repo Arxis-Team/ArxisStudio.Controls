@@ -10,10 +10,29 @@ namespace Controls.Gallery;
 /// </summary>
 public partial class GalleryCards : UserControl
 {
+    /// <summary>
+    /// Показывает поле в фокусе, не отбирая фокус у окна.
+    /// </summary>
+    /// <remarks>
+    /// Псевдокласс тот же, по которому тема рисует контур: галерея ничего не
+    /// подменяет собой, она лишь ставит контрол в состояние, которое обязана
+    /// показать. Иначе одна из двух половин и одна из двух колонок остались бы
+    /// пустыми — фокус в окне один.
+    /// </remarks>
+    private static void Show(AxTextBox field) =>
+        ((Avalonia.Controls.IPseudoClasses)field.Classes).Set(":focus", true);
+
     /// <summary>Создаёт карточки и наполняет блок кода примером разметки.</summary>
     public GalleryCards()
     {
         InitializeComponent();
+
+        // Две колонки карточки показывают поле в фокусе, а живое окно даёт один
+        // фокус на всех — и половин галереи две. Ставим состояние прямо, тем же
+        // псевдоклассом, которым его включает тема: рисует по-прежнему тема, и
+        // видно ровно то, что она делает на :focus.
+        Show(FocusedField);
+        Show(InvalidFocusedField);
 
         QuickSearch.ItemsSource = new[]
         {

@@ -88,17 +88,60 @@
       <ax:AxToggleSwitch IsChecked="True" IsEnabled="False" Content="Disabled"/>
     </StackPanel>
 
-    <!-- Поле ввода -->
+    <!--
+        Поле ввода — карточка «Input Field · с подписью» проекта: пять состояний
+        в ряд равными колонками, в колонке подпись состояния, подпись поля и
+        само поле.
+
+        Две колонки из пяти показывают фокус, а живое окно даёт один фокус на
+        всех — и половин здесь две. Поэтому состояние ставится этим полям прямо,
+        тем же псевдоклассом :focus, которым его включает сама тема: карточка
+        показывает состояния, а показать состояние значит в него поставить.
+        Рисует при этом тема, а не галерея, — своего вида фокуса тут нет.
+    -->
     <ax:AxGroupHeader Content="Поле ввода"/>
+    <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="16">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="dim small" Text="Default"/>
+        <TextBlock Text="Имя формы"/>
+        <ax:AxTextBox Text="ChatView"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Spacing="6">
+        <TextBlock Classes="dim small" Text="Focused"/>
+        <TextBlock Text="Имя формы"/>
+        <ax:AxTextBox x:Name="FocusedField" Text="ChatView"/>
+      </StackPanel>
+      <StackPanel Grid.Column="2" Spacing="6">
+        <TextBlock Classes="dim small" Text="Invalid"/>
+        <TextBlock Text="Имя формы"/>
+        <ax:AxTextBox Classes="error" Text="Chat View!"/>
+      </StackPanel>
+      <StackPanel Grid.Column="3" Spacing="6">
+        <TextBlock Classes="dim small" Text="Invalid focused"/>
+        <TextBlock Text="Имя формы"/>
+        <ax:AxTextBox x:Name="InvalidFocusedField" Classes="error" Text="Chat View!"/>
+      </StackPanel>
+      <StackPanel Grid.Column="4" Spacing="6">
+        <TextBlock Classes="dim small" Text="Disabled"/>
+        <!-- Подпись выключенного поля гаснет вместе с ним: проект даёт AxFg3. -->
+        <TextBlock Classes="dimmer" Text="Имя формы"/>
+        <ax:AxTextBox IsEnabled="False" Text="ChatView"/>
+      </StackPanel>
+    </Grid>
+
+    <!--
+        Чего карточка проекта не перечисляет, но требует спецификация:
+        предупреждение (раздел 10 — класс warning рядом с error), текст ошибки
+        под полем (раздел 12 — «класс error плюс текст под полем»), подсказка
+        вместо подписи и компактная высота 24 плотной зоны (раздел 6).
+    -->
     <StackPanel Spacing="8" Width="360" HorizontalAlignment="Left">
-      <ax:AxTextBox Text="ChatView" PlaceholderText="Имя формы"/>
       <ax:AxTextBox PlaceholderText="Плейсхолдер читается вместо подписи"/>
       <StackPanel Spacing="3">
         <ax:AxTextBox Classes="error" Text="Chat View!"/>
         <TextBlock Classes="bad" FontSize="11.5" Text="Имя не может содержать пробелы"/>
       </StackPanel>
       <ax:AxTextBox Classes="warning" Text="chatview"/>
-      <ax:AxTextBox IsEnabled="False" Text="ChatView"/>
       <ax:AxTextBox Classes="compact" Text="Компактное · 24"/>
     </StackPanel>
 
@@ -136,17 +179,21 @@
 
     <!-- Вкладки -->
     <ax:AxGroupHeader Content="Вкладки"/>
-    <ax:AxTabStrip SelectedIndex="0">
-      <ax:AxTabItem Content="Свойства" IsClosable="False"/>
-      <ax:AxTabItem Content="События" IsClosable="False"/>
-      <ax:AxTabItem Content="Стили" IsClosable="False"/>
-      <ax:AxTabItem Content="Ресурсы" IsClosable="False"/>
+    <!--
+        Два ряда, как в карточке проекта: обычные вкладки прозрачной полосой,
+        вкладки документа — на своей, со скруглением сверху и крестиками.
+    -->
+    <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0"
+                   BorderBrush="{DynamicResource AxBrdBrush}" BorderThickness="0,0,0,1">
+      <ax:AxTabItem Classes="compact" Content="Свойства" IsClosable="False"/>
+      <ax:AxTabItem Classes="compact" Content="События" IsClosable="False"/>
+      <ax:AxTabItem Classes="compact" Content="Стили" IsClosable="False"/>
+      <ax:AxTabItem Classes="compact" Content="Ресурсы" IsClosable="False"/>
     </ax:AxTabStrip>
     <ax:AxTabStrip SelectedIndex="0">
-      <ax:AxTabItem Content="MainWindow.axaml"
-                    Icon="{x:Static ax:AxIcons.DocumentCode}"/>
-      <ax:AxTabItem Content="ChatView.axaml" IsModified="True"
-                    Icon="{x:Static ax:AxIcons.DocumentCode}"/>
+      <ax:AxTabItem Content="MainWindow.axaml"/>
+      <ax:AxTabItem Content="ChatViewModel.cs" IsModified="True"/>
+      <ax:AxTabItem Content="App.axaml"/>
     </ax:AxTabStrip>
 
     <!-- Ссылки -->
