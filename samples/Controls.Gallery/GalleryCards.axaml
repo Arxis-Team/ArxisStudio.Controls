@@ -653,46 +653,79 @@
 
     <!-- Tool Window -->
     <ax:AxGroupHeader Content="Tool Window"/>
-    <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="False">
-      <ax:AxToolWindow.Actions>
-        <StackPanel Orientation="Horizontal" Spacing="2">
-          <ax:AxButton Classes="icon">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
-          </ax:AxButton>
-          <ax:AxButton Classes="icon">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
-          </ax:AxButton>
-        </StackPanel>
-      </ax:AxToolWindow.Actions>
-      <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Label only"/>
-    </ax:AxToolWindow>
-    <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="True">
-      <ax:AxToolWindow.Actions>
-        <StackPanel Orientation="Horizontal" Spacing="2">
-          <ax:AxButton Classes="icon">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
-          </ax:AxButton>
-          <ax:AxButton Classes="icon">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
-          </ax:AxButton>
-        </StackPanel>
-      </ax:AxToolWindow.Actions>
-      <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Label with separator"/>
-    </ax:AxToolWindow>
-    <ax:AxToolWindow Title="Header" Height="120" ShowHeaderSeparator="True">
-      <ax:AxToolWindow.Tabs>
-        <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0">
-          <ax:AxTabItem Content="Проект"/>
-          <ax:AxTabItem Content="Консоль"/>
-        </ax:AxTabStrip>
-      </ax:AxToolWindow.Tabs>
-      <ax:AxToolWindow.Actions>
-        <ax:AxButton Classes="icon">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
-        </ax:AxButton>
-      </ax:AxToolWindow.Actions>
-      <TextBlock Classes="dimmer" Margin="10" FontSize="11.5" Text="Tabs"/>
-    </ax:AxToolWindow>
+    <!--
+        Три вида шапки рядом, как в карточке: только заголовок, заголовок с
+        линией, заголовок с вкладками. Панели пустые — карточка показывает
+        именно шапку, а содержимое там ничем не занято.
+    -->
+    <!--
+        Правило карточки — колонки делят строку поровну и переносятся, когда
+        каждой остаётся меньше 250. На половине витрины в 736 три колонки дали
+        бы по 232, поэтому их две, и третья панель встаёт на вторую строку.
+        Отбивка 20 висит на самих колонках, а отрицательное поле сетки убирает
+        её с внешних краёв.
+    -->
+    <UniformGrid Columns="2" Margin="0,0,-20,-20">
+      <StackPanel Spacing="8" Margin="0,0,20,20">
+        <TextBlock Classes="dim small" Text="Label only"/>
+        <ax:AxToolWindow Title="Header" Height="150" ShowHeaderSeparator="False">
+          <ax:AxToolWindow.Actions>
+            <StackPanel Orientation="Horizontal" Spacing="2">
+              <ax:AxButton Classes="icon">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+              </ax:AxButton>
+              <ax:AxButton Classes="icon">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+              </ax:AxButton>
+            </StackPanel>
+          </ax:AxToolWindow.Actions>
+        </ax:AxToolWindow>
+      </StackPanel>
+
+      <StackPanel Spacing="8" Margin="0,0,20,20">
+        <TextBlock Classes="dim small" Text="Label with separator"/>
+        <ax:AxToolWindow Title="Header" Height="150" ShowHeaderSeparator="True">
+          <ax:AxToolWindow.Actions>
+            <StackPanel Orientation="Horizontal" Spacing="2">
+              <ax:AxButton Classes="icon">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+              </ax:AxButton>
+              <ax:AxButton Classes="icon">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+              </ax:AxButton>
+            </StackPanel>
+          </ax:AxToolWindow.Actions>
+        </ax:AxToolWindow>
+      </StackPanel>
+
+      <StackPanel Spacing="8" Margin="0,0,20,20">
+        <TextBlock Classes="dim small" Text="Tabs"/>
+        <ax:AxToolWindow Title="Header" Height="150" ShowHeaderSeparator="True">
+          <ax:AxToolWindow.Tabs>
+            <StackPanel Orientation="Horizontal">
+              <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0">
+                <ax:AxTabItem Content="Text"/>
+                <ax:AxTabItem Content="Text"/>
+              </ax:AxTabStrip>
+              <!-- Добавить вкладку: в карточке кнопка стоит в ряду вкладок. -->
+              <ax:AxButton Classes="icon" VerticalAlignment="Center">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+              </ax:AxButton>
+            </StackPanel>
+          </ax:AxToolWindow.Tabs>
+          <ax:AxToolWindow.Actions>
+            <StackPanel Orientation="Horizontal" Spacing="2">
+              <ax:AxButton Classes="icon">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+              </ax:AxButton>
+              <ax:AxButton Classes="icon">
+                <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+              </ax:AxButton>
+            </StackPanel>
+          </ax:AxToolWindow.Actions>
+        </ax:AxToolWindow>
+      </StackPanel>
+    </UniformGrid>
 
     <!-- Скроллбар -->
     <ax:AxGroupHeader Content="Скроллбар · 8"/>
