@@ -188,8 +188,8 @@
               <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.Close}"/>
             </ax:AxButton>
           </StackPanel>
-          <ax:AxTextBox Text="message" VerticalAlignment="Center"
-                        Background="Transparent" BorderThickness="0" Padding="0"/>
+          <ax:AxTextBox Theme="{StaticResource AxInlineTextBox}"
+                        Text="message" VerticalAlignment="Center"/>
         </DockPanel>
       </Border>
     </StackPanel>
