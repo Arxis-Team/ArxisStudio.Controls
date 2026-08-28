@@ -185,15 +185,42 @@
       <ax:AxDropDownButton Content="Debug" IsEnabled="False"/>
     </StackPanel>
 
-    <!-- Чекбокс -->
+    <!--
+        Чекбокс — карточка «Checkbox · 3 типа × 5 состояний»: три типа по
+        строкам, состояния по колонкам. Флажки без подписи: карточка показывает
+        коробку, а подпись у неё своя, в левой колонке.
+    -->
     <ax:AxGroupHeader Content="Чекбокс"/>
-    <StackPanel Orientation="Horizontal" Spacing="16">
-      <ax:AxCheckBox>Unchecked</ax:AxCheckBox>
-      <ax:AxCheckBox IsChecked="True">Checked</ax:AxCheckBox>
-      <ax:AxCheckBox IsThreeState="True" IsChecked="{x:Null}">Indeterminate</ax:AxCheckBox>
-      <ax:AxCheckBox Classes="error">Invalid</ax:AxCheckBox>
-      <ax:AxCheckBox IsEnabled="False" IsChecked="True">Disabled</ax:AxCheckBox>
-    </StackPanel>
+    <Grid ColumnDefinitions="104,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+      <TextBlock Grid.Column="1" Classes="dim small" Text="Active" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="2" Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="3" Classes="dim small" Text="Focused" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="4" Classes="dim small" Text="Invalid" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="5" Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+
+      <TextBlock Grid.Row="1" Classes="dim small" Text="Unchecked" VerticalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="1" Grid.Column="2" x:Name="HoveredBox" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="1" Grid.Column="3" x:Name="FocusedBox" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="1" Grid.Column="4" Classes="error" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="1" Grid.Column="5" IsEnabled="False" HorizontalAlignment="Center"/>
+
+      <TextBlock Grid.Row="2" Classes="dim small" Text="Checked" VerticalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="2" Grid.Column="1" IsChecked="True" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="2" Grid.Column="2" x:Name="HoveredChecked" IsChecked="True" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="2" Grid.Column="3" x:Name="FocusedChecked" IsChecked="True" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="2" Grid.Column="4" Classes="error" IsChecked="True" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="2" Grid.Column="5" IsChecked="True" IsEnabled="False" HorizontalAlignment="Center"/>
+
+      <TextBlock Grid.Row="3" Classes="dim small" Text="Indeterminate" VerticalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="3" Grid.Column="1" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="3" Grid.Column="2" x:Name="HoveredMixed" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="3" Grid.Column="3" x:Name="FocusedMixed" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="3" Grid.Column="4" Classes="error" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="3" Grid.Column="5" IsThreeState="True" IsChecked="{x:Null}" IsEnabled="False" HorizontalAlignment="Center"/>
+    </Grid>
+    <!-- Флажок с подписью: в жизни он ходит с ней, а в карточке её нет. -->
+    <ax:AxCheckBox IsChecked="True" Content="Больше не спрашивать"/>
 
     <!-- Радиокнопка -->
     <ax:AxGroupHeader Content="Радиокнопка"/>

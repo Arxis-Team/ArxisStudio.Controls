@@ -82,6 +82,13 @@ public partial class GalleryCards : UserControl
         foreach (var focused in new[] { FocusedPrimary, FocusedSecondary, FocusedSlim })
             Pin(focused, ":focus-visible");
 
+        // Флажки карточки «Checkbox»: три типа по пяти состояниям.
+        foreach (var hovered in new[] { HoveredBox, HoveredChecked, HoveredMixed })
+            Pin(hovered, ":pointerover");
+
+        foreach (var focused in new[] { FocusedBox, FocusedChecked, FocusedMixed })
+            Pin(focused, ":focus-visible");
+
         // Развёрнутый скроллбар второй области: разворот поднимает сама
         // область прокрутки под курсором, а карточка показывает оба состояния
         // сразу — курсор в живом окне один.
