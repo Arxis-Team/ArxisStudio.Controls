@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ax="using:ArxisStudio.Controls"
              x:Class="Controls.Gallery.GalleryCards">
@@ -540,7 +540,7 @@
         Дерево проекта: у папок глиф, у файлов плашка типа — так его рисует
         карточка проекта. Выбрана строка ChatView.axaml, как в макете.
     -->
-    <ax:AxTreeView SelectedItem="{Binding #SelectedFile}">
+    <ax:AxTreeView x:Name="ProjectTree" SelectedItem="{Binding #SelectedFile}">
       <ax:AxTreeViewItem Header="ChatApp" IsExpanded="True">
         <ax:AxTreeViewItem.Icon>
           <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
@@ -589,7 +589,7 @@
         Колонки долевые, как в карточке: 2fr 1fr 1fr 1fr. Ширины таблице не
         задаём — в карточке она занимает всю половину.
     -->
-    <ax:AxDataGrid SelectedIndex="1">
+    <ax:AxDataGrid x:Name="FilesTable" SelectedIndex="1">
       <ax:AxDataGrid.Header>
         <Grid ColumnDefinitions="2*,*,*,*">
           <TextBlock Text="Форма"/>

@@ -1,4 +1,4 @@
-using ArxisStudio.Controls;
+﻿using ArxisStudio.Controls;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -69,6 +69,12 @@ public partial class GalleryCards : UserControl
         Pin(HoveredTool, ":pointerover");
         Pin(PressedTool, ":pressed");
         Pin(SelectedTool, ":selected");
+
+        // Дерево и таблица: выделение показано в полную силу — AxSel живёт под
+        // фокусом списка, а в витрине фокус один на всех, и без метки карточки
+        // показывали бы погашенное AxSelInactive, которого в макете нет.
+        Pin(ProjectTree, ":focus-within");
+        Pin(FilesTable, ":focus-within");
 
         // Кнопки карточки «Button»: два вида по пяти состояниям.
         foreach (var hovered in new[] { HoveredPrimary, HoveredSecondary, HoveredSlim })
