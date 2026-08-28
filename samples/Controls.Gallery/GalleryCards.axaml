@@ -100,26 +100,61 @@
   -->
   <StackPanel Margin="22,18" Spacing="14">
 
-    <!-- Кнопки -->
+    <!--
+        Кнопки — карточка «Button · Primary / Secondary»: два вида по пяти
+        состояниям. Наведение, нажатие и фокус проставлены псевдоклассами:
+        живое окно показало бы одно состояние за раз, а карточка требует все
+        пять сразу.
+    -->
     <ax:AxGroupHeader Content="Кнопки"/>
+    <Grid ColumnDefinitions="92,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+      <TextBlock Grid.Column="1" Classes="dim small" Text="Default" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="2" Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="3" Classes="dim small" Text="Pressed" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="4" Classes="dim small" Text="Focused" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="5" Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+
+      <TextBlock Grid.Row="1" Classes="dim small" Text="Primary" VerticalAlignment="Center"/>
+      <ax:AxButton Grid.Row="1" Grid.Column="1" Classes="accent">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="2" x:Name="HoveredPrimary" Classes="accent">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="3" x:Name="PressedPrimary" Classes="accent">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="4" x:Name="FocusedPrimary" Classes="accent">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="5" Classes="accent" IsEnabled="False">Button</ax:AxButton>
+
+      <TextBlock Grid.Row="2" Classes="dim small" Text="Secondary" VerticalAlignment="Center"/>
+      <ax:AxButton Grid.Row="2" Grid.Column="1">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="2" Grid.Column="2" x:Name="HoveredSecondary">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="2" Grid.Column="3" x:Name="PressedSecondary">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="2" Grid.Column="4" x:Name="FocusedSecondary">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="2" Grid.Column="5" IsEnabled="False">Button</ax:AxButton>
+    </Grid>
+    <!--
+        Классы, которых в карточке состояний нет, но которые объявлены разделом
+        10: призрачная, опасная и иконочная.
+    -->
     <StackPanel Orientation="Horizontal" Spacing="10">
-      <ax:AxButton Classes="accent">Button</ax:AxButton>
-      <ax:AxButton>Button</ax:AxButton>
-      <ax:AxButton Classes="ghost">Button</ax:AxButton>
+      <ax:AxButton Classes="ghost">Ghost</ax:AxButton>
       <ax:AxButton Classes="danger">Delete</ax:AxButton>
-      <ax:AxButton IsEnabled="False">Button</ax:AxButton>
       <ax:AxButton Classes="icon" ToolTip.Tip="Собрать проект">
         <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
       </ax:AxButton>
     </StackPanel>
 
-    <!-- Компактная кнопка -->
+    <!-- Компактная кнопка — та же сетка состояний при высоте 24. -->
     <ax:AxGroupHeader Content="Компактная кнопка · 24"/>
-    <StackPanel Orientation="Horizontal" Spacing="10">
-      <ax:AxButton Classes="compact">Slim</ax:AxButton>
-      <ax:AxButton Classes="compact ghost">Slim</ax:AxButton>
-      <ax:AxButton Classes="compact" IsEnabled="False">Slim</ax:AxButton>
-    </StackPanel>
+    <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+      <TextBlock Grid.Column="0" Classes="dim small" Text="Default" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="1" Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="2" Classes="dim small" Text="Pressed" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="3" Classes="dim small" Text="Focused" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="4" Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+
+      <ax:AxButton Grid.Row="1" Grid.Column="0" Classes="compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="1" x:Name="HoveredSlim" Classes="compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="2" x:Name="PressedSlim" Classes="compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="3" x:Name="FocusedSlim" Classes="compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="4" Classes="compact" IsEnabled="False">Slim</ax:AxButton>
+    </Grid>
 
     <!-- Кнопка с меню -->
     <ax:AxGroupHeader Content="Кнопка с меню"/>

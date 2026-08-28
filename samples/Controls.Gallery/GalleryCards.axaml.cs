@@ -70,6 +70,18 @@ public partial class GalleryCards : UserControl
         Pin(PressedTool, ":pressed");
         Pin(SelectedTool, ":selected");
 
+        // Кнопки карточки «Button»: два вида по пяти состояниям.
+        foreach (var hovered in new[] { HoveredPrimary, HoveredSecondary, HoveredSlim })
+            Pin(hovered, ":pointerover");
+
+        foreach (var pressed in new[] { PressedPrimary, PressedSecondary, PressedSlim })
+            Pin(pressed, ":pressed");
+
+        // Фокус кнопки рисуется по :focus-visible — тем же псевдоклассом, по
+        // которому его поднимает обход с клавиатуры.
+        foreach (var focused in new[] { FocusedPrimary, FocusedSecondary, FocusedSlim })
+            Pin(focused, ":focus-visible");
+
         // Развёрнутый скроллбар второй области: разворот поднимает сама
         // область прокрутки под курсором, а карточка показывает оба состояния
         // сразу — курсор в живом окне один.
