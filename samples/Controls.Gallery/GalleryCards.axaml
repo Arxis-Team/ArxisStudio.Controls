@@ -1,6 +1,7 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ax="using:ArxisStudio.Controls"
+             xmlns:axi="using:ArxisStudio.Icons"
              x:Class="Controls.Gallery.GalleryCards">
 
   <UserControl.Resources>
@@ -136,7 +137,7 @@
       <ax:AxButton Classes="ghost">Ghost</ax:AxButton>
       <ax:AxButton Classes="danger">Delete</ax:AxButton>
       <ax:AxButton Classes="icon" ToolTip.Tip="Собрать проект">
-        <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+        <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
       </ax:AxButton>
     </StackPanel>
 
@@ -333,8 +334,8 @@
                 BorderBrush="{DynamicResource AxBrd2Brush}"
                 BorderThickness="1">
           <DockPanel LastChildFill="True">
-            <ax:AxIcon DockPanel.Dock="Left" Margin="0,0,8,0"
-                       Data="{x:Static ax:AxIcons.Search}"
+            <axi:AxIcon DockPanel.Dock="Left" Margin="0,0,8,0"
+                       Data="{x:Static axi:AxIcons.Search}"
                        VerticalAlignment="Center"/>
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8"
                         VerticalAlignment="Center">
@@ -343,13 +344,13 @@
               <TextBlock Classes="dim" Text=".*" VerticalAlignment="Center"/>
               <TextBlock Classes="dim small" Text="3/14" VerticalAlignment="Center"/>
               <ax:AxButton Classes="icon" AutomationProperties.Name="Предыдущее">
-                <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronUp}"/>
+                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronUp}"/>
               </ax:AxButton>
               <ax:AxButton Classes="icon" AutomationProperties.Name="Следующее">
-                <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
               </ax:AxButton>
               <ax:AxButton Classes="icon" AutomationProperties.Name="Закрыть поиск">
-                <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.Close}"/>
+                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.Close}"/>
               </ax:AxButton>
             </StackPanel>
             <ax:AxTextBox Theme="{StaticResource AxInlineTextBox}"
@@ -413,7 +414,7 @@
       <ax:AxLink Content="Документация" IsVisited="True"/>
       <StackPanel Orientation="Horizontal" Spacing="4">
         <ax:AxLink Content="avaloniaui.net"/>
-        <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ExternalLink}"
+        <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ExternalLink}"
                    Foreground="{DynamicResource AxLinkBrush}" VerticalAlignment="Center"/>
       </StackPanel>
       <ax:AxLink Content="Документация" IsEnabled="False"/>
@@ -543,11 +544,11 @@
     <ax:AxTreeView x:Name="ProjectTree" SelectedItem="{Binding #SelectedFile}">
       <ax:AxTreeViewItem Header="ChatApp" IsExpanded="True">
         <ax:AxTreeViewItem.Icon>
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
         </ax:AxTreeViewItem.Icon>
         <ax:AxTreeViewItem Header="Views" IsExpanded="True">
           <ax:AxTreeViewItem.Icon>
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+            <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
           </ax:AxTreeViewItem.Icon>
           <ax:AxTreeViewItem x:Name="SelectedFile" Header="ChatView.axaml">
             <ax:AxTreeViewItem.Icon>
@@ -562,7 +563,7 @@
         </ax:AxTreeViewItem>
         <ax:AxTreeViewItem Header="ViewModels">
           <ax:AxTreeViewItem.Icon>
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+            <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
           </ax:AxTreeViewItem.Icon>
           <ax:AxTreeViewItem Header="ChatViewModel.cs"/>
         </ax:AxTreeViewItem>
@@ -645,31 +646,31 @@
     <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
       <StackPanel Spacing="4" HorizontalAlignment="Center">
         <ax:AxButton Classes="icon" HorizontalAlignment="Center">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
         <TextBlock Classes="dim small" Text="Default" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
         <ax:AxButton x:Name="HoveredTool" Classes="icon" HorizontalAlignment="Center">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
         <TextBlock Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
         <ax:AxButton x:Name="PressedTool" Classes="icon" HorizontalAlignment="Center">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
         <TextBlock Classes="dim small" Text="Pressed" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
         <ax:AxButton x:Name="SelectedTool" Classes="icon" HorizontalAlignment="Center">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.List}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.List}"/>
         </ax:AxButton>
         <TextBlock Classes="dim small" Text="Selected" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
         <ax:AxButton Classes="icon" IsEnabled="False" HorizontalAlignment="Center">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
         <TextBlock Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
       </StackPanel>
@@ -679,13 +680,13 @@
 
       <StackPanel Orientation="Horizontal" Spacing="2">
         <ax:AxButton Classes="icon" ToolTip.Tip="Свернуть всё">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
         </ax:AxButton>
         <ax:AxButton Classes="icon" ToolTip.Tip="Фильтр">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Filter}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Filter}"/>
         </ax:AxButton>
         <ax:AxButton Classes="icon" ToolTip.Tip="Ещё">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.MoreHorizontal}" IsFilled="True"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.MoreHorizontal}" IsFilled="True"/>
         </ax:AxButton>
       </StackPanel>
     </StackPanel>
@@ -706,36 +707,36 @@
             <Border Classes="project-badge"><TextBlock Text="Ax"/></Border>
             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
               <TextBlock Text="ВолнаЧат" FontWeight="SemiBold" VerticalAlignment="Center"/>
-              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-              <ax:AxIcon Data="{x:Static ax:AxIcons.Branch}"/>
+              <axi:AxIcon Data="{x:Static axi:AxIcons.Branch}"/>
               <TextBlock Classes="dim" Text="main" VerticalAlignment="Center"/>
               <TextBlock Classes="dim" Text="↑2" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
               <TextBlock Classes="dim" Text="Desktop · Debug" VerticalAlignment="Center"/>
-              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
             </StackPanel>
           </StackPanel>
         </ax:AxToolBar.LeftContent>
         <ax:AxToolBar.RightContent>
           <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Search}"/>
+            <axi:AxIcon Data="{x:Static axi:AxIcons.Search}"/>
             <!--
                 Виджет запуска: конфигурация, которую сейчас запустят. Своего
                 контрола под него проект не заводит, поэтому он собран здесь.
             -->
             <Border Classes="run-widget">
               <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.Play}" IsFilled="True"
+                <axi:AxIcon Data="{x:Static axi:AxIcons.Play}" IsFilled="True"
                            Foreground="{DynamicResource AxGrnBrush}"/>
-                <ax:AxIcon Data="{x:Static ax:AxIcons.Refresh}"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.Refresh}"/>
                 <TextBlock Text="ВолнаЧат.Desktop" VerticalAlignment="Center"/>
-                <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"/>
+                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
               </StackPanel>
             </Border>
-            <ax:AxIcon Data="{x:Static ax:AxIcons.Split}"/>
+            <axi:AxIcon Data="{x:Static axi:AxIcons.Split}"/>
             <!--
                 Разделитель внутри полосы идёт цветом нажатия, а не рамки: в
                 карточке он на ступень заметнее, чем линии снаружи её.
@@ -761,7 +762,7 @@
     <ax:AxTitleBar Width="520" HorizontalAlignment="Left" ShowWindowControls="False">
       <DockPanel Margin="10,0">
         <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-          <ax:AxIcon Data="{x:Static ax:AxIcons.Window}"/>
+          <axi:AxIcon Data="{x:Static axi:AxIcons.Window}"/>
           <TextBlock Text="ВолнаЧат" VerticalAlignment="Center"/>
           <ax:AxChip Content="Debug"/>
         </StackPanel>
@@ -781,13 +782,13 @@
         <ax:AxBreadcrumbBar>
           <ax:AxBreadcrumbItem Content="ВолнаЧат">
             <ax:AxBreadcrumbItem.Icon>
-              <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+              <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
             </ax:AxBreadcrumbItem.Icon>
           </ax:AxBreadcrumbItem>
           <!-- Звено под курсором: в карточке оно показано с плашкой. -->
           <ax:AxBreadcrumbItem x:Name="HoveredCrumb" Content="Views">
             <ax:AxBreadcrumbItem.Icon>
-              <ax:AxIcon Data="{x:Static ax:AxIcons.Folder}"/>
+              <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
             </ax:AxBreadcrumbItem.Icon>
           </ax:AxBreadcrumbItem>
           <ax:AxBreadcrumbItem Classes="current" Content="ChatView.axaml">
@@ -804,7 +805,7 @@
           <ax:AxBreadcrumbItem>
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="ВолнаЧат" VerticalAlignment="Center"/>
-              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"
+              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
                          Foreground="{DynamicResource AxFg2Brush}"/>
             </StackPanel>
           </ax:AxBreadcrumbItem>
@@ -812,14 +813,14 @@
           <ax:AxBreadcrumbItem>
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="Views" VerticalAlignment="Center"/>
-              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"
+              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
                          Foreground="{DynamicResource AxFg2Brush}"/>
             </StackPanel>
           </ax:AxBreadcrumbItem>
           <ax:AxBreadcrumbItem Classes="current">
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="ChatView.axaml" VerticalAlignment="Center"/>
-              <ax:AxIcon Classes="small" Data="{x:Static ax:AxIcons.ChevronDown}"
+              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
                          Foreground="{DynamicResource AxFg2Brush}"/>
             </StackPanel>
           </ax:AxBreadcrumbItem>
@@ -837,7 +838,7 @@
                   сверяется с зоной один в один. Пока рисуем здесь, по правилам
                   набора: клетка 16, обводка 1.2.
               -->
-              <ax:AxIcon Data="M6.5 3H5.5A1.5 1.5 0 0 0 4 4.5v2A1.5 1.5 0 0 1 2.5 8A1.5 1.5 0 0 1 4 9.5v2A1.5 1.5 0 0 0 5.5 13h1 M9.5 3h1A1.5 1.5 0 0 1 12 4.5v2A1.5 1.5 0 0 0 13.5 8A1.5 1.5 0 0 0 12 9.5v2A1.5 1.5 0 0 1 10.5 13h-1"/>
+              <axi:AxIcon Data="M6.5 3H5.5A1.5 1.5 0 0 0 4 4.5v2A1.5 1.5 0 0 1 2.5 8A1.5 1.5 0 0 1 4 9.5v2A1.5 1.5 0 0 0 5.5 13h1 M9.5 3h1A1.5 1.5 0 0 1 12 4.5v2A1.5 1.5 0 0 0 13.5 8A1.5 1.5 0 0 0 12 9.5v2A1.5 1.5 0 0 1 10.5 13h-1"/>
             </ax:AxBreadcrumbItem.Icon>
           </ax:AxBreadcrumbItem>
           <ax:AxBreadcrumbItem Content="Grid"/>
@@ -877,10 +878,10 @@
           <ax:AxToolWindow.Actions>
             <StackPanel Orientation="Horizontal" Spacing="2">
               <ax:AxButton Classes="icon">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}" IsFilled="True"/>
               </ax:AxButton>
               <ax:AxButton Classes="icon">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
               </ax:AxButton>
             </StackPanel>
           </ax:AxToolWindow.Actions>
@@ -893,10 +894,10 @@
           <ax:AxToolWindow.Actions>
             <StackPanel Orientation="Horizontal" Spacing="2">
               <ax:AxButton Classes="icon">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}" IsFilled="True"/>
               </ax:AxButton>
               <ax:AxButton Classes="icon">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
               </ax:AxButton>
             </StackPanel>
           </ax:AxToolWindow.Actions>
@@ -914,17 +915,17 @@
               </ax:AxTabStrip>
               <!-- Добавить вкладку: в карточке кнопка стоит в ряду вкладок. -->
               <ax:AxButton Classes="icon" VerticalAlignment="Center">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.Plus}"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
               </ax:AxButton>
             </StackPanel>
           </ax:AxToolWindow.Tabs>
           <ax:AxToolWindow.Actions>
             <StackPanel Orientation="Horizontal" Spacing="2">
               <ax:AxButton Classes="icon">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.MoreVertical}" IsFilled="True"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}" IsFilled="True"/>
               </ax:AxButton>
               <ax:AxButton Classes="icon">
-                <ax:AxIcon Data="{x:Static ax:AxIcons.Minus}"/>
+                <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
               </ax:AxButton>
             </StackPanel>
           </ax:AxToolWindow.Actions>

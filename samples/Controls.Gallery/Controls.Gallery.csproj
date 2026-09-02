@@ -14,10 +14,23 @@
         <ThemesProject>$(ThemesRepositoryRoot)src/ArxisStudio.Themes.Arxis.csproj</ThemesProject>
     </PropertyGroup>
 
+    <!--
+        Иконки живут своим репозиторием и ожидаются тем же соглашением: сама
+        библиотека контролов набор не зовёт, а карточки галереи показывают
+        иконки в кнопках, полях и меню.
+    -->
+    <PropertyGroup>
+        <IconsRepositoryRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../../ArxisStudio.Icons/'))</IconsRepositoryRoot>
+        <IconsProject>$(IconsRepositoryRoot)src/ArxisStudio.Icons.csproj</IconsProject>
+    </PropertyGroup>
+
     <Target Name="CheckThemesIsBesideUs" BeforeTargets="CollectPackageReferences;ResolveProjectReferences">
         <Error
             Condition="!Exists('$(ThemesProject)')"
             Text="Controls.Gallery показывает контролы в теме ArxisStudio.Themes.Arxis и ожидает этот репозиторий рядом, в '$(ThemesRepositoryRoot)'. Клонируйте его туда." />
+        <Error
+            Condition="!Exists('$(IconsProject)')"
+            Text="Controls.Gallery показывает иконки из ArxisStudio.Icons и ожидает этот репозиторий рядом, в '$(IconsRepositoryRoot)'. Клонируйте его туда." />
     </Target>
 
     <!--
@@ -54,6 +67,7 @@
     <ItemGroup>
         <ProjectReference Include="../../src/ArxisStudio.Controls.csproj"/>
         <ProjectReference Include="$(ThemesProject)"/>
+        <ProjectReference Include="$(IconsProject)"/>
     </ItemGroup>
 
 </Project>

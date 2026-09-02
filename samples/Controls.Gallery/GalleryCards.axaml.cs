@@ -1,4 +1,5 @@
-﻿using ArxisStudio.Controls;
+using ArxisStudio.Controls;
+using ArxisStudio.Icons;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
