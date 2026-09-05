@@ -9,6 +9,25 @@ Border — разрешены как есть), как в Unity, где реда
 Контролы **lookless**: шаблоны и цвета живут в теме — [`ArxisStudio.Themes.Arxis`](../ArxisStudio.Themes.Arxis/),
 репозитории разрабатываются парой и ожидают друг друга рядом (sibling checkout).
 
+## В разметке
+
+Библиотека объявляет адрес пространства имён XAML — тот же, что и остальные
+библиотеки ArxisStudio:
+
+```xml
+<AxUserControl xmlns="https://github.com/Arxis-Team/ArxisStudio"
+               xmlns:a="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <a:StackPanel Spacing="8">
+    <AxButton Classes="accent" Content="Готово"/>
+  </a:StackPanel>
+</AxUserControl>
+```
+
+Один `xmlns` открывает столько, на сколько сборок ArxisStudio сослался проект.
+Родные виджеты Avalonia под этот адрес не попадают намеренно: они пишутся с
+префиксом — и видно, чего в наборе `Ax*` ещё нет.
+
 ## Состав (M0)
 
 | Контрол | База | Назначение |
@@ -37,6 +56,7 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxTreeView` / `AxTreeViewItem` | `TreeView` | дерево иерархии и файлов |
 | `AxSlider` | `Slider` | ползунок значения |
 | `AxToolWindow` | `ContentControl` | панель инструментов: шапка с заголовком, вкладками и действиями |
+| `AxUserControl` | `UserControl` | корень разметки: с него начинается панель, написанная на `.axaml` |
 | `AxTitleBar` | `ContentControl` | полоса заголовка окна: перетаскивание, двойной щелчок, кнопки окна |
 | `AxWindowControls` | `TemplatedControl` | свернуть, развернуть, закрыть; на macOS прячется |
 
