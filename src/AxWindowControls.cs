@@ -37,6 +37,18 @@ public class AxWindowControls : TemplatedControl
     public static readonly StyledProperty<bool> ShowMinimizeProperty =
         AvaloniaProperty.Register<AxWindowControls, bool>(nameof(ShowMinimize), defaultValue: true);
 
+    /// <summary>
+    /// Показывать ли кнопку «развернуть».
+    /// </summary>
+    /// <remarks>
+    /// Окну-палитре её не дают: у такого окна узкая шапка и один крестик — так
+    /// заведено в Windows и так поступают среды разработки. Сам разворот при
+    /// этом никуда не девается: двойной щелчок по шапке разворачивает и
+    /// возвращает окно на всех окнах системы, и жест этот сам себе обратный.
+    /// </remarks>
+    public static readonly StyledProperty<bool> ShowMaximizeProperty =
+        AvaloniaProperty.Register<AxWindowControls, bool>(nameof(ShowMaximize), defaultValue: true);
+
     /// <summary>Платформа ждёт кнопок от приложения, а не рисует их сама.</summary>
     public static bool IsSupported => !OperatingSystem.IsMacOS();
 
@@ -52,6 +64,13 @@ public class AxWindowControls : TemplatedControl
     {
         get => GetValue(ShowMinimizeProperty);
         set => SetValue(ShowMinimizeProperty, value);
+    }
+
+    /// <inheritdoc cref="ShowMaximizeProperty"/>
+    public bool ShowMaximize
+    {
+        get => GetValue(ShowMaximizeProperty);
+        set => SetValue(ShowMaximizeProperty, value);
     }
 
     /// <inheritdoc/>
