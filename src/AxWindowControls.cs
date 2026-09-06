@@ -25,6 +25,18 @@ public class AxWindowControls : TemplatedControl
     public static readonly StyledProperty<bool> IsMaximizedProperty =
         AvaloniaProperty.Register<AxWindowControls, bool>(nameof(IsMaximized));
 
+    /// <summary>
+    /// Показывать ли кнопку «свернуть».
+    /// </summary>
+    /// <remarks>
+    /// Есть окна, которым сворачиваться некуда. Окно при другом окне не заводит
+    /// себе кнопки в панели задач и не встаёт в Alt+Tab: свёрнутое, оно
+    /// исчезает без следа, и вернуть его человеку нечем. Кнопка, у которой нет
+    /// дороги назад, — ловушка, и такому окну её не дают.
+    /// </remarks>
+    public static readonly StyledProperty<bool> ShowMinimizeProperty =
+        AvaloniaProperty.Register<AxWindowControls, bool>(nameof(ShowMinimize), defaultValue: true);
+
     /// <summary>Платформа ждёт кнопок от приложения, а не рисует их сама.</summary>
     public static bool IsSupported => !OperatingSystem.IsMacOS();
 
@@ -33,6 +45,13 @@ public class AxWindowControls : TemplatedControl
     {
         get => GetValue(IsMaximizedProperty);
         private set => SetValue(IsMaximizedProperty, value);
+    }
+
+    /// <inheritdoc cref="ShowMinimizeProperty"/>
+    public bool ShowMinimize
+    {
+        get => GetValue(ShowMinimizeProperty);
+        set => SetValue(ShowMinimizeProperty, value);
     }
 
     /// <inheritdoc/>
