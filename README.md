@@ -50,6 +50,7 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxLink` | `Button` | ссылка; состояние «посещённая» |
 | `AxRadioButton` | `RadioButton` | выбор одного варианта |
 | `AxDivider` | `TemplatedControl` | линия в пиксель, горизонтальная или вертикальная |
+| `AxSplitter` | `GridSplitter` | граница областей: та же линия, но за неё можно взяться мышью |
 | `AxGroupHeader` | `ContentControl` | заголовок секции с линией |
 | `AxBanner` | `ContentControl` | сообщение: информация, успех, предупреждение, ошибка |
 | `AxTabStrip` / `AxTabItem` | `ListBox` | вкладки документов: значок, метка правок, закрытие |

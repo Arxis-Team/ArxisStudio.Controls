@@ -1021,6 +1021,36 @@
     </StackPanel>
 
     <!--
+        Разделитель областей: линия та же, что у AxDivider, но за неё можно
+        взяться. Карточка показывает обе стороны живьём — потянуть их мышью и
+        есть единственная проверка, которую разделителю имеет смысл устраивать.
+    -->
+    <ax:AxGroupHeader Content="Разделитель областей"/>
+    <StackPanel Orientation="Horizontal" Spacing="16" Height="120">
+
+      <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxBrdBrush}">
+        <Grid ColumnDefinitions="*,Auto,*">
+          <TextBlock Grid.Column="0" Classes="dim" Text="слева"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <ax:AxSplitter Grid.Column="1" Orientation="Vertical"/>
+          <TextBlock Grid.Column="2" Classes="dim" Text="справа"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+      </Border>
+
+      <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxBrdBrush}">
+        <Grid RowDefinitions="*,Auto,*">
+          <TextBlock Grid.Row="0" Classes="dim" Text="сверху"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <ax:AxSplitter Grid.Row="1" Orientation="Horizontal"/>
+          <TextBlock Grid.Row="2" Classes="dim" Text="снизу"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+      </Border>
+
+    </StackPanel>
+
+    <!--
         Примитивы: контролы из списка M0, которым карточки в проекте не
         досталось. Единственное, что проект о них говорит, — решение раздела 6
         приёмки про монограммы, и оно показано отдельной строкой.
