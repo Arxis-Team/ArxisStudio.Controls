@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 
 namespace ArxisStudio.Controls;
 
@@ -8,9 +9,15 @@ namespace ArxisStudio.Controls;
 /// Диалог студии: окно без системной рамки на тени <c>AxAbShadow</c> —
 /// заголовок с крестиком, содержимое и полоса кнопок. Основное действие
 /// стоит крайним справа, отмена — левее, деструктивное несёт класс
-/// <c>danger</c>. Esc закрывает диалог; крестик прячется свойством
-/// <see cref="IsCloseVisible"/> — например, у обязательного выбора.
+/// <c>danger</c>.
 /// </summary>
+/// <remarks>
+/// Уйти, не ответив, можно двумя способами — крестиком и Esc, — и оба слушают
+/// одно свойство <see cref="IsCloseVisible"/>. Снятое, оно означает
+/// обязательный выбор: ни крестика, ни клавиши, решать придётся кнопкой.
+/// Держать эти два пути на разных условиях значило бы завести чёрный ход мимо
+/// принятого решения.
+/// </remarks>
 public class AxDialog : Window
 {
     /// <summary>Кнопки диалога; кладутся в полосу внизу справа.</summary>
@@ -30,13 +37,24 @@ public class AxDialog : Window
     /// </remarks>
     /// <remarks>
     /// Со значком шапка не нужна: заголовок и текст встают колонкой рядом с
-    /// ним, как в карточке «Диалоги». Крестика у алерта тоже нет — уйти из
-    /// него можно только кнопкой, и это часть смысла: решение обязательно.
+    /// ним, как в карточке «Диалоги». Вместе с шапкой уходит и крестик — но это
+    /// вёрстка, а не смысл: обязательность выбора объявляет
+    /// <see cref="IsCloseVisible"/>, и алерт с обычным значением этого свойства
+    /// Esc отпускает. Так и устроен вопрос «вы уверены?»: у него есть «Отмена»,
+    /// и Esc делает ровно то же.
     /// </remarks>
     public static readonly StyledProperty<object?> AlertIconProperty =
         AvaloniaProperty.Register<AxDialog, object?>(nameof(AlertIcon));
 
-    /// <summary>Показывать крестик закрытия в заголовке.</summary>
+    /// <summary>
+    /// Из диалога можно уйти, не ответив: крестик в заголовке и Esc.
+    /// </summary>
+    /// <remarks>
+    /// Имя осталось прежним — свойство и заводилось как «показывать крестик», —
+    /// а значит оно с самого начала: есть ли у человека выход помимо кнопок.
+    /// Esc слушает его же, потому что второй выход на других условиях был бы
+    /// не вторым выходом, а дырой.
+    /// </remarks>
     public static readonly StyledProperty<bool> IsCloseVisibleProperty =
         AvaloniaProperty.Register<AxDialog, bool>(nameof(IsCloseVisible), true);
 
@@ -101,6 +119,26 @@ public class AxDialog : Window
     {
         get => GetValue(IsCloseVisibleProperty);
         set => SetValue(IsCloseVisibleProperty, value);
+    }
+
+    /// <summary>
+    /// Esc закрывает диалог — тот, из которого вообще можно уйти не ответив.
+    /// </summary>
+    /// <remarks>
+    /// Обещание это стояло в описании класса с первого дня и не выполнялось ни
+    /// разу: обработчика клавиши здесь не было вовсе, и сказанное словами
+    /// расходилось с тем, что делает код.
+    /// </remarks>
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape && IsCloseVisible)
+        {
+            e.Handled = true;
+
+            Close();
+        }
+
+        base.OnKeyDown(e);
     }
 
     /// <inheritdoc/>
