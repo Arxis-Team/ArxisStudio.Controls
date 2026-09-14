@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 
 namespace ArxisStudio.Controls;
 
@@ -74,6 +75,19 @@ public class AxTabItem : ListBoxItem
     {
         get => GetValue(IsModifiedProperty);
         set => SetValue(IsModifiedProperty, value);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Не шире места своей полосы — почему, сказано у <see cref="AxTabStrip"/>.
+    /// Вкладка вне полосы мерится как прежде.
+    /// </remarks>
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        if (this.FindAncestorOfType<AxTabStrip>() is { } strip && strip.Room < availableSize.Width)
+            availableSize = availableSize.WithWidth(strip.Room);
+
+        return base.MeasureOverride(availableSize);
     }
 
     /// <inheritdoc/>
