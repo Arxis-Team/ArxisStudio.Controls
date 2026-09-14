@@ -39,6 +39,19 @@ public class AxCodeBlock : TemplatedControl
     public static readonly StyledProperty<IBrush?> CommentBrushProperty =
         AvaloniaProperty.Register<AxCodeBlock, IBrush?>(nameof(CommentBrush));
 
+    /// <summary>Высота строки в долях кегля.</summary>
+    /// <remarks>
+    /// Безразмерная, как line-height в CSS: строка — кегль, умноженный на это
+    /// число, и растёт вместе с кеглем, а запас сверх высоты шрифта делится
+    /// поровну над текстом и под ним. Прибитая числом высота строки при крупном
+    /// кегле клала строки одну на другую, а расстояние между строками отдаёт
+    /// весь запас под строку и поднимает текст к верху. NaN — строку решает
+    /// шаблон, а не задал и он — естественная высота шрифта.
+    /// </remarks>
+    public static readonly StyledProperty<double> LineHeightRatioProperty =
+        AvaloniaProperty.Register<AxCodeBlock, double>(
+            nameof(LineHeightRatio), double.NaN, validate: ratio => double.IsNaN(ratio) || ratio > 0);
+
     private SelectableTextBlock? _presenter;
 
     static AxCodeBlock()
@@ -50,6 +63,10 @@ public class AxCodeBlock : TemplatedControl
         AttributeBrushProperty.Changed.AddClassHandler<AxCodeBlock>((block, _) => block.Render());
         StringBrushProperty.Changed.AddClassHandler<AxCodeBlock>((block, _) => block.Render());
         CommentBrushProperty.Changed.AddClassHandler<AxCodeBlock>((block, _) => block.Render());
+
+        // Кегль меняется вместе со шкалой шрифтов темы, и строка идёт за ним.
+        FontSizeProperty.Changed.AddClassHandler<AxCodeBlock>((block, _) => block.ApplyLineHeight());
+        LineHeightRatioProperty.Changed.AddClassHandler<AxCodeBlock>((block, _) => block.ApplyLineHeight());
     }
 
     /// <inheritdoc cref="TextProperty"/>
@@ -87,13 +104,34 @@ public class AxCodeBlock : TemplatedControl
         set => SetValue(CommentBrushProperty, value);
     }
 
+    /// <inheritdoc cref="LineHeightRatioProperty"/>
+    public double LineHeightRatio
+    {
+        get => GetValue(LineHeightRatioProperty);
+        set => SetValue(LineHeightRatioProperty, value);
+    }
+
     /// <inheritdoc/>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
         _presenter = e.NameScope.Find<SelectableTextBlock>("PART_Text");
+        ApplyLineHeight();
         Render();
+    }
+
+    private void ApplyLineHeight()
+    {
+        if (_presenter is null)
+            return;
+
+        // Без доли своё значение снимается: локальное NaN перебило бы высоту
+        // строки, которую задал шаблон.
+        if (double.IsNaN(LineHeightRatio))
+            _presenter.ClearValue(TextBlock.LineHeightProperty);
+        else
+            _presenter.LineHeight = FontSize * LineHeightRatio;
     }
 
     private void Render()
