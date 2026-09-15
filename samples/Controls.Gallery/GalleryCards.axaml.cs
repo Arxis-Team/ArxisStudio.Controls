@@ -73,7 +73,7 @@ public partial class GalleryCards : UserControl
 
         // Дерево и таблица: выделение показано в полную силу — AxSel живёт под
         // фокусом списка, а в витрине фокус один на всех, и без метки карточки
-        // показывали бы погашенное AxSelInactive, которого в макете нет.
+        // показывали бы погашенное AxSelInactive.
         Pin(ProjectTree, ":focus-within");
         Pin(FilesTable, ":focus-within");
 

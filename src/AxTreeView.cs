@@ -4,7 +4,7 @@ namespace ArxisStudio.Controls;
 
 /// <summary>
 /// Дерево: иерархия документа, файлы проекта, структура решения. Строка —
-/// <see cref="AxTreeViewItem"/> высотой в строку списка Int UI.
+/// <see cref="AxTreeViewItem"/> высотой в строку списка.
 /// </summary>
 public class AxTreeView : TreeView
 {
