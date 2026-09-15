@@ -71,9 +71,9 @@ public partial class GalleryCards : UserControl
         Pin(PressedTool, ":pressed");
         Pin(SelectedTool, ":selected");
 
-        // Дерево и таблица: выделение показано в полную силу — AxSel живёт под
+        // Дерево и таблица: выделение показано в полную силу — AxSelectionActive живёт под
         // фокусом списка, а в витрине фокус один на всех, и без метки карточки
-        // показывали бы погашенное AxSelInactive.
+        // показывали бы погашенное AxSelectionInactive.
         Pin(ProjectTree, ":focus-within");
         Pin(FilesTable, ":focus-within");
 
@@ -172,7 +172,7 @@ public partial class GalleryCards : UserControl
     {
         var sign = new AxIcon { Width = 28, Height = 28, Data = AxIcons.WarningTriangle };
 
-        sign[!AxIcon.ForegroundProperty] = new Avalonia.Markup.Xaml.MarkupExtensions.DynamicResourceExtension("AxYelBrush");
+        sign[!AxIcon.ForegroundProperty] = new Avalonia.Markup.Xaml.MarkupExtensions.DynamicResourceExtension("AxWarningBrush");
 
         return sign;
     }

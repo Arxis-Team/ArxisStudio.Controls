@@ -8,16 +8,16 @@
     <ResourceDictionary>
       <ResourceDictionary.ThemeDictionaries>
         <!--
-            Буквы на плашке типа файла. Своего ключа у этого цвета в теме
-            нет: плашка живёт только внутри карточки дерева, и там взяты
-            AxBlue4 в светлой и AxBlue10 в тёмной. Через AxAcc не выразить —
-            в тёмной он остаётся #3574F0 и на AxInfoBackground не читается.
+            Буквы на плашке типа файла. Своей роли у этого цвета в теме нет:
+            плашка живёт только внутри карточки дерева, поэтому цвет записан
+            здесь числом. Через AxAccent не выразить — в тёмной он остаётся
+            #3574F0 и на AxInfoFill не читается.
         -->
         <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="{StaticResource AxBlue4}"/>
+          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="#3574F0"/>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="{StaticResource AxBlue10}"/>
+          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="#83ACFC"/>
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
     </ResourceDictionary>
@@ -33,7 +33,7 @@
       <Setter Property="Width" Value="{DynamicResource AxIconSize}"/>
       <Setter Property="Height" Value="{DynamicResource AxIconSize}"/>
       <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadiusSmall}"/>
-      <Setter Property="Background" Value="{DynamicResource AxInfoBackgroundBrush}"/>
+      <Setter Property="Background" Value="{DynamicResource AxInfoFillBrush}"/>
     </Style>
     <!--
         Область прокрутки карточки: 110 в высоту, на утопленной подложке —
@@ -43,8 +43,8 @@
     <Style Selector="Border.scroll-pane">
       <Setter Property="Height" Value="110"/>
       <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadius}"/>
-      <Setter Property="Background" Value="{DynamicResource AxBgSunkenBrush}"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource AxBrdBrush}"/>
+      <Setter Property="Background" Value="{DynamicResource AxSurfaceSunkenBrush}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource AxStrokeSubtleBrush}"/>
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="ClipToBounds" Value="True"/>
     </Style>
@@ -58,10 +58,10 @@
       <Setter Property="Width" Value="{DynamicResource AxControlHeightCompact}"/>
       <Setter Property="Height" Value="{DynamicResource AxControlHeightCompact}"/>
       <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadius}"/>
-      <Setter Property="Background" Value="{DynamicResource AxAccBrush}"/>
+      <Setter Property="Background" Value="{DynamicResource AxAccentBrush}"/>
     </Style>
     <Style Selector="Border.project-badge > TextBlock">
-      <Setter Property="Foreground" Value="{DynamicResource AxOnAccBrush}"/>
+      <Setter Property="Foreground" Value="{DynamicResource AxTextOnAccentBrush}"/>
       <Setter Property="FontSize" Value="{DynamicResource AxFontSizeCaption}"/>
       <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -76,8 +76,8 @@
       <Setter Property="Height" Value="{DynamicResource AxControlHeight}"/>
       <Setter Property="Padding" Value="8,0"/>
       <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadius}"/>
-      <Setter Property="Background" Value="{DynamicResource AxBg1Brush}"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource AxBrd2Brush}"/>
+      <Setter Property="Background" Value="{DynamicResource AxSurfaceBaseBrush}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource AxStrokeControlBrush}"/>
       <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
@@ -271,7 +271,7 @@
       </StackPanel>
       <StackPanel Grid.Column="4" Spacing="6">
         <TextBlock Classes="dim small" Text="Disabled"/>
-        <!-- Подпись выключенного поля гаснет вместе с ним: проект даёт AxFg3. -->
+        <!-- Подпись выключенного поля гаснет вместе с ним: проект даёт AxTextTertiary. -->
         <TextBlock Classes="dimmer" Text="Имя формы"/>
         <ax:AxTextBox IsEnabled="False" Text="ChatView"/>
       </StackPanel>
@@ -324,8 +324,8 @@
       <StackPanel Spacing="6">
         <TextBlock Classes="dim small" Text="Строка поиска в редакторе"/>
         <Border Height="32" CornerRadius="6" Padding="10,0"
-                Background="{DynamicResource AxBg2Brush}"
-                BorderBrush="{DynamicResource AxBrd2Brush}"
+                Background="{DynamicResource AxSurfacePanelBrush}"
+                BorderBrush="{DynamicResource AxStrokeControlBrush}"
                 BorderThickness="1">
           <DockPanel LastChildFill="True">
             <axi:AxIcon DockPanel.Dock="Left" Margin="0,0,8,0"
@@ -389,7 +389,7 @@
         вкладки документа — на своей, со скруглением сверху и крестиками.
     -->
     <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0"
-                   BorderBrush="{DynamicResource AxBrdBrush}" BorderThickness="0,0,0,1">
+                   BorderBrush="{DynamicResource AxStrokeSubtleBrush}" BorderThickness="0,0,0,1">
       <ax:AxTabItem Classes="compact" Content="Свойства" IsClosable="False"/>
       <ax:AxTabItem Classes="compact" Content="События" IsClosable="False"/>
       <ax:AxTabItem Classes="compact" Content="Стили" IsClosable="False"/>
@@ -723,7 +723,7 @@
             <Border Classes="run-widget">
               <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                 <axi:AxIcon Data="{x:Static axi:AxIcons.Play}" IsFilled="True"
-                           Foreground="{DynamicResource AxGrnBrush}"/>
+                           Foreground="{DynamicResource AxSuccessBrush}"/>
                 <axi:AxIcon Data="{x:Static axi:AxIcons.Refresh}"/>
                 <TextBlock Text="ВолнаЧат.Desktop" VerticalAlignment="Center"/>
                 <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
@@ -735,7 +735,7 @@
                 карточке он на ступень заметнее, чем линии снаружи её.
             -->
             <ax:AxDivider Orientation="Vertical" Height="20"
-                          Background="{DynamicResource AxBg4Brush}"/>
+                          Background="{DynamicResource AxStrokeStrongBrush}"/>
             <ax:AxWindowControls IsHitTestVisible="False"/>
           </StackPanel>
         </ax:AxToolBar.RightContent>
@@ -799,7 +799,7 @@
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="ВолнаЧат" VerticalAlignment="Center"/>
               <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
-                         Foreground="{DynamicResource AxFg2Brush}"/>
+                         Foreground="{DynamicResource AxTextSecondaryBrush}"/>
             </StackPanel>
           </ax:AxBreadcrumbItem>
           <ax:AxBreadcrumbItem Content="…"/>
@@ -807,14 +807,14 @@
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="Views" VerticalAlignment="Center"/>
               <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
-                         Foreground="{DynamicResource AxFg2Brush}"/>
+                         Foreground="{DynamicResource AxTextSecondaryBrush}"/>
             </StackPanel>
           </ax:AxBreadcrumbItem>
           <ax:AxBreadcrumbItem Classes="current">
             <StackPanel Orientation="Horizontal" Spacing="4">
               <TextBlock Text="ChatView.axaml" VerticalAlignment="Center"/>
               <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
-                         Foreground="{DynamicResource AxFg2Brush}"/>
+                         Foreground="{DynamicResource AxTextSecondaryBrush}"/>
             </StackPanel>
           </ax:AxBreadcrumbItem>
         </ax:AxBreadcrumbBar>
@@ -961,7 +961,7 @@
     <ax:AxGroupHeader Content="Шорткаты и код"/>
     <!--
         Строка шортката карточки: подпись, сочетание клавиш и второе через
-        косую черту. Разделитель идёт на AxFg3 — это токен шорткатов и декора,
+        косую черту. Разделитель идёт на AxTextTertiary — это токен шорткатов и декора,
         и читаемым текстом он не служит.
     -->
     <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
@@ -996,7 +996,7 @@
     </StackPanel>
 
     <!--
-        Разделители: линия в пиксель в обеих ориентациях цвета AxBrd. Живьём
+        Разделители: линия в пиксель в обеих ориентациях цвета AxStrokeSubtle. Живьём
         разделители видно в тулбаре, в таблице и под шапкой панели.
     -->
     <ax:AxGroupHeader Content="Разделители"/>
@@ -1017,7 +1017,7 @@
     <ax:AxGroupHeader Content="Разделитель областей"/>
     <StackPanel Orientation="Horizontal" Spacing="16" Height="120">
 
-      <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxBrdBrush}">
+      <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxStrokeSubtleBrush}">
         <Grid ColumnDefinitions="*,Auto,*">
           <TextBlock Grid.Column="0" Classes="dim" Text="слева"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -1027,7 +1027,7 @@
         </Grid>
       </Border>
 
-      <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxBrdBrush}">
+      <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxStrokeSubtleBrush}">
         <Grid RowDefinitions="*,Auto,*">
           <TextBlock Grid.Row="0" Classes="dim" Text="сверху"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -1054,7 +1054,7 @@
       </ax:AxCard>
     </StackPanel>
     <!--
-        Цветные монограммы не ставят на AxOrg / AxGrn / AxPur / AxRed — белые
+        Цветные монограммы не ставят на AxTintOrange / AxSuccess / AxTintPurple / AxError — белые
         инициалы дают там 2,68…3,69:1.
     -->
     <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">

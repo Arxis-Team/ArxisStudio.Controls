@@ -19,7 +19,7 @@ namespace ArxisStudio.Controls;
 /// появляется светлая кайма шириной в несколько пикселей; просить у системы
 /// нужный цвет — единственный способ её убрать, не отказываясь от самой рамки.
 /// <para>
-/// Цвет берётся из ресурса <c>AxBg2Color</c> по текущему варианту темы: рамка
+/// Цвет берётся из ресурса <c>AxSurfacePanelColor</c> по текущему варианту темы: рамка
 /// примыкает к полосе заголовка, и разница цветов заметнее всего именно там.
 /// Перекрашивается окно само — и при открытии, и при смене темы, — поэтому
 /// обходить открытые окна снаружи никому не нужно.
@@ -67,7 +67,7 @@ public class AxWindow : Window
         var dark = ActualThemeVariant != ThemeVariant.Light;
         var colour = dark ? Color.FromRgb(0x2B, 0x2D, 0x30) : Color.FromRgb(0xF7, 0xF8, 0xFA);
 
-        if (this.TryFindResource("AxBg2Color", ActualThemeVariant, out var value) && value is Color found)
+        if (this.TryFindResource("AxSurfacePanelColor", ActualThemeVariant, out var value) && value is Color found)
             colour = found;
 
         Paint(handle, colour, dark);

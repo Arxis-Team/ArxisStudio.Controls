@@ -13,8 +13,8 @@
   -->
   <DockPanel>
     <Border DockPanel.Dock="Top"
-            Background="{DynamicResource AxBg2Brush}"
-            BorderBrush="{DynamicResource AxBrdBrush}"
+            Background="{DynamicResource AxSurfacePanelBrush}"
+            BorderBrush="{DynamicResource AxStrokeSubtleBrush}"
             BorderThickness="0,0,0,1"
             Padding="22,10">
       <DockPanel>
@@ -40,12 +40,12 @@
       -->
       <Grid x:Name="Halves" ColumnDefinitions="*,*">
         <ThemeVariantScope x:Name="LightHalf" RequestedThemeVariant="Light">
-          <Border Background="{DynamicResource AxBg1Brush}">
+          <Border Background="{DynamicResource AxSurfaceBaseBrush}">
             <g:GalleryCards/>
           </Border>
         </ThemeVariantScope>
         <ThemeVariantScope x:Name="DarkHalf" Grid.Column="1" RequestedThemeVariant="Dark">
-          <Border Background="{DynamicResource AxBg1Brush}">
+          <Border Background="{DynamicResource AxSurfaceBaseBrush}">
             <g:GalleryCards/>
           </Border>
         </ThemeVariantScope>
