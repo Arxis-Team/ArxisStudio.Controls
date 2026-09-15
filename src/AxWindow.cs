@@ -65,24 +65,29 @@ public class AxWindow : Window
             return;
 
         var dark = ActualThemeVariant != ThemeVariant.Light;
-        var colour = dark ? Color.FromRgb(0x2B, 0x2D, 0x30) : Color.FromRgb(0xF7, 0xF8, 0xFA);
 
-        if (this.TryFindResource("AxSurfacePanelColor", ActualThemeVariant, out var value) && value is Color found)
-            colour = found;
+        // Цвет рамки — только у темы. Запасное число здесь было вторым местом цвета панели и
+        // отстало от палитры при первой же её настройке; без темы рамка остаётся системной.
+        Color? border = this.TryFindResource("AxSurfacePanelColor", ActualThemeVariant, out var value) && value is Color found
+            ? found
+            : null;
 
-        Paint(handle, colour, dark);
+        Paint(handle, border, dark);
     }
 
     [SupportedOSPlatform("windows")]
-    private static void Paint(IntPtr handle, Color border, bool dark)
+    private static void Paint(IntPtr handle, Color? border, bool dark)
     {
         try
         {
             var mode = dark ? 1 : 0;
             SetWindowAttribute(handle, UseImmersiveDarkMode, ref mode, sizeof(int));
 
+            if (border is not { } tone)
+                return;
+
             // COLORREF: 0x00BBGGRR — порядок каналов обратный привычному.
-            var colour = border.R | (border.G << 8) | (border.B << 16);
+            var colour = tone.R | (tone.G << 8) | (tone.B << 16);
             SetWindowAttribute(handle, BorderColor, ref colour, sizeof(int));
             SetWindowAttribute(handle, CaptionColor, ref colour, sizeof(int));
         }

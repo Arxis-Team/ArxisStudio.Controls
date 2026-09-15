@@ -656,12 +656,8 @@
               </StackPanel>
             </Border>
             <axi:AxIcon Data="{x:Static axi:AxIcons.Split}"/>
-            <!--
-                Разделитель внутри полосы идёт цветом нажатия, а не рамки: в
-                карточке он на ступень заметнее, чем линии снаружи её.
-            -->
-            <ax:AxDivider Orientation="Vertical" Height="20"
-                          Fill="{DynamicResource AxStrokeStrongBrush}"/>
+            <!-- Разделитель внутри полосы — того же веса, что линии снаружи неё. -->
+            <ax:AxDivider Orientation="Vertical" Height="20"/>
             <ax:AxWindowControls IsHitTestVisible="False"/>
           </StackPanel>
         </ax:AxToolBar.RightContent>
@@ -897,7 +893,7 @@
     </StackPanel>
     <!--
         Цветные монограммы не ставят на AxTintOrange / AxSuccess / AxTintPurple / AxError — белые
-        инициалы дают там 2,68…3,69:1.
+        инициалы дают там в тёмной теме 2,50…3,44:1.
     -->
     <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
       <ax:AxAvatar Tint="Orange" Initials="Ор"/>
