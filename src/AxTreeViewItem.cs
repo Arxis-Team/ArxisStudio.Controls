@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 
 namespace ArxisStudio.Controls;
@@ -9,22 +10,33 @@ namespace ArxisStudio.Controls;
 /// Строка дерева со стрелкой раскрытия, значком и отступом по уровню.
 /// </summary>
 /// <remarks>
-/// Значок здесь — содержимое, а не путь: в дереве проекта рядом стоят папка,
-/// нарисованная глифом, и значок типа файла — маленькая плашка с двумя буквами.
-/// Свести их к одной геометрии нельзя, а разводить на два свойства значило бы
-/// заставить каждого потребителя выбирать, каким из них он сегодня пользуется.
+/// Значок — путь в клетке 16 и его цвет, как у вкладки. Прежде значком было любое
+/// содержимое, и рядом с глифом папки стояли плашки типа файла со своими размерами:
+/// клетка набора ложится в пиксели, а плашка — как получится. Тип документа
+/// различают цветом значка, <see cref="IconBrush"/>.
 /// </remarks>
 public class AxTreeViewItem : TreeViewItem
 {
-    /// <summary>Значок слева от подписи: глиф, плашка типа файла или своё.</summary>
-    public static readonly StyledProperty<object?> IconProperty =
-        AvaloniaProperty.Register<AxTreeViewItem, object?>(nameof(Icon));
+    /// <summary>Значок слева от подписи.</summary>
+    public static readonly StyledProperty<Geometry?> IconProperty =
+        AvaloniaProperty.Register<AxTreeViewItem, Geometry?>(nameof(Icon));
+
+    /// <summary>Цвет значка; без него значок идёт цветом иконки темы.</summary>
+    public static readonly StyledProperty<IBrush?> IconBrushProperty =
+        AvaloniaProperty.Register<AxTreeViewItem, IBrush?>(nameof(IconBrush));
 
     /// <inheritdoc cref="IconProperty"/>
-    public object? Icon
+    public Geometry? Icon
     {
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
+    }
+
+    /// <inheritdoc cref="IconBrushProperty"/>
+    public IBrush? IconBrush
+    {
+        get => GetValue(IconBrushProperty);
+        set => SetValue(IconBrushProperty, value);
     }
 
     /// <summary>

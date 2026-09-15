@@ -1,5 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 
 namespace ArxisStudio.Controls;
@@ -31,7 +33,13 @@ public enum AxBannerSeverity
 /// раньше, чем состояние меняется, и человек вправе убрать его с глаз. Кто
 /// показал баннер, узнаёт об этом из <see cref="Closed"/> — чтобы не показать
 /// то же самое снова.
+/// <para>
+/// Крестик баннер берёт из своего шаблона по ссылке, а не узнаёт по имени во всплывшем
+/// нажатии: так любая кнопка с тем же именем в содержимом или действиях закрывала бы
+/// баннер вместо своего дела.
+/// </para>
 /// </remarks>
+[TemplatePart(ClosePart, typeof(Button))]
 public class AxBanner : ContentControl
 {
     /// <summary>Имя кнопки закрытия в теме.</summary>
@@ -41,12 +49,7 @@ public class AxBanner : ContentControl
     public static readonly RoutedEvent<RoutedEventArgs> ClosedEvent =
         RoutedEvent.Register<AxBanner, RoutedEventArgs>(nameof(Closed), RoutingStrategies.Bubble);
 
-    /// <summary>
-    /// Слушает нажатие по маршруту события: кнопка живёт в шаблоне, но её
-    /// нажатие всплывает до баннера в любом случае.
-    /// </summary>
-    public AxBanner() =>
-        AddHandler(Button.ClickEvent, OnClick, RoutingStrategies.Bubble);
+    private Button? _close;
 
     /// <inheritdoc cref="ClosedEvent"/>
     public event EventHandler<RoutedEventArgs>? Closed
@@ -77,13 +80,24 @@ public class AxBanner : ContentControl
         set => SetValue(ActionsProperty, value);
     }
 
+    /// <inheritdoc/>
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        ArgumentNullException.ThrowIfNull(e);
+
+        base.OnApplyTemplate(e);
+
+        if (_close is not null)
+            _close.Click -= OnClick;
+
+        _close = e.NameScope.Find<Button>(ClosePart);
+
+        if (_close is not null)
+            _close.Click += OnClick;
+    }
+
     private void OnClick(object? sender, RoutedEventArgs e)
     {
-        if (e.Source is not Button { Name: ClosePart })
-        {
-            return;
-        }
-
         // Баннер убирает себя сам: тот, кто его показал, узнает об этом
         // событием и решит, показывать ли снова.
         IsVisible = false;

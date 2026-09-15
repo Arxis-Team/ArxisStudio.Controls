@@ -29,9 +29,6 @@ public partial class GalleryCards : UserControl
             ((Avalonia.Controls.IPseudoClasses)field.Classes).Set(":focus", true);
 
     /// <summary>
-    /// Показывает звено под курсором, не двигая настоящий курсор.
-    /// </summary>
-    /// <summary>
     /// Ставит контролу состояние тем же псевдоклассом, каким его включает тема.
     /// </summary>
     /// <remarks>
@@ -63,13 +60,12 @@ public partial class GalleryCards : UserControl
         Show(FocusedField);
         Show(InvalidFocusedField);
         Show(FocusedSearch);
-        Pin(HoveredCrumb, ":pointerover");
 
         // Ряд состояний иконочной кнопки в тулбаре: живое окно показало бы
-        // одно состояние за раз, а карточка требует все пять сразу.
+        // одно состояние за раз, а карточка требует все пять сразу. Включённый
+        // инструмент — переключатель, и включён он свойством в разметке.
         Pin(HoveredTool, ":pointerover");
         Pin(PressedTool, ":pressed");
-        Pin(SelectedTool, ":selected");
 
         // Дерево и таблица: выделение показано в полную силу — AxSelectionActive живёт под
         // фокусом списка, а в витрине фокус один на всех, и без метки карточки

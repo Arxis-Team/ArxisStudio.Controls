@@ -1,15 +1,16 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 
 namespace ArxisStudio.Controls;
 
 /// <summary>
-/// Диалог студии: окно без системной рамки на тени <c>AxAbShadow</c> —
+/// Диалог студии: окно без системной рамки на тени <c>AxShadowModal</c> —
 /// заголовок с крестиком, содержимое и полоса кнопок. Основное действие
-/// стоит крайним справа, отмена — левее, деструктивное несёт класс
-/// <c>danger</c>.
+/// стоит крайним справа, отмена — левее, деструктивное — кнопка вида
+/// <see cref="AxButtonAppearance.Danger"/>.
 /// </summary>
 /// <remarks>
 /// Уйти, не ответив, можно двумя способами — крестиком и Esc, — и оба слушают
@@ -18,8 +19,12 @@ namespace ArxisStudio.Controls;
 /// Держать эти два пути на разных условиях значило бы завести чёрный ход мимо
 /// принятого решения.
 /// </remarks>
+[TemplatePart("PART_Close", typeof(Button))]
+[PseudoClasses(":alert")]
 public class AxDialog : Window
 {
+    private Button? _close;
+
     /// <summary>Кнопки диалога; кладутся в полосу внизу справа.</summary>
     public static readonly StyledProperty<object?> ButtonsProperty =
         AvaloniaProperty.Register<AxDialog, object?>(nameof(Buttons));
@@ -144,9 +149,20 @@ public class AxDialog : Window
     /// <inheritdoc/>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
+        ArgumentNullException.ThrowIfNull(e);
+
         base.OnApplyTemplate(e);
 
-        if (e.NameScope.Find<Button>("PART_Close") is { } close)
-            close.Click += (_, _) => Close();
+        // Шаблон переприменяется при смене темы, и подписка на прежний крестик
+        // держала бы в памяти его дерево вместе с окном.
+        if (_close is not null)
+            _close.Click -= OnCloseClick;
+
+        _close = e.NameScope.Find<Button>("PART_Close");
+
+        if (_close is not null)
+            _close.Click += OnCloseClick;
     }
+
+    private void OnCloseClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => Close();
 }

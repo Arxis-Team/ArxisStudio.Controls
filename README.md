@@ -19,7 +19,8 @@ Border — разрешены как есть), как в Unity, где реда
                xmlns:a="https://github.com/avaloniaui"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <a:StackPanel Spacing="8">
-    <AxButton Classes="accent" Content="Готово"/>
+    <AxButton Appearance="Primary" Content="Готово"/>
+    <a:TextBlock AxText.Tone="Secondary" Text="Изменения сохранены"/>
   </a:StackPanel>
 </AxUserControl>
 ```
@@ -28,11 +29,32 @@ Border — разрешены как есть), как в Unity, где реда
 Родные виджеты Avalonia под этот адрес не попадают намеренно: они пишутся с
 префиксом — и видно, чего в наборе `Ax*` ещё нет.
 
+## Вид — свойствами, а не классами
+
+Вид контрола задают перечисления, и опечатку в них ловит компилятор разметки. Классов
+вида тема не знает с SDK 6.0: класс с опечаткой молча давал контрол по умолчанию.
+
+| Что | Свойство | Значения |
+|---|---|---|
+| вид кнопки | `AxButton.Appearance`, `AxToggleButton.Appearance`, `AxSplitButton.Appearance` | `Default`, `Primary`, `Subtle`, `Danger`, `Toolbar` |
+| размер | `Size` у кнопки, переключателя, поля и списка | `Normal`, `Compact` |
+| роль и тон текста | `AxText.Role`, `AxText.Tone` у `TextBlock` | `Body`, `Small`, `Caption`, `Title`, `Section`, `Code`; `Primary`, `Secondary`, `Tertiary`, `Disabled`, `Accent`, `Error`, `Warning`, `Success` |
+| проверка поля | `AxValidation.State` | `None`, `Warning`, `Error` |
+| чип | `AxChip.Kind` | `Default`, `Accent`, `Key` |
+| аватар | `AxAvatar.Shape`, `AxAvatar.Tint` | `Tile`, `Circle`; `Accent`, `Orange`, `Green`, `Purple`, `Red` |
+| лоадер | `AxSpinner.Size` | `Normal`, `Large` |
+| вкладки панели | `AxTabStrip.Kind` | `Document`, `ToolWindow` |
+| пункт удаления | `AxMenuItem.IsDestructive` | `True` |
+
+Тема видит значение псевдоклассом — `:primary`, `:compact`, `:tone-secondary`, — и значение
+по умолчанию псевдокласса не несёт.
+
 ## Состав (M0)
 
 | Контрол | База | Назначение |
 |---|---|---|
-| `AxButton` | `Button` | классы: `accent`, `ghost`, `icon`, `danger` |
+| `AxButton` | `Button` | кнопка; вид `Appearance`, размер `Size` |
+| `AxToggleButton` | `ToggleButton` | кнопка, которая остаётся нажатой: инструмент, фильтр, пункт навигации |
 | `AxTextBox` | `TextBox` | однострочное поле ввода |
 | `AxSearchField` | `AxTextBox` | поле поиска со значком-лупой |
 | `AxCheckBox` | `CheckBox` | флажок 16×16 |
@@ -41,20 +63,20 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxListBox` / `AxListBoxItem` | `ListBox` | список с выделением строк |
 | `AxSegmentedControl` / `AxSegmentItem` | `ListBox` | сегментный переключатель (Design/XAML/Split) |
 | `AxBadge` | `ContentControl` | бейдж-счётчик |
-| `AxChip` | `ContentControl` | чип-метка; классы `accent`, `kbd` |
+| `AxChip` | `ContentControl` | чип-метка; вид `Kind` |
 | `AxCard` | `ContentControl` | карточка-контейнер |
 | `AxProgressBar` | `ProgressBar` | тонкий индикатор (4px) |
-| `AxAvatar` | `TemplatedControl` | плитка с инициалами; класс `round` |
+| `AxAvatar` | `TemplatedControl` | плитка с инициалами; `Shape` и `Tint` |
 | `AxIcon` | `TemplatedControl` | контурная иконка 16×16; пути — в `AxIcons` |
 | `AxTextArea` | `AxTextBox` | многострочное поле |
 | `AxLink` | `Button` | ссылка; состояние «посещённая» |
 | `AxRadioButton` | `RadioButton` | выбор одного варианта |
-| `AxDivider` | `TemplatedControl` | линия в пиксель, горизонтальная или вертикальная |
+| `AxDivider` | `Control` | линия в пиксель, горизонтальная или вертикальная; цвет `Fill` |
 | `AxSplitter` | `GridSplitter` | граница областей: та же линия, но за неё можно взяться мышью |
 | `AxGroupHeader` | `ContentControl` | заголовок секции с линией |
 | `AxBanner` | `ContentControl` | сообщение: информация, успех, предупреждение, ошибка |
-| `AxTabStrip` / `AxTabItem` | `ListBox` | вкладки документов: значок, метка правок, закрытие |
-| `AxTreeView` / `AxTreeViewItem` | `TreeView` | дерево иерархии и файлов |
+| `AxTabStrip` / `AxTabItem` | `ListBox` | вкладки документов и панелей (`Kind`): значок, метка правок, закрытие |
+| `AxTreeView` / `AxTreeViewItem` | `TreeView` | дерево иерархии и файлов; значок — путь `Icon` и цвет `IconBrush` |
 | `AxSlider` | `Slider` | ползунок значения |
 | `AxToolWindow` | `ContentControl` | панель инструментов: шапка с заголовком, вкладками и действиями |
 | `AxUserControl` | `UserControl` | корень разметки: с него начинается панель, написанная на `.axaml` |
@@ -68,13 +90,10 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxSplitButton` | `SplitButton` | кнопка с меню: действие слева, варианты справа |
 | `AxDropDownButton` | `DropDownButton` | кнопка выбора с шевроном |
 | `AxMenuFlyout` / `AxMenuItem` | `MenuFlyout` / `MenuItem` | контекстное меню: колонка иконок 16, шорткат справа |
-| `AxDialog` | `Window` | диалог без системной рамки на тени `AxAbShadow` |
-| `AxTeachingTip` | `ContentControl` | подсказка «Понятно» со счётчиком шагов |
-| `AxNotificationCard` | `ContentControl` | уведомление: событие, которое исчезает |
+| `AxDialog` | `Window` | диалог без системной рамки на тени `AxShadowModal` |
 | `AxQuickSearch` | `TemplatedControl` | попап поиска: запрос, результаты, подсказки клавиш |
-| `AxBreadcrumbBar` / `AxBreadcrumbItem` | `ItemsControl` | хлебные крошки; классы `current`, `error` |
 | `AxToolBar` | `TemplatedControl` | главный тулбар: слоты слева, по центру и справа |
-| `AxSpinner` | `TemplatedControl` | лоадер 16: оборот за 0.8 с линейно |
+| `AxSpinner` | `TemplatedControl` | лоадер 16 или крупный (`Size`): оборот за 0.8 с линейно |
 | `AxCodeBlock` | `TemplatedControl` | блок кода с подсветкой кистями `AxCode*` |
 | `AxDataGrid` | `AxListBox` | таблица-список со строкой заголовков |
 
@@ -82,8 +101,10 @@ Border — разрешены как есть), как в Unity, где реда
 ([`docs/design-system.md`](../../docs/design-system.md)): строка 24, контур
 фокуса 2px, скругление 4, кнопка 28 высотой. У каждого интерактивного контрола
 есть наведение, нажатие, фокус и выключенное состояние; у полей ввода — ещё
-классы `error` и `warning`. Единые классы вида у всех: `accent`, `ghost`, `icon`,
-`danger`, `compact`.
+состояние проверки `AxValidation.State`.
+
+Уведомление, подсказка-обучение и хлебные крошки сняты в SDK 6.0: у них не было ни
+одного потребителя, и вернутся они добавкой вместе со своей службой.
 
 Подпись кнопки или вкладки, которой не хватает ширины, кончается многоточием и
 целиком читается в подсказке — только пока она сокращена. Вкладка при этом не
@@ -96,12 +117,13 @@ Border — разрешены как есть), как в Unity, где реда
 
 ## Иконки
 
-`AxIcons` — два семейства контурных путей в системе координат 16×16 для `AxIcon`:
-действия и объекты интерфейса (раскрытие, правка, поиск, файлы, запуск, статусы,
-дизайнер, окно) и вложенный класс `AxIcons.Toolbox` — глифы контролов для палитры
-дизайнера форм, где имя глифа равно имени контрола Avalonia. Обводка 1.2, дуги
-настоящие, цвет только от `Foreground`: своих цветов у иконки нет. Заливка — у
-силуэтов (`Play`, `Stop`, `Pause`, точки меню) свойством `IsFilled`.
+`AxIcons` — контурные пути в системе координат 16×16 для `AxIcon`: действия и объекты
+интерфейса (раскрытие, правка, поиск, файлы, запуск, статусы, окно). Обводка 1.2, дуги
+настоящие, цвет только от `Foreground`: своих цветов у иконки нет. Силуэты набора
+(`Play`, `Stop`, `Pause`, точки меню) `AxIcon` заливает сам; свой путь заливают
+свойством `IsFilled`. Мелкая иконка — `Size="Small"`. Путь разбирается при первом
+обращении к иконке. Глифы палитры снятого дизайнера форм (`AxIcons.Toolbox`) сняты в
+SDK 6.0.
 
 ## Галерея
 

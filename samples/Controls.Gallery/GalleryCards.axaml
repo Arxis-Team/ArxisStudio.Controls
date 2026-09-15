@@ -4,37 +4,7 @@
              xmlns:axi="using:ArxisStudio.Icons"
              x:Class="Controls.Gallery.GalleryCards">
 
-  <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.ThemeDictionaries>
-        <!--
-            Буквы на плашке типа файла. Своей роли у этого цвета в теме нет:
-            плашка живёт только внутри карточки дерева, поэтому цвет записан
-            здесь числом. Через AxAccent не выразить — в тёмной он остаётся
-            #3574F0 и на AxInfoFill не читается.
-        -->
-        <ResourceDictionary x:Key="Light">
-          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="#3574F0"/>
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Dark">
-          <SolidColorBrush x:Key="GalleryFileBadgeBrush" Color="#83ACFC"/>
-        </ResourceDictionary>
-      </ResourceDictionary.ThemeDictionaries>
-    </ResourceDictionary>
-  </UserControl.Resources>
-
   <UserControl.Styles>
-    <!--
-        Плашка типа файла стоит слева от имени вместо глифа. Размеры — ключами
-        темы: AxIconSize, AxCornerRadiusSmall, AxFontSizeCaption. Своего
-        контрола под плашку нет — поэтому она собрана здесь, в витрине.
-    -->
-    <Style Selector="Border.file-badge">
-      <Setter Property="Width" Value="{DynamicResource AxIconSize}"/>
-      <Setter Property="Height" Value="{DynamicResource AxIconSize}"/>
-      <Setter Property="CornerRadius" Value="{DynamicResource AxCornerRadiusSmall}"/>
-      <Setter Property="Background" Value="{DynamicResource AxInfoFillBrush}"/>
-    </Style>
     <!--
         Область прокрутки карточки: 110 в высоту, на утопленной подложке —
         та же полоса, что под деревом контролов. Радиус в карточке 6, а в
@@ -107,20 +77,20 @@
     -->
     <ax:AxGroupHeader Content="Кнопки"/>
     <Grid ColumnDefinitions="92,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="12">
-      <TextBlock Grid.Column="1" Classes="dim small" Text="Default" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="2" Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="3" Classes="dim small" Text="Pressed" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="4" Classes="dim small" Text="Focused" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="5" Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="1" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Default" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="2" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Hovered" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="3" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Pressed" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="4" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Focused" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="5" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Disabled" HorizontalAlignment="Center"/>
 
-      <TextBlock Grid.Row="1" Classes="dim small" Text="Primary" VerticalAlignment="Center"/>
-      <ax:AxButton Grid.Row="1" Grid.Column="1" Classes="accent">Button</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="2" x:Name="HoveredPrimary" Classes="accent">Button</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="3" x:Name="PressedPrimary" Classes="accent">Button</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="4" x:Name="FocusedPrimary" Classes="accent">Button</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="5" Classes="accent" IsEnabled="False">Button</ax:AxButton>
+      <TextBlock Grid.Row="1" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Primary" VerticalAlignment="Center"/>
+      <ax:AxButton Grid.Row="1" Grid.Column="1" Appearance="Primary">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="2" x:Name="HoveredPrimary" Appearance="Primary">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="3" x:Name="PressedPrimary" Appearance="Primary">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="4" x:Name="FocusedPrimary" Appearance="Primary">Button</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="5" Appearance="Primary" IsEnabled="False">Button</ax:AxButton>
 
-      <TextBlock Grid.Row="2" Classes="dim small" Text="Secondary" VerticalAlignment="Center"/>
+      <TextBlock Grid.Row="2" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Secondary" VerticalAlignment="Center"/>
       <ax:AxButton Grid.Row="2" Grid.Column="1">Button</ax:AxButton>
       <ax:AxButton Grid.Row="2" Grid.Column="2" x:Name="HoveredSecondary">Button</ax:AxButton>
       <ax:AxButton Grid.Row="2" Grid.Column="3" x:Name="PressedSecondary">Button</ax:AxButton>
@@ -131,9 +101,9 @@
         Остальные классы кнопки: призрачная, опасная и иконочная.
     -->
     <StackPanel Orientation="Horizontal" Spacing="10">
-      <ax:AxButton Classes="ghost">Ghost</ax:AxButton>
-      <ax:AxButton Classes="danger">Delete</ax:AxButton>
-      <ax:AxButton Classes="icon" ToolTip.Tip="Собрать проект">
+      <ax:AxButton Appearance="Subtle">Ghost</ax:AxButton>
+      <ax:AxButton Appearance="Danger">Delete</ax:AxButton>
+      <ax:AxButton Appearance="Toolbar" ToolTip.Tip="Собрать проект">
         <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
       </ax:AxButton>
     </StackPanel>
@@ -141,23 +111,23 @@
     <!-- Компактная кнопка — та же сетка состояний при высоте 24. -->
     <ax:AxGroupHeader Content="Компактная кнопка · 24"/>
     <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
-      <TextBlock Grid.Column="0" Classes="dim small" Text="Default" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="1" Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="2" Classes="dim small" Text="Pressed" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="3" Classes="dim small" Text="Focused" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="4" Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="0" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Default" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="1" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Hovered" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="2" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Pressed" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="3" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Focused" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="4" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Disabled" HorizontalAlignment="Center"/>
 
-      <ax:AxButton Grid.Row="1" Grid.Column="0" Classes="compact">Slim</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="1" x:Name="HoveredSlim" Classes="compact">Slim</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="2" x:Name="PressedSlim" Classes="compact">Slim</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="3" x:Name="FocusedSlim" Classes="compact">Slim</ax:AxButton>
-      <ax:AxButton Grid.Row="1" Grid.Column="4" Classes="compact" IsEnabled="False">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="0" Size="Compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="1" x:Name="HoveredSlim" Size="Compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="2" x:Name="PressedSlim" Size="Compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="3" x:Name="FocusedSlim" Size="Compact">Slim</ax:AxButton>
+      <ax:AxButton Grid.Row="1" Grid.Column="4" Size="Compact" IsEnabled="False">Slim</ax:AxButton>
     </Grid>
 
     <!-- Кнопка с меню -->
     <ax:AxGroupHeader Content="Кнопка с меню"/>
     <StackPanel Orientation="Horizontal" Spacing="10">
-      <ax:AxSplitButton Classes="accent" Content="Run">
+      <ax:AxSplitButton Appearance="Primary" Content="Run">
         <ax:AxSplitButton.Flyout>
           <ax:AxMenuFlyout>
             <MenuItem Header="Run ChatApp"/>
@@ -190,31 +160,31 @@
     -->
     <ax:AxGroupHeader Content="Чекбокс"/>
     <Grid ColumnDefinitions="104,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="12">
-      <TextBlock Grid.Column="1" Classes="dim small" Text="Active" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="2" Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="3" Classes="dim small" Text="Focused" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="4" Classes="dim small" Text="Invalid" HorizontalAlignment="Center"/>
-      <TextBlock Grid.Column="5" Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="1" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Active" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="2" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Hovered" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="3" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Focused" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="4" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Invalid" HorizontalAlignment="Center"/>
+      <TextBlock Grid.Column="5" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Disabled" HorizontalAlignment="Center"/>
 
-      <TextBlock Grid.Row="1" Classes="dim small" Text="Unchecked" VerticalAlignment="Center"/>
+      <TextBlock Grid.Row="1" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Unchecked" VerticalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="1" Grid.Column="2" x:Name="HoveredBox" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="1" Grid.Column="3" x:Name="FocusedBox" HorizontalAlignment="Center"/>
-      <ax:AxCheckBox Grid.Row="1" Grid.Column="4" Classes="error" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="1" Grid.Column="4" ax:AxValidation.State="Error" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="1" Grid.Column="5" IsEnabled="False" HorizontalAlignment="Center"/>
 
-      <TextBlock Grid.Row="2" Classes="dim small" Text="Checked" VerticalAlignment="Center"/>
+      <TextBlock Grid.Row="2" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Checked" VerticalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="2" Grid.Column="1" IsChecked="True" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="2" Grid.Column="2" x:Name="HoveredChecked" IsChecked="True" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="2" Grid.Column="3" x:Name="FocusedChecked" IsChecked="True" HorizontalAlignment="Center"/>
-      <ax:AxCheckBox Grid.Row="2" Grid.Column="4" Classes="error" IsChecked="True" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="2" Grid.Column="4" ax:AxValidation.State="Error" IsChecked="True" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="2" Grid.Column="5" IsChecked="True" IsEnabled="False" HorizontalAlignment="Center"/>
 
-      <TextBlock Grid.Row="3" Classes="dim small" Text="Indeterminate" VerticalAlignment="Center"/>
+      <TextBlock Grid.Row="3" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Indeterminate" VerticalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="3" Grid.Column="1" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="3" Grid.Column="2" x:Name="HoveredMixed" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="3" Grid.Column="3" x:Name="FocusedMixed" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
-      <ax:AxCheckBox Grid.Row="3" Grid.Column="4" Classes="error" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
+      <ax:AxCheckBox Grid.Row="3" Grid.Column="4" ax:AxValidation.State="Error" IsThreeState="True" IsChecked="{x:Null}" HorizontalAlignment="Center"/>
       <ax:AxCheckBox Grid.Row="3" Grid.Column="5" IsThreeState="True" IsChecked="{x:Null}" IsEnabled="False" HorizontalAlignment="Center"/>
     </Grid>
     <!-- Флажок с подписью: в жизни он ходит с ней, а в карточке её нет. -->
@@ -250,29 +220,29 @@
     <ax:AxGroupHeader Content="Поле ввода"/>
     <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="16">
       <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="Default"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Default"/>
         <TextBlock Text="Имя формы"/>
         <ax:AxTextBox Text="ChatView"/>
       </StackPanel>
       <StackPanel Grid.Column="1" Spacing="6">
-        <TextBlock Classes="dim small" Text="Focused"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Focused"/>
         <TextBlock Text="Имя формы"/>
         <ax:AxTextBox x:Name="FocusedField" Text="ChatView"/>
       </StackPanel>
       <StackPanel Grid.Column="2" Spacing="6">
-        <TextBlock Classes="dim small" Text="Invalid"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Invalid"/>
         <TextBlock Text="Имя формы"/>
-        <ax:AxTextBox Classes="error" Text="Chat View!"/>
+        <ax:AxTextBox ax:AxValidation.State="Error" Text="Chat View!"/>
       </StackPanel>
       <StackPanel Grid.Column="3" Spacing="6">
-        <TextBlock Classes="dim small" Text="Invalid focused"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Invalid focused"/>
         <TextBlock Text="Имя формы"/>
-        <ax:AxTextBox x:Name="InvalidFocusedField" Classes="error" Text="Chat View!"/>
+        <ax:AxTextBox x:Name="InvalidFocusedField" ax:AxValidation.State="Error" Text="Chat View!"/>
       </StackPanel>
       <StackPanel Grid.Column="4" Spacing="6">
-        <TextBlock Classes="dim small" Text="Disabled"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Disabled"/>
         <!-- Подпись выключенного поля гаснет вместе с ним: проект даёт AxTextTertiary. -->
-        <TextBlock Classes="dimmer" Text="Имя формы"/>
+        <TextBlock ax:AxText.Tone="Tertiary" Text="Имя формы"/>
         <ax:AxTextBox IsEnabled="False" Text="ChatView"/>
       </StackPanel>
     </Grid>
@@ -284,11 +254,11 @@
     <StackPanel Spacing="8" Width="360" HorizontalAlignment="Left">
       <ax:AxTextBox PlaceholderText="Плейсхолдер читается вместо подписи"/>
       <StackPanel Spacing="3">
-        <ax:AxTextBox Classes="error" Text="Chat View!"/>
-        <TextBlock Classes="bad" FontSize="11.5" Text="Имя не может содержать пробелы"/>
+        <ax:AxTextBox ax:AxValidation.State="Error" Text="Chat View!"/>
+        <TextBlock ax:AxText.Tone="Error" FontSize="11.5" Text="Имя не может содержать пробелы"/>
       </StackPanel>
-      <ax:AxTextBox Classes="warning" Text="chatview"/>
-      <ax:AxTextBox Classes="compact" Text="Компактное · 24"/>
+      <ax:AxTextBox ax:AxValidation.State="Warning" Text="chatview"/>
+      <ax:AxTextBox Size="Compact" Text="Компактное · 24"/>
     </StackPanel>
 
     <!--
@@ -307,12 +277,12 @@
           Подпись остаётся, что бы с полем ни делали.
       -->
       <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="В покое"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="В покое"/>
         <ax:AxSearchField Width="240" HorizontalAlignment="Left" PlaceholderText="Поиск"/>
       </StackPanel>
 
       <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="В фокусе, с очисткой"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="В фокусе, с очисткой"/>
         <ax:AxSearchField x:Name="FocusedSearch" Width="240" HorizontalAlignment="Left" Text="send"/>
       </StackPanel>
 
@@ -322,7 +292,7 @@
           в него печатают.
       -->
       <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="Строка поиска в редакторе"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Строка поиска в редакторе"/>
         <Border Height="32" CornerRadius="6" Padding="10,0"
                 Background="{DynamicResource AxSurfacePanelBrush}"
                 BorderBrush="{DynamicResource AxStrokeControlBrush}"
@@ -335,16 +305,16 @@
                         VerticalAlignment="Center">
               <!-- Учитывать регистр включено — своей плашкой; регулярка выключена. -->
               <ax:AxChip Content="Aa" VerticalAlignment="Center"/>
-              <TextBlock Classes="dim" Text=".*" VerticalAlignment="Center"/>
-              <TextBlock Classes="dim small" Text="3/14" VerticalAlignment="Center"/>
-              <ax:AxButton Classes="icon" AutomationProperties.Name="Предыдущее">
-                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronUp}"/>
+              <TextBlock ax:AxText.Tone="Secondary" Text=".*" VerticalAlignment="Center"/>
+              <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="3/14" VerticalAlignment="Center"/>
+              <ax:AxButton Appearance="Toolbar" AutomationProperties.Name="Предыдущее">
+                <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.ChevronUp}"/>
               </ax:AxButton>
-              <ax:AxButton Classes="icon" AutomationProperties.Name="Следующее">
-                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
+              <ax:AxButton Appearance="Toolbar" AutomationProperties.Name="Следующее">
+                <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
               </ax:AxButton>
-              <ax:AxButton Classes="icon" AutomationProperties.Name="Закрыть поиск">
-                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.Close}"/>
+              <ax:AxButton Appearance="Toolbar" AutomationProperties.Name="Закрыть поиск">
+                <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.Close}"/>
               </ax:AxButton>
             </StackPanel>
             <ax:AxTextBox Theme="{StaticResource AxInlineTextBox}"
@@ -368,7 +338,7 @@
         <ax:AxComboBoxItem>net8.0-ios</ax:AxComboBoxItem>
         <ax:AxComboBoxItem>net8.0-browser</ax:AxComboBoxItem>
       </ax:AxComboBox>
-      <ax:AxComboBox Classes="compact" Width="150" SelectedIndex="0">
+      <ax:AxComboBox Size="Compact" Width="150" SelectedIndex="0">
         <ax:AxComboBoxItem>Компактный · 24</ax:AxComboBoxItem>
       </ax:AxComboBox>
       <ax:AxComboBox Width="130" PlaceholderText="Выключен" IsEnabled="False"/>
@@ -390,10 +360,10 @@
     -->
     <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0"
                    BorderBrush="{DynamicResource AxStrokeSubtleBrush}" BorderThickness="0,0,0,1">
-      <ax:AxTabItem Classes="compact" Content="Свойства" IsClosable="False"/>
-      <ax:AxTabItem Classes="compact" Content="События" IsClosable="False"/>
-      <ax:AxTabItem Classes="compact" Content="Стили" IsClosable="False"/>
-      <ax:AxTabItem Classes="compact" Content="Ресурсы" IsClosable="False"/>
+      <ax:AxTabItem Content="Свойства" IsClosable="False"/>
+      <ax:AxTabItem Content="События" IsClosable="False"/>
+      <ax:AxTabItem Content="Стили" IsClosable="False"/>
+      <ax:AxTabItem Content="Ресурсы" IsClosable="False"/>
     </ax:AxTabStrip>
     <ax:AxTabStrip SelectedIndex="0">
       <ax:AxTabItem Content="MainWindow.axaml"/>
@@ -408,7 +378,7 @@
       <ax:AxLink Content="Документация" IsVisited="True"/>
       <StackPanel Orientation="Horizontal" Spacing="4">
         <ax:AxLink Content="avaloniaui.net"/>
-        <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ExternalLink}"
+        <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.ExternalLink}"
                    Foreground="{DynamicResource AxLinkBrush}" VerticalAlignment="Center"/>
       </StackPanel>
       <ax:AxLink Content="Документация" IsEnabled="False"/>
@@ -439,20 +409,6 @@
       </ax:AxBanner>
     </StackPanel>
 
-    <!-- Уведомления -->
-    <ax:AxGroupHeader Content="Уведомления"/>
-    <ax:AxNotificationCard Severity="Success"
-                           Title="Сборка завершена"
-                           Content="ChatApp собран за 2,4 с. Готов к запуску на net8.0-desktop."
-                           HorizontalAlignment="Left">
-      <ax:AxNotificationCard.Actions>
-        <StackPanel Orientation="Horizontal" Spacing="14">
-          <ax:AxLink Content="Запустить"/>
-          <ax:AxLink Content="Показать журнал"/>
-        </StackPanel>
-      </ax:AxNotificationCard.Actions>
-    </ax:AxNotificationCard>
-
     <!-- Диалоги -->
     <ax:AxGroupHeader Content="Диалоги"/>
     <StackPanel Orientation="Horizontal" Spacing="10">
@@ -468,21 +424,12 @@
         <ToolTip.Tip>
           <StackPanel Orientation="Horizontal" Spacing="10">
             <TextBlock Text="Собрать проект"/>
-            <TextBlock Classes="dim" Text="⌘ F9"/>
+            <TextBlock ax:AxText.Tone="Secondary" Text="⌘ F9"/>
           </StackPanel>
         </ToolTip.Tip>
         С шорткатом
       </ax:AxButton>
     </StackPanel>
-    <ax:AxTeachingTip Title="Быстрый предпросмотр"
-                      StepText="1/3"
-                      HorizontalAlignment="Left"
-                      Content="Нажмите ⌘P, чтобы открыть форму в живом режиме без сборки.">
-      <ax:AxTeachingTip.Actions>
-        <ax:AxButton Classes="compact">Понятно</ax:AxButton>
-      </ax:AxTeachingTip.Actions>
-    </ax:AxTeachingTip>
-
     <!--
         Прогресс-бар: определённый с долей справа и бесконечный без неё.
         Подпись идёт основным текстом, доля — вторичным и мельче; ширина блока
@@ -492,7 +439,7 @@
     <StackPanel Spacing="18" Width="340" HorizontalAlignment="Left">
       <StackPanel Spacing="6">
         <DockPanel>
-          <TextBlock DockPanel.Dock="Right" Classes="dim small" Text="62%"/>
+          <TextBlock DockPanel.Dock="Right" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="62%"/>
           <TextBlock Text="Сборка ChatApp"/>
         </DockPanel>
         <ax:AxProgressBar Minimum="0" Maximum="100" Value="62"/>
@@ -508,11 +455,11 @@
     <StackPanel Orientation="Horizontal" Spacing="24" VerticalAlignment="Center">
       <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
         <ax:AxSpinner/>
-        <TextBlock Classes="dim" VerticalAlignment="Center" Text="Индексация…"/>
+        <TextBlock ax:AxText.Tone="Secondary" VerticalAlignment="Center" Text="Индексация…"/>
       </StackPanel>
       <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-        <ax:AxSpinner Classes="large"/>
-        <TextBlock Classes="dim" VerticalAlignment="Center" Text="Загрузка предпросмотра"/>
+        <ax:AxSpinner Size="Large"/>
+        <TextBlock ax:AxText.Tone="Secondary" VerticalAlignment="Center" Text="Загрузка предпросмотра"/>
       </StackPanel>
     </StackPanel>
 
@@ -532,40 +479,19 @@
     <!-- Дерево -->
     <ax:AxGroupHeader Content="Дерево"/>
     <!--
-        Дерево проекта: у папок глиф, у файлов плашка типа. Выбрана строка
+        Дерево проекта: у папок и файлов глифы набора. Выбрана строка
         ChatView.axaml.
     -->
     <ax:AxTreeView x:Name="ProjectTree" SelectedItem="{Binding #SelectedFile}">
-      <ax:AxTreeViewItem Header="ChatApp" IsExpanded="True">
-        <ax:AxTreeViewItem.Icon>
-          <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
-        </ax:AxTreeViewItem.Icon>
-        <ax:AxTreeViewItem Header="Views" IsExpanded="True">
-          <ax:AxTreeViewItem.Icon>
-            <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
-          </ax:AxTreeViewItem.Icon>
-          <ax:AxTreeViewItem x:Name="SelectedFile" Header="ChatView.axaml">
-            <ax:AxTreeViewItem.Icon>
-              <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
-            </ax:AxTreeViewItem.Icon>
-          </ax:AxTreeViewItem>
-          <ax:AxTreeViewItem Header="MainWindow.axaml">
-            <ax:AxTreeViewItem.Icon>
-              <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
-            </ax:AxTreeViewItem.Icon>
-          </ax:AxTreeViewItem>
+      <ax:AxTreeViewItem Header="ChatApp" IsExpanded="True" Icon="{x:Static axi:AxIcons.Folder}">
+        <ax:AxTreeViewItem Header="Views" IsExpanded="True" Icon="{x:Static axi:AxIcons.Folder}">
+          <ax:AxTreeViewItem x:Name="SelectedFile" Header="ChatView.axaml" Icon="{x:Static axi:AxIcons.DocumentCode}"/>
+          <ax:AxTreeViewItem Header="MainWindow.axaml" Icon="{x:Static axi:AxIcons.DocumentCode}"/>
         </ax:AxTreeViewItem>
-        <ax:AxTreeViewItem Header="ViewModels">
-          <ax:AxTreeViewItem.Icon>
-            <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
-          </ax:AxTreeViewItem.Icon>
+        <ax:AxTreeViewItem Header="ViewModels" Icon="{x:Static axi:AxIcons.Folder}">
           <ax:AxTreeViewItem Header="ChatViewModel.cs"/>
         </ax:AxTreeViewItem>
-        <ax:AxTreeViewItem Header="App.axaml">
-          <ax:AxTreeViewItem.Icon>
-            <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
-          </ax:AxTreeViewItem.Icon>
-        </ax:AxTreeViewItem>
+        <ax:AxTreeViewItem Header="App.axaml" Icon="{x:Static axi:AxIcons.DocumentCode}"/>
       </ax:AxTreeViewItem>
     </ax:AxTreeView>
 
@@ -598,7 +524,7 @@
           <TextBlock Text="MainWindow.axaml"/>
           <TextBlock Grid.Column="1" Text="12"/>
           <TextBlock Grid.Column="2" Text="сегодня 14:02"/>
-          <TextBlock Grid.Column="3" Classes="ok" Text="Собрана"/>
+          <TextBlock Grid.Column="3" ax:AxText.Tone="Success" Text="Собрана"/>
         </Grid>
       </ax:AxListBoxItem>
       <ax:AxListBoxItem>
@@ -606,7 +532,7 @@
           <TextBlock Text="ChatView.axaml"/>
           <TextBlock Grid.Column="1" Text="23"/>
           <TextBlock Grid.Column="2" Text="сегодня 14:21"/>
-          <TextBlock Grid.Column="3" Classes="ok" Text="Собрана"/>
+          <TextBlock Grid.Column="3" ax:AxText.Tone="Success" Text="Собрана"/>
         </Grid>
       </ax:AxListBoxItem>
       <ax:AxListBoxItem>
@@ -614,7 +540,7 @@
           <TextBlock Text="LoginView.axaml"/>
           <TextBlock Grid.Column="1" Text="9"/>
           <TextBlock Grid.Column="2" Text="вчера 18:47"/>
-          <TextBlock Grid.Column="3" Classes="bad" Text="Ошибка привязки"/>
+          <TextBlock Grid.Column="3" ax:AxText.Tone="Error" Text="Ошибка привязки"/>
         </Grid>
       </ax:AxListBoxItem>
       <ax:AxListBoxItem>
@@ -622,7 +548,7 @@
           <TextBlock Text="SettingsView.axaml"/>
           <TextBlock Grid.Column="1" Text="17"/>
           <TextBlock Grid.Column="2" Text="12 авг"/>
-          <TextBlock Grid.Column="3" Classes="dim" Text="Черновик"/>
+          <TextBlock Grid.Column="3" ax:AxText.Tone="Secondary" Text="Черновик"/>
         </Grid>
       </ax:AxListBoxItem>
     </ax:AxDataGrid>
@@ -638,48 +564,48 @@
     -->
     <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
       <StackPanel Spacing="4" HorizontalAlignment="Center">
-        <ax:AxButton Classes="icon" HorizontalAlignment="Center">
+        <ax:AxButton Appearance="Toolbar" HorizontalAlignment="Center">
           <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
-        <TextBlock Classes="dim small" Text="Default" HorizontalAlignment="Center"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Default" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
-        <ax:AxButton x:Name="HoveredTool" Classes="icon" HorizontalAlignment="Center">
+        <ax:AxButton x:Name="HoveredTool" Appearance="Toolbar" HorizontalAlignment="Center">
           <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
-        <TextBlock Classes="dim small" Text="Hovered" HorizontalAlignment="Center"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Hovered" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
-        <ax:AxButton x:Name="PressedTool" Classes="icon" HorizontalAlignment="Center">
+        <ax:AxButton x:Name="PressedTool" Appearance="Toolbar" HorizontalAlignment="Center">
           <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
-        <TextBlock Classes="dim small" Text="Pressed" HorizontalAlignment="Center"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Pressed" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
-        <ax:AxButton x:Name="SelectedTool" Classes="icon" HorizontalAlignment="Center">
+        <ax:AxToggleButton x:Name="SelectedTool" Appearance="Toolbar" IsChecked="True" HorizontalAlignment="Center">
           <axi:AxIcon Data="{x:Static axi:AxIcons.List}"/>
-        </ax:AxButton>
-        <TextBlock Classes="dim small" Text="Selected" HorizontalAlignment="Center"/>
+        </ax:AxToggleButton>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Selected" HorizontalAlignment="Center"/>
       </StackPanel>
       <StackPanel Spacing="4" HorizontalAlignment="Center">
-        <ax:AxButton Classes="icon" IsEnabled="False" HorizontalAlignment="Center">
+        <ax:AxButton Appearance="Toolbar" IsEnabled="False" HorizontalAlignment="Center">
           <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
         </ax:AxButton>
-        <TextBlock Classes="dim small" Text="Disabled" HorizontalAlignment="Center"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Disabled" HorizontalAlignment="Center"/>
       </StackPanel>
 
       <!-- Разделитель группы: 1 на 22 цветом рамки. -->
       <ax:AxDivider Orientation="Vertical" Height="22"/>
 
       <StackPanel Orientation="Horizontal" Spacing="2">
-        <ax:AxButton Classes="icon" ToolTip.Tip="Свернуть всё">
+        <ax:AxButton Appearance="Toolbar" ToolTip.Tip="Свернуть всё">
           <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
         </ax:AxButton>
-        <ax:AxButton Classes="icon" ToolTip.Tip="Фильтр">
+        <ax:AxButton Appearance="Toolbar" ToolTip.Tip="Фильтр">
           <axi:AxIcon Data="{x:Static axi:AxIcons.Filter}"/>
         </ax:AxButton>
-        <ax:AxButton Classes="icon" ToolTip.Tip="Ещё">
-          <axi:AxIcon Data="{x:Static axi:AxIcons.MoreHorizontal}" IsFilled="True"/>
+        <ax:AxButton Appearance="Toolbar" ToolTip.Tip="Ещё">
+          <axi:AxIcon Data="{x:Static axi:AxIcons.MoreHorizontal}"/>
         </ax:AxButton>
       </StackPanel>
     </StackPanel>
@@ -700,16 +626,16 @@
             <Border Classes="project-badge"><TextBlock Text="Ax"/></Border>
             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
               <TextBlock Text="ВолнаЧат" FontWeight="SemiBold" VerticalAlignment="Center"/>
-              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
+              <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
               <axi:AxIcon Data="{x:Static axi:AxIcons.Branch}"/>
-              <TextBlock Classes="dim" Text="main" VerticalAlignment="Center"/>
-              <TextBlock Classes="dim" Text="↑2" VerticalAlignment="Center"/>
+              <TextBlock ax:AxText.Tone="Secondary" Text="main" VerticalAlignment="Center"/>
+              <TextBlock ax:AxText.Tone="Secondary" Text="↑2" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-              <TextBlock Classes="dim" Text="Desktop · Debug" VerticalAlignment="Center"/>
-              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
+              <TextBlock ax:AxText.Tone="Secondary" Text="Desktop · Debug" VerticalAlignment="Center"/>
+              <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
             </StackPanel>
           </StackPanel>
         </ax:AxToolBar.LeftContent>
@@ -722,11 +648,11 @@
             -->
             <Border Classes="run-widget">
               <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                <axi:AxIcon Data="{x:Static axi:AxIcons.Play}" IsFilled="True"
+                <axi:AxIcon Data="{x:Static axi:AxIcons.Play}"
                            Foreground="{DynamicResource AxSuccessBrush}"/>
                 <axi:AxIcon Data="{x:Static axi:AxIcons.Refresh}"/>
                 <TextBlock Text="ВолнаЧат.Desktop" VerticalAlignment="Center"/>
-                <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
+                <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.ChevronDown}"/>
               </StackPanel>
             </Border>
             <axi:AxIcon Data="{x:Static axi:AxIcons.Split}"/>
@@ -735,7 +661,7 @@
                 карточке он на ступень заметнее, чем линии снаружи её.
             -->
             <ax:AxDivider Orientation="Vertical" Height="20"
-                          Background="{DynamicResource AxStrokeStrongBrush}"/>
+                          Fill="{DynamicResource AxStrokeStrongBrush}"/>
             <ax:AxWindowControls IsHitTestVisible="False"/>
           </StackPanel>
         </ax:AxToolBar.RightContent>
@@ -764,90 +690,6 @@
       </DockPanel>
     </ax:AxTitleBar>
 
-    <!-- Хлебные крошки -->
-    <ax:AxGroupHeader Content="Хлебные крошки"/>
-    <!--
-        Четыре ряда крошек в разных состояниях.
-    -->
-    <StackPanel Spacing="18">
-      <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="Путь к файлу"/>
-        <ax:AxBreadcrumbBar>
-          <ax:AxBreadcrumbItem Content="ВолнаЧат">
-            <ax:AxBreadcrumbItem.Icon>
-              <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
-            </ax:AxBreadcrumbItem.Icon>
-          </ax:AxBreadcrumbItem>
-          <!-- Звено под курсором: в карточке оно показано с плашкой. -->
-          <ax:AxBreadcrumbItem x:Name="HoveredCrumb" Content="Views">
-            <ax:AxBreadcrumbItem.Icon>
-              <axi:AxIcon Data="{x:Static axi:AxIcons.Folder}"/>
-            </ax:AxBreadcrumbItem.Icon>
-          </ax:AxBreadcrumbItem>
-          <ax:AxBreadcrumbItem Classes="current" Content="ChatView.axaml">
-            <ax:AxBreadcrumbItem.Icon>
-              <Border Classes="file-badge"><TextBlock Text="Ax"/></Border>
-            </ax:AxBreadcrumbItem.Icon>
-          </ax:AxBreadcrumbItem>
-        </ax:AxBreadcrumbBar>
-      </StackPanel>
-
-      <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="С выпадающим списком и усечением"/>
-        <ax:AxBreadcrumbBar>
-          <ax:AxBreadcrumbItem>
-            <StackPanel Orientation="Horizontal" Spacing="4">
-              <TextBlock Text="ВолнаЧат" VerticalAlignment="Center"/>
-              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
-                         Foreground="{DynamicResource AxTextSecondaryBrush}"/>
-            </StackPanel>
-          </ax:AxBreadcrumbItem>
-          <ax:AxBreadcrumbItem Content="…"/>
-          <ax:AxBreadcrumbItem>
-            <StackPanel Orientation="Horizontal" Spacing="4">
-              <TextBlock Text="Views" VerticalAlignment="Center"/>
-              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
-                         Foreground="{DynamicResource AxTextSecondaryBrush}"/>
-            </StackPanel>
-          </ax:AxBreadcrumbItem>
-          <ax:AxBreadcrumbItem Classes="current">
-            <StackPanel Orientation="Horizontal" Spacing="4">
-              <TextBlock Text="ChatView.axaml" VerticalAlignment="Center"/>
-              <axi:AxIcon Classes="small" Data="{x:Static axi:AxIcons.ChevronDown}"
-                         Foreground="{DynamicResource AxTextSecondaryBrush}"/>
-            </StackPanel>
-          </ax:AxBreadcrumbItem>
-        </ax:AxBreadcrumbBar>
-      </StackPanel>
-
-      <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="Дерево контролов в дизайнере"/>
-        <ax:AxBreadcrumbBar Classes="framed" HorizontalAlignment="Left">
-          <ax:AxBreadcrumbItem Content="Window">
-            <ax:AxBreadcrumbItem.Icon>
-              <!--
-                  Скобки: этого глифа в AxIcons нет. Пока рисуем здесь, по
-                  правилам набора: клетка 16, обводка 1.2.
-              -->
-              <axi:AxIcon Data="M6.5 3H5.5A1.5 1.5 0 0 0 4 4.5v2A1.5 1.5 0 0 1 2.5 8A1.5 1.5 0 0 1 4 9.5v2A1.5 1.5 0 0 0 5.5 13h1 M9.5 3h1A1.5 1.5 0 0 1 12 4.5v2A1.5 1.5 0 0 0 13.5 8A1.5 1.5 0 0 0 12 9.5v2A1.5 1.5 0 0 1 10.5 13h-1"/>
-            </ax:AxBreadcrumbItem.Icon>
-          </ax:AxBreadcrumbItem>
-          <ax:AxBreadcrumbItem Content="Grid"/>
-          <ax:AxBreadcrumbItem Content="StackPanel"/>
-          <ax:AxBreadcrumbItem Classes="current" Content="SendButton"/>
-        </ax:AxBreadcrumbBar>
-      </StackPanel>
-
-      <StackPanel Spacing="6">
-        <TextBlock Classes="dim small" Text="Ошибка в пути и неактивные звенья"/>
-        <ax:AxBreadcrumbBar>
-          <ax:AxBreadcrumbItem IsEnabled="False" Content="ВолнаЧат"/>
-          <ax:AxBreadcrumbItem IsEnabled="False" Content="Views"/>
-          <ax:AxBreadcrumbItem Classes="error" Content="LoginView.axaml"/>
-        </ax:AxBreadcrumbBar>
-      </StackPanel>
-    </StackPanel>
-
     <!-- Tool Window -->
     <ax:AxGroupHeader Content="Tool Window"/>
     <!--
@@ -864,14 +706,14 @@
     -->
     <UniformGrid Columns="2" Margin="0,0,-20,-20">
       <StackPanel Spacing="8" Margin="0,0,20,20">
-        <TextBlock Classes="dim small" Text="Label only"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Label only"/>
         <ax:AxToolWindow Title="Header" Height="150" ShowHeaderSeparator="False">
           <ax:AxToolWindow.Actions>
             <StackPanel Orientation="Horizontal" Spacing="2">
-              <ax:AxButton Classes="icon">
-                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}" IsFilled="True"/>
+              <ax:AxButton Appearance="Toolbar">
+                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}"/>
               </ax:AxButton>
-              <ax:AxButton Classes="icon">
+              <ax:AxButton Appearance="Toolbar">
                 <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
               </ax:AxButton>
             </StackPanel>
@@ -880,14 +722,14 @@
       </StackPanel>
 
       <StackPanel Spacing="8" Margin="0,0,20,20">
-        <TextBlock Classes="dim small" Text="Label with separator"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Label with separator"/>
         <ax:AxToolWindow Title="Header" Height="150" ShowHeaderSeparator="True">
           <ax:AxToolWindow.Actions>
             <StackPanel Orientation="Horizontal" Spacing="2">
-              <ax:AxButton Classes="icon">
-                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}" IsFilled="True"/>
+              <ax:AxButton Appearance="Toolbar">
+                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}"/>
               </ax:AxButton>
-              <ax:AxButton Classes="icon">
+              <ax:AxButton Appearance="Toolbar">
                 <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
               </ax:AxButton>
             </StackPanel>
@@ -896,7 +738,7 @@
       </StackPanel>
 
       <StackPanel Spacing="8" Margin="0,0,20,20">
-        <TextBlock Classes="dim small" Text="Tabs"/>
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Tabs"/>
         <ax:AxToolWindow Title="Header" Height="150" ShowHeaderSeparator="True">
           <ax:AxToolWindow.Tabs>
             <StackPanel Orientation="Horizontal">
@@ -905,17 +747,17 @@
                 <ax:AxTabItem Content="Text"/>
               </ax:AxTabStrip>
               <!-- Добавить вкладку: в карточке кнопка стоит в ряду вкладок. -->
-              <ax:AxButton Classes="icon" VerticalAlignment="Center">
+              <ax:AxButton Appearance="Toolbar" VerticalAlignment="Center">
                 <axi:AxIcon Data="{x:Static axi:AxIcons.Plus}"/>
               </ax:AxButton>
             </StackPanel>
           </ax:AxToolWindow.Tabs>
           <ax:AxToolWindow.Actions>
             <StackPanel Orientation="Horizontal" Spacing="2">
-              <ax:AxButton Classes="icon">
-                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}" IsFilled="True"/>
+              <ax:AxButton Appearance="Toolbar">
+                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}"/>
               </ax:AxButton>
-              <ax:AxButton Classes="icon">
+              <ax:AxButton Appearance="Toolbar">
                 <axi:AxIcon Data="{x:Static axi:AxIcons.Minus}"/>
               </ax:AxButton>
             </StackPanel>
@@ -936,7 +778,7 @@
       <Border Classes="scroll-pane" Margin="0,0,24,0">
         <ScrollViewer VerticalScrollBarVisibility="Visible">
           <StackPanel Margin="10">
-            <TextBlock Classes="dim" Text="Default"/>
+            <TextBlock ax:AxText.Tone="Secondary" Text="Default"/>
             <TextBlock Text="Строка 2"/><TextBlock Text="Строка 3"/>
             <TextBlock Text="Строка 4"/><TextBlock Text="Строка 5"/>
             <TextBlock Text="Строка 6"/><TextBlock Text="Строка 7"/>
@@ -948,7 +790,7 @@
                       VerticalScrollBarVisibility="Visible"
                       HorizontalScrollBarVisibility="Visible">
           <StackPanel Margin="10">
-            <TextBlock Classes="dim" Text="Hovered"/>
+            <TextBlock ax:AxText.Tone="Secondary" Text="Hovered"/>
             <TextBlock Text="Строка 2"/><TextBlock Text="Строка 3"/>
             <TextBlock Text="Строка 4"/><TextBlock Text="Строка 5"/>
             <TextBlock Text="Строка 6, которая не помещается по ширине области"/>
@@ -965,11 +807,11 @@
         и читаемым текстом он не служит.
     -->
     <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-      <TextBlock Classes="dim" Text="Собрать и запустить" VerticalAlignment="Center"/>
-      <ax:AxChip Classes="kbd">⌘</ax:AxChip>
-      <ax:AxChip Classes="kbd">R</ax:AxChip>
-      <TextBlock Classes="dimmer small" Text="/" VerticalAlignment="Center"/>
-      <ax:AxChip Classes="kbd">Shift F10</ax:AxChip>
+      <TextBlock ax:AxText.Tone="Secondary" Text="Собрать и запустить" VerticalAlignment="Center"/>
+      <ax:AxChip Kind="Key">⌘</ax:AxChip>
+      <ax:AxChip Kind="Key">R</ax:AxChip>
+      <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Tertiary" Text="/" VerticalAlignment="Center"/>
+      <ax:AxChip Kind="Key">Shift F10</ax:AxChip>
     </StackPanel>
     <ax:AxCodeBlock x:Name="Code"/>
 
@@ -979,7 +821,7 @@
     <ax:AxGroupHeader Content="Чипы и бейджи"/>
     <StackPanel Orientation="Horizontal" Spacing="6">
       <ax:AxChip>метка</ax:AxChip>
-      <ax:AxChip Classes="accent">выбранная</ax:AxChip>
+      <ax:AxChip Kind="Accent">выбранная</ax:AxChip>
       <ax:AxBadge>7</ax:AxBadge>
     </StackPanel>
 
@@ -1003,9 +845,9 @@
     <StackPanel Spacing="10">
       <ax:AxDivider Width="260" HorizontalAlignment="Left"/>
       <StackPanel Orientation="Horizontal" Spacing="10" Height="20">
-        <TextBlock Classes="dim" Text="слева" VerticalAlignment="Center"/>
+        <TextBlock ax:AxText.Tone="Secondary" Text="слева" VerticalAlignment="Center"/>
         <ax:AxDivider Orientation="Vertical"/>
-        <TextBlock Classes="dim" Text="справа" VerticalAlignment="Center"/>
+        <TextBlock ax:AxText.Tone="Secondary" Text="справа" VerticalAlignment="Center"/>
       </StackPanel>
     </StackPanel>
 
@@ -1019,20 +861,20 @@
 
       <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxStrokeSubtleBrush}">
         <Grid ColumnDefinitions="*,Auto,*">
-          <TextBlock Grid.Column="0" Classes="dim" Text="слева"
+          <TextBlock Grid.Column="0" ax:AxText.Tone="Secondary" Text="слева"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
           <ax:AxSplitter Grid.Column="1" Orientation="Vertical"/>
-          <TextBlock Grid.Column="2" Classes="dim" Text="справа"
+          <TextBlock Grid.Column="2" ax:AxText.Tone="Secondary" Text="справа"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
       </Border>
 
       <Border Width="300" BorderThickness="1" BorderBrush="{DynamicResource AxStrokeSubtleBrush}">
         <Grid RowDefinitions="*,Auto,*">
-          <TextBlock Grid.Row="0" Classes="dim" Text="сверху"
+          <TextBlock Grid.Row="0" ax:AxText.Tone="Secondary" Text="сверху"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
           <ax:AxSplitter Grid.Row="1" Orientation="Horizontal"/>
-          <TextBlock Grid.Row="2" Classes="dim" Text="снизу"
+          <TextBlock Grid.Row="2" ax:AxText.Tone="Secondary" Text="снизу"
                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
       </Border>
@@ -1046,11 +888,11 @@
     <ax:AxGroupHeader Content="Примитивы"/>
     <StackPanel Orientation="Horizontal" Spacing="14" VerticalAlignment="Center">
       <ax:AxAvatar Initials="ВЧ"/>
-      <ax:AxAvatar Classes="round" Initials="МК"/>
+      <ax:AxAvatar Shape="Circle" Initials="МК"/>
       <ax:AxSlider Width="140" Minimum="0" Maximum="100" Value="60"/>
       <ax:AxDivider Orientation="Vertical" Height="20"/>
       <ax:AxCard Padding="10">
-        <TextBlock Classes="dim" FontSize="11.5" Text="Карточка"/>
+        <TextBlock ax:AxText.Tone="Secondary" FontSize="11.5" Text="Карточка"/>
       </ax:AxCard>
     </StackPanel>
     <!--
@@ -1058,10 +900,10 @@
         инициалы дают там 2,68…3,69:1.
     -->
     <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-      <ax:AxAvatar Classes="orange" Initials="Ор"/>
-      <ax:AxAvatar Classes="green" Initials="Зл"/>
-      <ax:AxAvatar Classes="purple" Initials="Фл"/>
-      <ax:AxAvatar Classes="red" Initials="Кр"/>
+      <ax:AxAvatar Tint="Orange" Initials="Ор"/>
+      <ax:AxAvatar Tint="Green" Initials="Зл"/>
+      <ax:AxAvatar Tint="Purple" Initials="Фл"/>
+      <ax:AxAvatar Tint="Red" Initials="Кр"/>
     </StackPanel>
 
   </StackPanel>

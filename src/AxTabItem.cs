@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -9,9 +10,15 @@ using Avalonia.VisualTree;
 namespace ArxisStudio.Controls;
 
 /// <summary>
-/// Вкладка документа: значок, заголовок и кнопка закрытия. Активная вкладка
-/// подчёркнута акцентной полосой снизу, как в IntelliJ.
+/// Вкладка документа или панели: значок, заголовок и кнопка закрытия. Активная
+/// вкладка подчёркнута акцентной полосой снизу, как в IntelliJ.
 /// </summary>
+/// <remarks>
+/// Вид вкладки панели приходит от полосы псевдоклассом <c>:tool-window</c> — см.
+/// <see cref="AxTabStrip.Kind"/>.
+/// </remarks>
+[TemplatePart("PART_Close", typeof(Control))]
+[PseudoClasses(":tool-window")]
 public class AxTabItem : ListBoxItem
 {
     /// <summary>
@@ -76,6 +83,9 @@ public class AxTabItem : ListBoxItem
         get => GetValue(IsModifiedProperty);
         set => SetValue(IsModifiedProperty, value);
     }
+
+    /// <summary>Отмечает вкладку вкладкой панели; зовёт полоса.</summary>
+    internal void MarkToolWindow(bool on) => PseudoClasses.Set(":tool-window", on);
 
     /// <inheritdoc/>
     /// <remarks>

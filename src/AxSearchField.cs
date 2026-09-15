@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 
 namespace ArxisStudio.Controls;
@@ -12,30 +14,38 @@ namespace ArxisStudio.Controls;
 /// набранное. Появляется он от текста и вместе с текстом исчезает: пустое поле
 /// с крестиком предлагает стереть то, чего нет. Показом занимается тема,
 /// поведением — контрол.
+/// <para>
+/// Кнопка — часть шаблона поля, и берётся она по ссылке. Прежде она жила в
+/// <c>InnerRightContent</c>, своей области имён, и поле узнавало её по имени во
+/// всплывшем нажатии: кнопка с тем же именем в чужом содержимом стирала бы запрос.
+/// </para>
 /// </remarks>
+[TemplatePart(ClearPart, typeof(Button))]
 public class AxSearchField : AxTextBox
 {
     /// <summary>Имя кнопки очистки в теме.</summary>
     private const string ClearPart = "PART_Clear";
 
-    /// <summary>
-    /// Слушает нажатие по маршруту события, а не ищет кнопку в шаблоне.
-    /// </summary>
-    /// <remarks>
-    /// Кнопка живёт в <c>InnerRightContent</c>, а это своя область имён:
-    /// <c>OnApplyTemplate</c> её не видит. Нажатие же всплывает до поля в любом
-    /// случае — по нему и работаем.
-    /// </remarks>
-    public AxSearchField() =>
-        AddHandler(Button.ClickEvent, OnClick, RoutingStrategies.Bubble);
+    private Button? _clear;
+
+    /// <inheritdoc/>
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        ArgumentNullException.ThrowIfNull(e);
+
+        base.OnApplyTemplate(e);
+
+        if (_clear is not null)
+            _clear.Click -= OnClick;
+
+        _clear = e.NameScope.Find<Button>(ClearPart);
+
+        if (_clear is not null)
+            _clear.Click += OnClick;
+    }
 
     private void OnClick(object? sender, RoutedEventArgs e)
     {
-        if (e.Source is not Button { Name: ClearPart })
-        {
-            return;
-        }
-
         Clear();
 
         // Курсор остаётся в поле: человек стёр запрос, чтобы набрать другой,

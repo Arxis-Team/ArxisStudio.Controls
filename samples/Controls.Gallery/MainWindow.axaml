@@ -26,7 +26,7 @@
         </ax:AxSegmentedControl>
         <StackPanel>
           <TextBlock FontSize="16" FontWeight="SemiBold" Text="ArxisStudio.Controls"/>
-          <TextBlock Classes="dim" FontSize="11.5"
+          <TextBlock ax:AxText.Tone="Secondary" FontSize="11.5"
                      Text="Галерея: каждая карточка страницы «Контролы» в Light и Dark"/>
         </StackPanel>
       </DockPanel>
