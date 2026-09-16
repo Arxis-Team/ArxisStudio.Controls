@@ -3,8 +3,8 @@
              xmlns:themes="using:ArxisStudio.Themes.Arxis"
              x:Class="Controls.Gallery.App"
              RequestedThemeVariant="Dark">
+  <!-- Одна тема студии: окно, попапы и простые контейнеры она одевает сама. -->
   <Application.Styles>
-    <FluentTheme/>
     <themes:ArxisTheme/>
   </Application.Styles>
 </Application>
