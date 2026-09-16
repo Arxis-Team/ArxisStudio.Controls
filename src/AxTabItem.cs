@@ -14,13 +14,25 @@ namespace ArxisStudio.Controls;
 /// вкладка подчёркнута акцентной полосой снизу, как в IntelliJ.
 /// </summary>
 /// <remarks>
+/// <para>
 /// Вид вкладки панели приходит от полосы псевдоклассом <c>:tool-window</c> — см.
 /// <see cref="AxTabStrip.Kind"/>.
+/// </para>
+/// <para>
+/// Выбранная вкладка говорит и о фокусе: <c>:selection-active</c>, пока клавиатура внутри её
+/// области — панели, в шапке которой она стоит, — и ничего, когда клавиатура ушла к соседке. Так
+/// же устроена строка списка (<see cref="AxListBoxItem"/>): признак приходит от области выделения,
+/// а не от селектора с предком, и потому не гаснет, пока открыто меню, позванное из панели.
+/// </para>
 /// </remarks>
 [TemplatePart("PART_Close", typeof(Control))]
-[PseudoClasses(":tool-window")]
+[PseudoClasses(":tool-window", ":selection-active")]
 public class AxTabItem : ListBoxItem
 {
+    static AxTabItem() =>
+        AxSelectionScope.IsActiveProperty.Changed.AddClassHandler<AxTabItem>(
+            (tab, change) => tab.PseudoClasses.Set(":selection-active", change.GetNewValue<bool>()));
+
     /// <summary>
     /// Человек попросил закрыть вкладку.
     /// </summary>

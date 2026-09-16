@@ -357,19 +357,28 @@
     <!--
         Два ряда: обычные вкладки прозрачной полосой,
         вкладки документа — на своей, со скруглением сверху и крестиками.
+
+        Оба ряда стоят в панели, и это не украшение витрины. Полоса под выбранной вкладкой красится
+        по области выделения: акцентом, пока клавиатура внутри панели, и нейтральной линией, когда
+        она ушла. Область объявляет собой панель, вкладки берут признак наследованием — щёлкните по
+        вкладке и по чему-нибудь за панелью, и увидите оба цвета.
     -->
-    <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0"
-                   BorderBrush="{DynamicResource AxStrokeSubtleBrush}" BorderThickness="0,0,0,1">
-      <ax:AxTabItem Content="Свойства" IsClosable="False"/>
-      <ax:AxTabItem Content="События" IsClosable="False"/>
-      <ax:AxTabItem Content="Стили" IsClosable="False"/>
-      <ax:AxTabItem Content="Ресурсы" IsClosable="False"/>
-    </ax:AxTabStrip>
-    <ax:AxTabStrip SelectedIndex="0">
-      <ax:AxTabItem Content="MainWindow.axaml"/>
-      <ax:AxTabItem Content="ChatViewModel.cs" IsModified="True"/>
-      <ax:AxTabItem Content="App.axaml"/>
-    </ax:AxTabStrip>
+    <ax:AxToolWindow ShowHeader="False" Background="Transparent">
+      <StackPanel Spacing="8">
+        <ax:AxTabStrip Theme="{StaticResource AxToolWindowTabStrip}" SelectedIndex="0"
+                       BorderBrush="{DynamicResource AxStrokeSubtleBrush}" BorderThickness="0,0,0,1">
+          <ax:AxTabItem Content="Свойства" IsClosable="False"/>
+          <ax:AxTabItem Content="События" IsClosable="False"/>
+          <ax:AxTabItem Content="Стили" IsClosable="False"/>
+          <ax:AxTabItem Content="Ресурсы" IsClosable="False"/>
+        </ax:AxTabStrip>
+        <ax:AxTabStrip SelectedIndex="0">
+          <ax:AxTabItem Content="MainWindow.axaml"/>
+          <ax:AxTabItem Content="ChatViewModel.cs" IsModified="True"/>
+          <ax:AxTabItem Content="App.axaml"/>
+        </ax:AxTabStrip>
+      </StackPanel>
+    </ax:AxToolWindow>
 
     <!-- Ссылки -->
     <ax:AxGroupHeader Content="Ссылки"/>
