@@ -26,7 +26,7 @@ namespace ArxisStudio.Controls;
 /// </para>
 /// </remarks>
 [TemplatePart("PART_Close", typeof(Control))]
-[PseudoClasses(":tool-window", ":selection-active")]
+[PseudoClasses(":tool-window", ":selection-active", ":solo")]
 public class AxTabItem : ListBoxItem
 {
     static AxTabItem() =>
@@ -98,6 +98,16 @@ public class AxTabItem : ListBoxItem
 
     /// <summary>Отмечает вкладку вкладкой панели; зовёт полоса.</summary>
     internal void MarkToolWindow(bool on) => PseudoClasses.Set(":tool-window", on);
+
+    /// <summary>
+    /// Отмечает вкладку единственной в полосе; зовёт полоса.
+    /// </summary>
+    /// <remarks>
+    /// Одинокой вкладке полоса выбора не нужна: выбирать не из чего, и линия под ней говорит о
+    /// том, чего человек и так не спрашивает. Считает это сама полоса — вкладка своего ряда не
+    /// видит.
+    /// </remarks>
+    internal void MarkSolo(bool on) => PseudoClasses.Set(":solo", on);
 
     /// <inheritdoc/>
     /// <remarks>

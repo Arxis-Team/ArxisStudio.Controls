@@ -26,7 +26,7 @@ public enum AxTabStripKind
 /// каждой. Полоса ставит своим вкладкам псевдокласс <c>:tool-window</c> — и тем, что
 /// создала сама, и тем, что пришли готовыми.
 /// </remarks>
-[PseudoClasses(":tool-window", ":overflow")]
+[PseudoClasses(":tool-window", ":overflow", ":solo")]
 [TemplatePart("PART_Overflow", typeof(Button))]
 [TemplatePart("PART_Scroll", typeof(ScrollViewer))]
 public class AxTabStrip : ListBox
@@ -111,7 +111,10 @@ public class AxTabStrip : ListBox
         base.PrepareContainerForItemOverride(container, item, index);
 
         if (container is AxTabItem tab)
+        {
             tab.MarkToolWindow(Kind == AxTabStripKind.ToolWindow);
+            tab.MarkSolo(ItemCount <= 1);
+        }
     }
 
     /// <inheritdoc/>
@@ -206,6 +209,8 @@ public class AxTabStrip : ListBox
     /// </remarks>
     private void Sync()
     {
+        Solo();
+
         var hidden = Hidden();
 
         PseudoClasses.Set(":overflow", hidden.Count > 0);
@@ -256,5 +261,23 @@ public class AxTabStrip : ListBox
 
         foreach (var tab in GetRealizedContainers().OfType<AxTabItem>())
             tab.MarkToolWindow(kind == AxTabStripKind.ToolWindow);
+    }
+
+    /// <summary>
+    /// Одна вкладка в полосе или несколько.
+    /// </summary>
+    /// <remarks>
+    /// Считается там же, где переполнение, — на раскладке: вкладки приходят и уходят, а сравнение
+    /// числа с единицей дешевле любого события. Метятся и сама полоса, и её вкладки: тема
+    /// спрашивает у вкладки, а число знает полоса.
+    /// </remarks>
+    private void Solo()
+    {
+        var solo = ItemCount <= 1;
+
+        PseudoClasses.Set(":solo", solo);
+
+        foreach (var tab in GetRealizedContainers().OfType<AxTabItem>())
+            tab.MarkSolo(solo);
     }
 }
