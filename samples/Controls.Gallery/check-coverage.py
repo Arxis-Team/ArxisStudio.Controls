@@ -23,6 +23,13 @@ for name in ('GalleryCards.axaml', 'GalleryCards.axaml.cs', 'MainWindow.axaml', 
     shown |= set(re.findall(r'<ax:(Ax[A-Za-z]+)', text))
     shown |= set(re.findall(r'new (Ax[A-Za-z]+)', text))
 
+# Двое карточкой не бывают, и это не пробел витрины.
+#
+# AxWindow — само окно: витрина в нём и живёт, показать его карточкой внутри себя нельзя.
+# AxUserControl — основание для чужих панелей: своего вида у него нет вовсе, и карточка вышла бы
+# пустым прямоугольником. Оба одеты темой и проверены её тестами — там, где это и проверяется.
+ROOTS = {'AxWindow', 'AxUserControl'}
+
 # Что есть в библиотеке. Конвертеры не контролы и витрины не требуют.
 declared = []
 for name in sorted(os.listdir(src)):
@@ -35,9 +42,9 @@ for name in sorted(os.listdir(src)):
         if 'IValueConverter' not in m.group(2):
             declared.append(m.group(1))
 
-missing = [name for name in declared if name not in shown]
+missing = [name for name in declared if name not in shown and name not in ROOTS]
 
-print('контролов:', len(declared), '· в галерее:', len(declared) - len(missing))
+print('контролов:', len(declared), '· в галерее:', len(declared) - len(missing) - len(ROOTS), '· корней:', len(ROOTS))
 if missing:
     print('нет в галерее:')
     for name in missing:
