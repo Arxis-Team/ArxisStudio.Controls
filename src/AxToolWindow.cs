@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 
 namespace ArxisStudio.Controls;
 
@@ -15,8 +16,21 @@ namespace ArxisStudio.Controls;
 /// (<see cref="Tabs"/>) — так устроена нижняя панель IDE, где рядом живут
 /// «Проект», «Консоль» и «Проблемы».
 /// </remarks>
+[PseudoClasses(":active")]
 public class AxToolWindow : ContentControl
 {
+    static AxToolWindow() =>
+        AxSelectionScope.IsActiveProperty.Changed.AddClassHandler<AxToolWindow>(
+            (panel, change) => panel.PseudoClasses.Set(":active", change.GetNewValue<bool>()));
+
+    /// <summary>Заводит панель и объявляет её областью: активна та, в которой клавиатура.</summary>
+    /// <remarks>
+    /// У среды с десятком панелей вопрос «куда пойдёт нажатие» обязан иметь ответ до нажатия.
+    /// Прежде это держал <c>:focus-within</c> у самой панели, и открытое меню гасило её вместе с
+    /// выделением: у окна попапа нет визуального предка.
+    /// </remarks>
+    public AxToolWindow() => AxSelectionScope.Track(this);
+
     /// <summary>Заголовок панели.</summary>
     public static readonly StyledProperty<string?> TitleProperty =
         AvaloniaProperty.Register<AxToolWindow, string?>(nameof(Title));

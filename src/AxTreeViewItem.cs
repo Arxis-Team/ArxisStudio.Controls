@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.VisualTree;
@@ -15,8 +16,13 @@ namespace ArxisStudio.Controls;
 /// клетка набора ложится в пиксели, а плашка — как получится. Тип документа
 /// различают цветом значка, <see cref="IconBrush"/>.
 /// </remarks>
+[PseudoClasses(":selection-active")]
 public class AxTreeViewItem : TreeViewItem
 {
+    static AxTreeViewItem() =>
+        AxSelectionScope.IsActiveProperty.Changed.AddClassHandler<AxTreeViewItem>(
+            (item, change) => item.PseudoClasses.Set(":selection-active", change.GetNewValue<bool>()));
+
     /// <summary>Значок слева от подписи.</summary>
     public static readonly StyledProperty<Geometry?> IconProperty =
         AvaloniaProperty.Register<AxTreeViewItem, Geometry?>(nameof(Icon));

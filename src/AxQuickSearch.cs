@@ -13,6 +13,25 @@ namespace ArxisStudio.Controls;
 /// </summary>
 public class AxQuickSearch : TemplatedControl
 {
+    /// <inheritdoc/>
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+
+        // Список внутри попапа — не своя область: клавиатура стоит в строке запроса, и своей
+        // областью список гас бы всегда. Значение он берёт у попапа по наследству.
+        if (e.NameScope.Find<Control>("PART_List") is { } list)
+            AxSelectionScope.Release(list);
+    }
+
+    /// <summary>Заводит попап и объявляет его областью выделения.</summary>
+    /// <remarks>
+    /// Фокус в попапе стоит в строке запроса, а выбранная строка живёт в списке под ней: со стилем
+    /// по <c>:focus-within</c> список не загорался никогда, и выбор в палитре команд всегда
+    /// выглядел погашенным. Область — весь попап целиком: и поле, и список внутри него.
+    /// </remarks>
+    public AxQuickSearch() => AxSelectionScope.Track(this);
+
     /// <summary>Набранный запрос.</summary>
     public static readonly StyledProperty<string?> TextProperty =
         AvaloniaProperty.Register<AxQuickSearch, string?>(nameof(Text), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
