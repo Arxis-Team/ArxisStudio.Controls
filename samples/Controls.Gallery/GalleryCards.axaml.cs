@@ -61,6 +61,12 @@ public partial class GalleryCards : UserControl
         Show(InvalidFocusedField);
         Show(FocusedSearch);
 
+        // Крошки: владелец отвечает на выбор сегмента тем, что укорачивает путь до него.
+        Walk(WidePath, Whole.Length);
+        Walk(NarrowPath, Whole.Length);
+        WidePath.Navigated += (_, e) => Walk(WidePath, e.Index + 1);
+        NarrowPath.Navigated += (_, e) => Walk(NarrowPath, e.Index + 1);
+
         // Ряд состояний иконочной кнопки в тулбаре: живое окно показало бы
         // одно состояние за раз, а карточка требует все пять сразу. Включённый
         // инструмент — переключатель, и включён он свойством в разметке.
@@ -203,6 +209,30 @@ public partial class GalleryCards : UserControl
 
         if (TopLevel.GetTopLevel(this) is Window owner)
             await dialog.ShowDialog(owner);
+    }
+
+    /// <summary>Путь окна проекта для карточки крошек: решение, проект и папки вглубь.</summary>
+    private static readonly string[] Whole = ["TestApp", "TestApp", "ViewModels", "Generated", "Templates"];
+
+    /// <summary>Ставит крошкам первые <paramref name="depth"/> уровней пути.</summary>
+    private static void Walk(AxBreadcrumb path, int depth)
+    {
+        path.Items.Clear();
+
+        for (var at = 0; at < depth; at++)
+        {
+            path.Items.Add(new AxBreadcrumbItem
+            {
+                Content = Whole[at],
+                Icon = at switch { 0 => AxIcons.Solution, 1 => AxIcons.Project, _ => AxIcons.Folder },
+            });
+        }
+    }
+
+    private void OnWholePathClick(object? sender, RoutedEventArgs e)
+    {
+        Walk(WidePath, Whole.Length);
+        Walk(NarrowPath, Whole.Length);
     }
 
     private void OnOpenMenu(object? sender, RoutedEventArgs e)

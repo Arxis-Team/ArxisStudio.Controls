@@ -380,6 +380,22 @@
       </StackPanel>
     </ax:AxToolWindow>
 
+    <!-- Крошки навигации -->
+    <ax:AxGroupHeader Content="Крошки навигации"/>
+    <!--
+        Путь окна проекта: решение, проект, папки. Последний сегмент — текущее место и никуда не
+        ведёт. Второй ряд тот же путь в узкой колонке: ведущие сегменты ушли в меню переполнения у
+        левого края, последний остался. Щелчок по сегменту укорачивает путь до него — так владелец
+        отвечает на Navigated; сами крошки пути не меняют. «Весь путь» возвращает его целиком.
+    -->
+    <StackPanel Spacing="8">
+      <ax:AxBreadcrumb x:Name="WidePath"/>
+      <StackPanel Orientation="Horizontal" Spacing="16">
+        <ax:AxBreadcrumb x:Name="NarrowPath" Width="220"/>
+        <ax:AxLink Content="Весь путь" Click="OnWholePathClick" VerticalAlignment="Center"/>
+      </StackPanel>
+    </StackPanel>
+
     <!-- Ссылки -->
     <ax:AxGroupHeader Content="Ссылки"/>
     <StackPanel Orientation="Horizontal" Spacing="16">

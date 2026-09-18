@@ -30,7 +30,7 @@ for name in ('GalleryCards.axaml', 'GalleryCards.axaml.cs', 'MainWindow.axaml', 
 # пустым прямоугольником. Оба одеты темой и проверены её тестами — там, где это и проверяется.
 ROOTS = {'AxWindow', 'AxUserControl'}
 
-# Что есть в библиотеке. Конвертеры не контролы и витрины не требуют.
+# Что есть в библиотеке. Конвертеры и аргументы событий не контролы и витрины не требуют.
 declared = []
 for name in sorted(os.listdir(src)):
     if not name.endswith('.cs'):
@@ -39,7 +39,7 @@ for name in sorted(os.listdir(src)):
     for m in re.finditer(
             r'public\s+(?:sealed\s+)?(?:abstract\s+)?(?:partial\s+)?class\s+(Ax[A-Za-z]+)\s*:\s*([A-Za-z<>, .]+)',
             text):
-        if 'IValueConverter' not in m.group(2):
+        if 'IValueConverter' not in m.group(2) and 'EventArgs' not in m.group(2):
             declared.append(m.group(1))
 
 missing = [name for name in declared if name not in shown and name not in ROOTS]
