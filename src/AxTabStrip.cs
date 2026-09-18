@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
@@ -96,6 +97,13 @@ public class AxTabStrip : ListBox
 
         return size;
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Полоса устроена списком, и экранный диктор читал её списком. Роль у неё своя — набор
+    /// вкладок; выбор, прокрутка и дети остаются от списка.
+    /// </remarks>
+    protected override AutomationPeer OnCreateAutomationPeer() => new StripPeer(this);
 
     /// <inheritdoc/>
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
@@ -279,5 +287,11 @@ public class AxTabStrip : ListBox
 
         foreach (var tab in GetRealizedContainers().OfType<AxTabItem>())
             tab.MarkSolo(solo);
+    }
+
+    /// <summary>Полоса для экранного диктора.</summary>
+    private sealed class StripPeer(AxTabStrip owner) : ListBoxAutomationPeer(owner)
+    {
+        protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Tab;
     }
 }

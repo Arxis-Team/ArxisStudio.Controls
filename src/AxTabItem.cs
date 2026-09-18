@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Automation.Peers;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
@@ -167,6 +168,19 @@ public class AxTabItem : ListBoxItem
         }
 
         base.OnKeyDown(e);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Вкладка устроена строкой списка, и экранный диктор читал её «элементом списка, 2 из 5».
+    /// Роль у неё своя — вкладка, — а выбор остаётся от строки: вкладку выбирают, как строку.
+    /// </remarks>
+    protected override AutomationPeer OnCreateAutomationPeer() => new TabPeer(this);
+
+    /// <summary>Вкладка для экранного диктора.</summary>
+    private sealed class TabPeer(AxTabItem owner) : ListItemAutomationPeer(owner)
+    {
+        protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.TabItem;
     }
 
     /// <summary>

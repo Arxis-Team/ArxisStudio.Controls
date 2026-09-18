@@ -1,4 +1,7 @@
 using Avalonia;
+using Avalonia.Automation;
+using Avalonia.Automation.Peers;
+using Avalonia.Automation.Provider;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Input;
@@ -66,6 +69,35 @@ public class AxTreeViewItem : TreeViewItem
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
         => NeedsContainer<AxTreeViewItem>(item, out recycleKey);
 
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Пир строки дерева в Avalonia 12 раскрытия не знает, и экранный диктор не слышал у узла ни
+    /// «свёрнуто», ни «развёрнуто», а раскрыть его своей командой не мог вовсе. Раскрытие — своё,
+    /// выбор и дети — от пира Avalonia.
+    /// </remarks>
+    protected override AutomationPeer OnCreateAutomationPeer() => new NodePeer(this);
+
+    /// <inheritdoc/>
+    /// <remarks>Смену раскрытия диктор узнаёт от пира: иначе услышал бы её, только вернувшись к строке.</remarks>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        ArgumentNullException.ThrowIfNull(change);
+
+        base.OnPropertyChanged(change);
+
+        if (change.Property == IsExpandedProperty && ItemCount > 0 && ControlAutomationPeer.FromElement(this) is { } peer)
+            peer.RaisePropertyChangedEvent(
+                ExpandCollapsePatternIdentifiers.ExpandCollapseStateProperty,
+                State(change.GetOldValue<bool>()),
+                State(change.GetNewValue<bool>()));
+    }
+
+    /// <summary>Как раскрытие читает диктор: лист, свёрнут или развёрнут.</summary>
+    private ExpandCollapseState State(bool expanded) =>
+        ItemCount == 0 ? ExpandCollapseState.LeafNode
+        : expanded ? ExpandCollapseState.Expanded
+        : ExpandCollapseState.Collapsed;
+
     private void OnRowDoubleTapped(object? sender, TappedEventArgs e)
     {
         if (ItemCount == 0 || e.Source is not Visual source)
@@ -84,5 +116,25 @@ public class AxTreeViewItem : TreeViewItem
 
         IsExpanded = !IsExpanded;
         e.Handled = true;
+    }
+
+    /// <summary>Узел дерева для диктора: раскрывается и сворачивается так же, как стрелкой.</summary>
+    private sealed class NodePeer(AxTreeViewItem owner) : TreeViewItemAutomationPeer(owner), IExpandCollapseProvider
+    {
+        public ExpandCollapseState ExpandCollapseState => owner.State(owner.IsExpanded);
+
+        public bool ShowsMenu => false;
+
+        public void Expand()
+        {
+            if (owner.ItemCount > 0)
+                owner.SetCurrentValue(IsExpandedProperty, true);
+        }
+
+        public void Collapse()
+        {
+            if (owner.ItemCount > 0)
+                owner.SetCurrentValue(IsExpandedProperty, false);
+        }
     }
 }

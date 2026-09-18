@@ -74,8 +74,8 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxSplitter` | `GridSplitter` | граница областей: та же линия, но за неё можно взяться мышью |
 | `AxGroupHeader` | `ContentControl` | заголовок секции с линией |
 | `AxBanner` | `ContentControl` | сообщение: информация, успех, предупреждение, ошибка |
-| `AxTabStrip` / `AxTabItem` | `ListBox` | вкладки документов и панелей (`Kind`): значок, метка правок, закрытие |
-| `AxTreeView` / `AxTreeViewItem` | `TreeView` | дерево иерархии и файлов; значок — путь `Icon` и цвет `IconBrush` |
+| `AxTabStrip` / `AxTabItem` | `ListBox` | вкладки документов и панелей (`Kind`): значок, метка правок, закрытие; диктору — набор вкладок и вкладка, а не список |
+| `AxTreeView` / `AxTreeViewItem` | `TreeView` | дерево иерархии и файлов; значок — путь `Icon` и цвет `IconBrush`; диктор слышит раскрытие узла и раскрывает его сам |
 | `AxBreadcrumb` / `AxBreadcrumbItem` | `ItemsControl` / `Button` | путь от корня до текущего места: сегмент — переход (`Navigated`), последний — текущий, ведущие при нехватке места уходят в меню |
 | `AxSlider` | `Slider` | ползунок значения |
 | `AxToolWindow` | `ContentControl` | панель инструментов: шапка с заголовком, вкладками и действиями |
