@@ -28,6 +28,11 @@ namespace ArxisStudio.Controls;
 /// Настройка появилась в Windows 11; на более ранних версиях вызов ничего не
 /// делает, как и на других платформах.
 /// </para>
+/// <para>
+/// Окно не открывается больше рабочей области своего экрана — ни размером, ни наименьшим размером:
+/// числа из разметки заданы под обычный монитор, а ноутбук 1920 × 1080 при 150 % — это 1280 × 720
+/// точек без панели задач.
+/// </para>
 /// </remarks>
 public class AxWindow : Window
 {
@@ -51,8 +56,62 @@ public class AxWindow : Window
         ExtendClientAreaToDecorationsHint = true;
 
         // До открытия окна ручки платформы ещё нет, и красить нечего.
-        Opened += (_, _) => Paint();
+        Opened += (_, _) =>
+        {
+            _opened = true;
+            Paint();
+        };
         ActualThemeVariantChanged += (_, _) => Paint();
+    }
+
+    /// <summary>Окно уже показывали: размер с этого мига держат человек и система.</summary>
+    private bool _opened;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Размер урезается при каждой его правке до первого показа — из разметки, из кода, из записанной
+    /// раскладки, — а место окну выбирает показ: по центру уже урезанного размера. Один миг вроде
+    /// конца разметки годился бы не всем: окно, заведённое кодом, получает размер уже после него.
+    /// </remarks>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (!_opened
+            && (change.Property == WidthProperty || change.Property == HeightProperty
+                || change.Property == MinWidthProperty || change.Property == MinHeightProperty))
+        {
+            Fit();
+        }
+    }
+
+    /// <summary>
+    /// Урезает размер и наименьший размер окна до рабочей области экрана, на котором оно встанет.
+    /// </summary>
+    /// <remarks>
+    /// Окно крупнее экрана вставало по центру с заголовком выше верхнего края — сдвинуть его было не
+    /// за что, — а наименьший размер крупнее экрана не давал его и сжать. Наименьший трогается,
+    /// только если не влезает: заданный стилем, он иначе прибился бы местным значением и перестал
+    /// следовать теме.
+    /// </remarks>
+    private void Fit()
+    {
+        if ((Screens?.ScreenFromWindow(this) ?? Screens?.Primary) is not { } screen)
+            return;
+
+        var area = screen.WorkingArea.ToRect(screen.Scaling).Size;
+
+        if (MinWidth > area.Width)
+            MinWidth = area.Width;
+
+        if (MinHeight > area.Height)
+            MinHeight = area.Height;
+
+        if (Width > area.Width)
+            Width = area.Width;
+
+        if (Height > area.Height)
+            Height = area.Height;
     }
 
     /// <summary>Приводит рамку окна к нынешней теме.</summary>
