@@ -31,6 +31,19 @@ public class AxMenuItem : MenuItem
         => new AxMenuItem();
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// Разделитель — строка сама по себе, как в корне меню. Спрошенный наравне с остальными, он
+    /// заворачивался в пункт подменю и становился строкой с подсветкой под курсором, в которую можно
+    /// было щёлкнуть, — а в корне того же меню оставался линией.
+    /// </remarks>
     protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
-        => NeedsContainer<AxMenuItem>(item, out recycleKey);
+    {
+        if (item is Separator)
+        {
+            recycleKey = null;
+            return false;
+        }
+
+        return NeedsContainer<AxMenuItem>(item, out recycleKey);
+    }
 }

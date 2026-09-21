@@ -103,6 +103,7 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxSplitButton` | `SplitButton` | кнопка с меню: действие слева, варианты справа |
 | `AxDropDownButton` | `DropDownButton` | кнопка выбора с шевроном |
 | `AxMenuFlyout` / `AxMenuItem` | `MenuFlyout` / `MenuItem` | контекстное меню: колонка иконок 16, шорткат справа |
+| `AxSeparator` | `Separator` | черта между группами пунктов меню — и в корне, и в подменю строка сама по себе |
 | `AxDialog` | `Window` | диалог без системной рамки на тени `AxShadowModal` |
 | `AxQuickSearch` | `TemplatedControl` | попап поиска: запрос, результаты, подсказки клавиш |
 | `AxToolBar` | `TemplatedControl` | главный тулбар: слоты слева, по центру и справа |
