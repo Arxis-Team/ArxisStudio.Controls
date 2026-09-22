@@ -17,8 +17,13 @@ namespace ArxisStudio.Controls;
 /// Значок — путь в клетке 16 и его цвет, как у строки дерева и вкладки: библиотека контролов
 /// набора значков не зовёт, глиф ставит тема.
 /// </para>
+/// <para>
+/// Сегмент бывает целью перетаскивания (<c>:drop-target</c>): уровень пути — такое же место, как
+/// строка каталога, и отпущенное на нём ляжет туда. Ставит отметку хозяин крошек — только он знает,
+/// что куда кладётся, — а рисует её тема.
+/// </para>
 /// </remarks>
-[PseudoClasses(":first", ":current")]
+[PseudoClasses(":first", ":current", ":drop-target")]
 public class AxBreadcrumbItem : Button
 {
     /// <summary>Значок слева от подписи.</summary>
@@ -33,7 +38,27 @@ public class AxBreadcrumbItem : Button
     public static readonly DirectProperty<AxBreadcrumbItem, bool> IsCurrentProperty =
         AvaloniaProperty.RegisterDirect<AxBreadcrumbItem, bool>(nameof(IsCurrent), item => item.IsCurrent);
 
+    /// <summary>Сегмент — цель перетаскивания.</summary>
+    public static readonly StyledProperty<bool> IsDropTargetProperty =
+        AvaloniaProperty.Register<AxBreadcrumbItem, bool>(nameof(IsDropTarget));
+
     private bool _current;
+
+    static AxBreadcrumbItem() =>
+        IsDropTargetProperty.Changed.AddClassHandler<AxBreadcrumbItem>(
+            (item, change) => item.PseudoClasses.Set(":drop-target", change.GetNewValue<bool>()));
+
+    /// <summary>
+    /// Сегмент — цель перетаскивания: отпущенное над крошками ляжет на этот уровень пути.
+    /// </summary>
+    /// <remarks>
+    /// Текущий сегмент тоже бывает целью: копия, отпущенная на нём, ложится туда, где человек стоит.
+    /// </remarks>
+    public bool IsDropTarget
+    {
+        get => GetValue(IsDropTargetProperty);
+        set => SetValue(IsDropTargetProperty, value);
+    }
 
     /// <inheritdoc cref="IconProperty"/>
     public Geometry? Icon
