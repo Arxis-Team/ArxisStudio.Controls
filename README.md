@@ -60,7 +60,7 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxCheckBox` | `CheckBox` | флажок 16×16 |
 | `AxToggleSwitch` | `ToggleButton` | тумблер 30×17 |
 | `AxComboBox` / `AxComboBoxItem` | `ComboBox` | выпадающий список |
-| `AxListBox` / `AxListBoxItem` | `ListBox` | список с выделением строк |
+| `AxListBox` / `AxListBoxItem` | `ListBox` | список с выделением строк; `IsDropTarget` отмечает строку, в которую ляжет перетаскиваемое |
 | `AxSegmentedControl` / `AxSegmentItem` | `ListBox` | сегментный переключатель (Design/XAML/Split) |
 | `AxBadge` | `ContentControl` | бейдж-счётчик |
 | `AxChip` | `ContentControl` | чип-метка; вид `Kind` |
