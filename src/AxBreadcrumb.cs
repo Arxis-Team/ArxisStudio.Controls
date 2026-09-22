@@ -29,11 +29,11 @@ namespace ArxisStudio.Controls;
 /// </para>
 /// <para>
 /// Крошки бывают целью перетаскивания, и спрятанные уровни — тоже: хозяин, над «…» которого держат
-/// перетаскиваемое, раскрывает меню, не забирая клавиатуры (<see cref="OpenOverflow"/>), и спрашивает,
-/// какой сегмент под курсором — показанный или спрятанный в меню (<see cref="SegmentAt"/>). Цель,
-/// поставленная спрятанному сегменту, видна на его пункте. Тяга из проводника над меню приходит к
-/// крошкам их собственными событиями: у всплывающего окна свой корень, и до крошек его события
-/// иначе не доходят.
+/// перетаскиваемое, раскрывает меню, не забирая ни клавиатуры, ни окна (<see cref="OpenOverflow"/>),
+/// и спрашивает, какой сегмент под курсором — показанный или спрятанный в меню
+/// (<see cref="SegmentAt"/>). Цель, поставленная спрятанному сегменту, видна на его пункте. Тяга из
+/// проводника над меню приходит к крошкам их собственными событиями: у всплывающего окна свой корень,
+/// и до крошек его события иначе не доходят.
 /// </para>
 /// </remarks>
 [PseudoClasses(":overflow")]
@@ -70,13 +70,20 @@ public class AxBreadcrumb : ItemsControl
     public bool IsOverflowOpen => _menu?.IsOpen == true;
 
     /// <summary>
-    /// Раскрывает меню спрятанных уровней, не забирая клавиатуры: так его раскрывает тяга,
-    /// задержавшаяся над «…».
+    /// Раскрывает меню спрятанных уровней, не забирая клавиатуры и не закрывая окна: так его
+    /// раскрывает тяга, задержавшаяся над «…».
     /// </summary>
     /// <returns>Открыто ли меню: спрятанных уровней может и не быть.</returns>
     /// <remarks>
     /// Щелчок по «…» раскрывает меню по-прежнему — с клавиатурой в нём. Тяга же держит клавиатуру там,
     /// где начата: Esc и Ctrl, нажатые посреди неё, должны прийти туда.
+    /// <para>
+    /// Под всякое всплывающее с лёгким закрытием Avalonia стелет поверх окна прозрачный слой, которым
+    /// ловит щелчок мимо, — и в нём тонет всякое попадание в окно, включая попадание системной тяги:
+    /// раскрытое меню сделало бы недосягаемым всё, над чем несут. Меню, раскрытое тягой, поэтому
+    /// пропускает ввод к окну насквозь, и цель под ним находится как обычно; закрывшись, оно
+    /// возвращает и слой, и клавиатуру.
+    /// </para>
     /// </remarks>
     public bool OpenOverflow()
     {
@@ -86,6 +93,7 @@ public class AxBreadcrumb : ItemsControl
         if (!_menu.IsOpen)
         {
             _menu.ShowMode = FlyoutShowMode.Transient;
+            _menu.OverlayInputPassThroughElement = TopLevel.GetTopLevel(this);
             _menu.ShowAt(overflow);
         }
 
@@ -95,11 +103,15 @@ public class AxBreadcrumb : ItemsControl
     /// <summary>Закрывает меню спрятанных уровней.</summary>
     public void CloseOverflow() => _menu?.Hide();
 
-    /// <summary>Лежит ли точка экрана на «…» или на открытом меню спрятанных уровней.</summary>
+    /// <summary>Лежит ли точка экрана на «…» или на карточке открытого меню спрятанных уровней.</summary>
     /// <param name="screen">Точка экрана.</param>
+    /// <remarks>
+    /// Карточка, а не полотно: вокруг карточки тема оставляет поле под тень, сквозь которое видно то,
+    /// что лежит под меню, — и несут туда, к нему, а не к меню.
+    /// </remarks>
     public bool IsOverflowAt(PixelPoint screen) =>
         (_overflow is { IsEffectivelyVisible: true } overflow && Holds(overflow, screen))
-        || (IsOverflowOpen && _menu!.Presenter is { } menu && Holds(menu, screen));
+        || (IsOverflowOpen && _menu!.Card is { } card && Holds(card, screen));
 
     /// <summary>
     /// Сегмент под точкой экрана: показанный в ряду — или спрятанный, чей пункт открытого меню под ней.
@@ -342,23 +354,33 @@ public class AxBreadcrumb : ItemsControl
         && new Rect(visual.Bounds.Size).Contains(visual.PointToClient(screen));
 
     /// <summary>
-    /// Меню спрятанных уровней: знает своё полотно и передаёт тягу над ним крошкам.
+    /// Меню спрятанных уровней: знает свою карточку и передаёт тягу над ней крошкам.
     /// </summary>
     /// <remarks>
-    /// Разрешение на сброс полотно наследует от крошек само: всплывающее окно — логический потомок
-    /// «…», и хозяин, разрешивший сброс на крошки, разрешил его и на их спрятанные уровни. Открытое
-    /// тягой — без клавиатуры; закрывшись, меню возвращает обычный режим, и следующий щелчок по «…»
-    /// отдаёт клавиатуру меню, как всегда.
+    /// Целью сброса бывает полотно, а не окно всплывающего: окно шире карточки на поле под тень, и
+    /// сброс, пришедший на поле, разобрать некому — источник счёл бы его принятым и мог бы убрать у
+    /// себя отпущенное. Наследование поэтому обрывается на попапе, а полотно берёт разрешение прямо
+    /// у крошек: спрятанные уровни — цель ровно тогда, когда цель сами крошки.
+    /// <para>
+    /// Открытое тягой — без клавиатуры и со слоем лёгкого закрытия, пропускающим ввод к окну;
+    /// закрывшись, меню возвращает и то и другое, и следующий щелчок по «…» раскрывает его как всегда.
+    /// </para>
     /// </remarks>
     /// <param name="owner">Крошки.</param>
-    private sealed class OverflowMenu(AxBreadcrumb owner) : MenuFlyout
+    private sealed class OverflowMenu(AxBreadcrumb owner) : AxMenuFlyout
     {
         /// <summary>Полотно меню; пусто — меню ещё не открывали.</summary>
         public Control? Presenter { get; private set; }
 
+        /// <summary>Видимая карточка меню — полотно без поля под тень; пусто — меню ещё не открывали.</summary>
+        public Visual? Card => Presenter?.GetVisualChildren().FirstOrDefault() ?? Presenter;
+
         protected override Control CreatePresenter()
         {
             var presenter = base.CreatePresenter();
+
+            DragDrop.SetAllowDrop(Popup, false);
+            _ = presenter.Bind(DragDrop.AllowDropProperty, owner.GetObservable(DragDrop.AllowDropProperty));
 
             presenter.AddHandler(DragDrop.DragEnterEvent, owner.OnMenuDrag);
             presenter.AddHandler(DragDrop.DragOverEvent, owner.OnMenuDrag);
@@ -373,6 +395,7 @@ public class AxBreadcrumb : ItemsControl
         {
             base.OnClosed();
             ShowMode = FlyoutShowMode.Standard;
+            OverlayInputPassThroughElement = null;
         }
     }
 }
