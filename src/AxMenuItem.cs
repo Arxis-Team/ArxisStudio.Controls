@@ -8,22 +8,43 @@ namespace ArxisStudio.Controls;
 /// Пункт меню студии: колонка иконок 16 фиксирована — пункт без иконки
 /// получает пустой отступ, и текст не съезжает; шорткат прижат вправо.
 /// </summary>
-[PseudoClasses(":destructive")]
+[PseudoClasses(":destructive", ":drop-target")]
 public class AxMenuItem : MenuItem
 {
     /// <summary>Пункт необратимого действия: удалить, снять. Тема красит его цветом ошибки.</summary>
     public static readonly StyledProperty<bool> IsDestructiveProperty =
         AvaloniaProperty.Register<AxMenuItem, bool>(nameof(IsDestructive));
 
-    static AxMenuItem() =>
+    /// <summary>Пункт — цель перетаскивания.</summary>
+    public static readonly StyledProperty<bool> IsDropTargetProperty =
+        AvaloniaProperty.Register<AxMenuItem, bool>(nameof(IsDropTarget));
+
+    static AxMenuItem()
+    {
         IsDestructiveProperty.Changed.AddClassHandler<AxMenuItem>((item, change) =>
             item.PseudoClasses.Set(":destructive", change.GetNewValue<bool>()));
+        IsDropTargetProperty.Changed.AddClassHandler<AxMenuItem>((item, change) =>
+            item.PseudoClasses.Set(":drop-target", change.GetNewValue<bool>()));
+    }
 
     /// <inheritdoc cref="IsDestructiveProperty"/>
     public bool IsDestructive
     {
         get => GetValue(IsDestructiveProperty);
         set => SetValue(IsDestructiveProperty, value);
+    }
+
+    /// <summary>
+    /// Пункт — цель перетаскивания: отпущенное над меню ляжет в то, что пункт называет.
+    /// </summary>
+    /// <remarks>
+    /// Отметку ставит хозяин меню, а не наведение: пока несут, мышь занята тягой, и наведения у пункта
+    /// нет. И не выбор: выбранный пункт забирает клавиатуру себе, а тяга держит её там, где начата.
+    /// </remarks>
+    public bool IsDropTarget
+    {
+        get => GetValue(IsDropTargetProperty);
+        set => SetValue(IsDropTargetProperty, value);
     }
 
     /// <inheritdoc/>

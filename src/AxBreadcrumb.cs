@@ -27,6 +27,14 @@ namespace ArxisStudio.Controls;
 /// На клавиатуре путь — одна остановка Tab; по сегментам ходят Left и Right, Home и End ведут к
 /// крайним видимым, а шаг влево с первого видимого сегмента — на кнопку переполнения, когда она есть.
 /// </para>
+/// <para>
+/// Крошки бывают целью перетаскивания, и спрятанные уровни — тоже: хозяин, над «…» которого держат
+/// перетаскиваемое, раскрывает меню, не забирая клавиатуры (<see cref="OpenOverflow"/>), и спрашивает,
+/// какой сегмент под курсором — показанный или спрятанный в меню (<see cref="SegmentAt"/>). Цель,
+/// поставленная спрятанному сегменту, видна на его пункте. Тяга из проводника над меню приходит к
+/// крошкам их собственными событиями: у всплывающего окна свой корень, и до крошек его события
+/// иначе не доходят.
+/// </para>
 /// </remarks>
 [PseudoClasses(":overflow")]
 [TemplatePart("PART_Overflow", typeof(Button))]
@@ -38,12 +46,14 @@ public class AxBreadcrumb : ItemsControl
 
     private readonly List<AxBreadcrumbItem> _listed = [];
     private Button? _overflow;
-    private MenuFlyout? _menu;
+    private OverflowMenu? _menu;
 
     static AxBreadcrumb()
     {
         ItemsPanelProperty.OverrideDefaultValue<AxBreadcrumb>(new FuncTemplate<Panel?>(() => new AxBreadcrumbPanel()));
         KeyboardNavigation.TabNavigationProperty.OverrideDefaultValue<AxBreadcrumb>(KeyboardNavigationMode.Once);
+        AxBreadcrumbItem.IsDropTargetProperty.Changed.AddClassHandler<AxBreadcrumbItem>(
+            (segment, _) => (ItemsControlFromItemContainer(segment) as AxBreadcrumb)?.Reflect(segment));
     }
 
     /// <summary>Заводит крошки: щелчки по сегментам слушаются здесь, а не у каждого сегмента.</summary>
@@ -54,6 +64,64 @@ public class AxBreadcrumb : ItemsControl
     {
         add => AddHandler(NavigatedEvent, value);
         remove => RemoveHandler(NavigatedEvent, value);
+    }
+
+    /// <summary>Меню спрятанных уровней открыто.</summary>
+    public bool IsOverflowOpen => _menu?.IsOpen == true;
+
+    /// <summary>
+    /// Раскрывает меню спрятанных уровней, не забирая клавиатуры: так его раскрывает тяга,
+    /// задержавшаяся над «…».
+    /// </summary>
+    /// <returns>Открыто ли меню: спрятанных уровней может и не быть.</returns>
+    /// <remarks>
+    /// Щелчок по «…» раскрывает меню по-прежнему — с клавиатурой в нём. Тяга же держит клавиатуру там,
+    /// где начата: Esc и Ctrl, нажатые посреди неё, должны прийти туда.
+    /// </remarks>
+    public bool OpenOverflow()
+    {
+        if (_menu is null || _overflow is not { IsEffectivelyVisible: true } overflow || _listed.Count == 0)
+            return false;
+
+        if (!_menu.IsOpen)
+        {
+            _menu.ShowMode = FlyoutShowMode.Transient;
+            _menu.ShowAt(overflow);
+        }
+
+        return _menu.IsOpen;
+    }
+
+    /// <summary>Закрывает меню спрятанных уровней.</summary>
+    public void CloseOverflow() => _menu?.Hide();
+
+    /// <summary>Лежит ли точка экрана на «…» или на открытом меню спрятанных уровней.</summary>
+    /// <param name="screen">Точка экрана.</param>
+    public bool IsOverflowAt(PixelPoint screen) =>
+        (_overflow is { IsEffectivelyVisible: true } overflow && Holds(overflow, screen))
+        || (IsOverflowOpen && _menu!.Presenter is { } menu && Holds(menu, screen));
+
+    /// <summary>
+    /// Сегмент под точкой экрана: показанный в ряду — или спрятанный, чей пункт открытого меню под ней.
+    /// </summary>
+    /// <param name="screen">Точка экрана.</param>
+    /// <returns>Сегмент; пусто — под точкой нет уровня пути.</returns>
+    /// <remarks>
+    /// Точка экрана, а не окна: меню — отдельное окно поверх того, что под крошками, и хозяин, который
+    /// несёт на захвате указателя, видит курсор в координатах своего окна.
+    /// </remarks>
+    public AxBreadcrumbItem? SegmentAt(PixelPoint screen)
+    {
+        if (IsOverflowOpen)
+        {
+            for (var at = 0; at < _listed.Count && at < _menu!.Items.Count; at++)
+            {
+                if (_menu.Items[at] is Control item && Holds(item, screen))
+                    return _listed[at];
+            }
+        }
+
+        return Shown().FirstOrDefault(segment => Holds(segment, screen));
     }
 
     /// <inheritdoc/>
@@ -72,7 +140,7 @@ public class AxBreadcrumb : ItemsControl
 
         if (_overflow is not null)
         {
-            _menu = new MenuFlyout { Placement = PlacementMode.BottomEdgeAlignedLeft };
+            _menu = new OverflowMenu(this) { Placement = PlacementMode.BottomEdgeAlignedLeft };
             _overflow.Flyout = _menu;
             _overflow.SizeChanged += OnOverflowSized;
         }
@@ -210,6 +278,7 @@ public class AxBreadcrumb : ItemsControl
             {
                 Header = segment.Content is Control ? AutomationProperties.GetName(segment) : segment.Content,
                 HeaderTemplate = segment.Content is Control ? null : segment.ContentTemplate,
+                IsDropTarget = segment.IsDropTarget,
             };
 
             item.Click += (_, _) => Raise(chosen);
@@ -236,6 +305,75 @@ public class AxBreadcrumb : ItemsControl
             return;
 
         RaiseEvent(new AxBreadcrumbNavigatedEventArgs(NavigatedEvent, ItemFromContainer(segment), index));
+    }
+
+    /// <summary>Цель у спрятанного сегмента — цель и у его пункта в меню: сам сегмент в ряду не виден.</summary>
+    private void Reflect(AxBreadcrumbItem segment)
+    {
+        var at = _listed.IndexOf(segment);
+
+        if (_menu is not null && at >= 0 && at < _menu.Items.Count && _menu.Items[at] is AxMenuItem item)
+            item.IsDropTarget = segment.IsDropTarget;
+    }
+
+    /// <summary>
+    /// Тяга из проводника над меню спрятанных уровней — тяга над крошками: то же событие поднимается у
+    /// них, с курсором в их координатах — за краем ряда, там, где меню, — и ответ хозяина уходит назад.
+    /// </summary>
+    private void OnMenuDrag(object? sender, DragEventArgs e)
+    {
+        if (sender is not Visual menu || e.RoutedEvent is not RoutedEvent<DragEventArgs> routed)
+            return;
+
+        var relayed = new DragEventArgs(routed, e.DataTransfer, this, this.PointToClient(menu.PointToScreen(e.GetPosition(menu))), e.KeyModifiers)
+        {
+            DragEffects = e.DragEffects,
+        };
+
+        RaiseEvent(relayed);
+
+        e.DragEffects = relayed.DragEffects;
+        e.Handled = relayed.Handled;
+    }
+
+    /// <summary>Лежит ли точка экрана в границах элемента, показанного в каком-нибудь окне.</summary>
+    private static bool Holds(Visual visual, PixelPoint screen) =>
+        visual.IsEffectivelyVisible && TopLevel.GetTopLevel(visual) is not null
+        && new Rect(visual.Bounds.Size).Contains(visual.PointToClient(screen));
+
+    /// <summary>
+    /// Меню спрятанных уровней: знает своё полотно и передаёт тягу над ним крошкам.
+    /// </summary>
+    /// <remarks>
+    /// Разрешение на сброс полотно наследует от крошек само: всплывающее окно — логический потомок
+    /// «…», и хозяин, разрешивший сброс на крошки, разрешил его и на их спрятанные уровни. Открытое
+    /// тягой — без клавиатуры; закрывшись, меню возвращает обычный режим, и следующий щелчок по «…»
+    /// отдаёт клавиатуру меню, как всегда.
+    /// </remarks>
+    /// <param name="owner">Крошки.</param>
+    private sealed class OverflowMenu(AxBreadcrumb owner) : MenuFlyout
+    {
+        /// <summary>Полотно меню; пусто — меню ещё не открывали.</summary>
+        public Control? Presenter { get; private set; }
+
+        protected override Control CreatePresenter()
+        {
+            var presenter = base.CreatePresenter();
+
+            presenter.AddHandler(DragDrop.DragEnterEvent, owner.OnMenuDrag);
+            presenter.AddHandler(DragDrop.DragOverEvent, owner.OnMenuDrag);
+            presenter.AddHandler(DragDrop.DragLeaveEvent, owner.OnMenuDrag);
+            presenter.AddHandler(DragDrop.DropEvent, owner.OnMenuDrag);
+            Presenter = presenter;
+
+            return presenter;
+        }
+
+        protected override void OnClosed()
+        {
+            base.OnClosed();
+            ShowMode = FlyoutShowMode.Standard;
+        }
     }
 }
 
