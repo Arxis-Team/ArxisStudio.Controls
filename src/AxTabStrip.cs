@@ -36,7 +36,7 @@ public class AxTabStrip : ListBox
     private readonly List<IDisposable> _bound = [];
     private Button? _overflow;
     private ScrollViewer? _scroll;
-    private MenuFlyout? _menu;
+    private AxMenuFlyout? _menu;
 
     /// <summary>Чьи вкладки держит полоса.</summary>
     public static readonly StyledProperty<AxTabStripKind> KindProperty =
@@ -73,8 +73,10 @@ public class AxTabStrip : ListBox
         if (_overflow is not null)
         {
             // Меню держит сама кнопка: она же его открывает, закрывает по Esc и щелчку в
-            // стороне и метит себя, пока оно открыто.
-            _menu = new MenuFlyout { Placement = PlacementMode.BottomEdgeAlignedRight };
+            // стороне и метит себя, пока оно открыто. Меню студии, а не голое: карточка стоит в
+            // попапе не вплотную — вокруг неё поле под тень, — и голое встало бы на это поле
+            // дальше кнопки, вправо и ниже.
+            _menu = new AxMenuFlyout { Placement = PlacementMode.BottomEdgeAlignedRight };
             _overflow.Flyout = _menu;
         }
 
