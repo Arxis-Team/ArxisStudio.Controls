@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using ArxisStudio.Controls;
 using ArxisStudio.Icons;
 using Avalonia.Controls;
@@ -126,6 +127,93 @@ public partial class GalleryCards : UserControl
               <Button Classes="accent" Content="Отправить" />
             </StackPanel>
             """;
+
+        // Куски размечает хозяин просмотра; витрине хватает грубой разметки регулярными
+        // выражениями — в дизайнере их даёт синтаксическое дерево Markup.
+        var form = """
+            <Window xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="using:Demo"
+                    x:Class="Demo.MainWindow"
+                    Title="Заказ">
+              <!-- Форма заказа -->
+              <StackPanel Spacing="8">
+                <TextBlock Text="{Binding Customer}"/>
+                <local:Badge x:Name="Status" Kind="Warning"/>
+                <Button Content="Отправить" Command="{Binding Send}"/>
+                <Button Content=Ошибка/>
+              </StackPanel>
+            </Window>
+            """;
+
+        var badge = form.IndexOf("<local:Badge", StringComparison.Ordinal);
+
+        CodeView.Text = form;
+        CodeView.Spans = Classify(form);
+        CodeView.Highlight = new AxCodeRange(badge, form.IndexOf("/>", badge, StringComparison.Ordinal) + 2 - badge);
+        CodeView.CaretOffset = badge;
+    }
+
+    /// <summary>Грубая разметка XAML для витрины: комментарии, теги, свойства, значения, расширения.</summary>
+    private static List<AxCodeSpan> Classify(string xaml)
+    {
+        var spans = new List<AxCodeSpan>();
+
+        foreach (Match comment in Regex.Matches(xaml, "<!--.*?-->", RegexOptions.Singleline))
+            spans.Add(new AxCodeSpan(comment.Index, comment.Length, AxCodeRole.Comment));
+
+        foreach (Match tag in Regex.Matches(xaml, @"(?<open></?)(?:(?<prefix>\w+:))?(?<name>[\w.]+)|(?<close>/?>)"))
+        {
+            if (tag.Groups["close"].Success)
+            {
+                spans.Add(new AxCodeSpan(tag.Index, tag.Length, AxCodeRole.Tag));
+
+                continue;
+            }
+
+            var open = tag.Groups["open"];
+            var prefix = tag.Groups["prefix"];
+            var name = tag.Groups["name"];
+
+            spans.Add(new AxCodeSpan(open.Index, open.Length, AxCodeRole.Tag));
+
+            if (prefix.Success)
+                spans.Add(new AxCodeSpan(prefix.Index, prefix.Length, AxCodeRole.Prefix));
+
+            spans.Add(new AxCodeSpan(name.Index, name.Length, AxCodeRole.Tag));
+        }
+
+        foreach (Match attribute in Regex.Matches(xaml, @"\s(?<name>[\w.:]+)=(?:""(?<value>[^""]*)""|(?<bad>[^\s/>]+))"))
+        {
+            var name = attribute.Groups["name"];
+            var directive = name.Value.StartsWith("xmlns", StringComparison.Ordinal) || name.Value.StartsWith("x:", StringComparison.Ordinal);
+
+            spans.Add(new AxCodeSpan(name.Index, name.Length, directive ? AxCodeRole.Directive : AxCodeRole.Attribute));
+
+            if (attribute.Groups["bad"].Success)
+            {
+                spans.Add(new AxCodeSpan(attribute.Groups["bad"].Index, attribute.Groups["bad"].Length, AxCodeRole.Error));
+
+                continue;
+            }
+
+            var value = attribute.Groups["value"];
+            var extension = Regex.Match(value.Value, @"^(?<head>\{\w+).*(?<tail>\})$");
+
+            if (!extension.Success)
+            {
+                spans.Add(new AxCodeSpan(value.Index - 1, value.Length + 2, AxCodeRole.String));
+
+                continue;
+            }
+
+            spans.Add(new AxCodeSpan(value.Index - 1, 1, AxCodeRole.String));
+            spans.Add(new AxCodeSpan(value.Index + extension.Groups["head"].Index, extension.Groups["head"].Length, AxCodeRole.Extension));
+            spans.Add(new AxCodeSpan(value.Index + extension.Groups["tail"].Index, 1, AxCodeRole.Extension));
+            spans.Add(new AxCodeSpan(value.Index + value.Length, 1, AxCodeRole.String));
+        }
+
+        return spans;
     }
 
     private async void OnOpenDialog(object? sender, RoutedEventArgs e)

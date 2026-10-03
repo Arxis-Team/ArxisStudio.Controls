@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Avalonia.Metadata;
 
 // Словарь разметки ArxisStudio. Один адрес на все её библиотеки: автору панели
@@ -14,3 +15,7 @@ using Avalonia.Metadata;
 
 // Префикс, который предложит инструмент, когда адрес объявляют псевдонимом.
 [assembly: XmlnsPrefix("https://github.com/Arxis-Team/ArxisStudio", "ax")]
+
+// Тесты контролов живут в репозитории темы: lookless-контрол без темы не показать. Внутрь им нужно
+// там, где поведение не видно снаружи, — сколько строк разложил просмотр кода, например.
+[assembly: InternalsVisibleTo("ArxisStudio.Themes.Arxis.Tests")]
