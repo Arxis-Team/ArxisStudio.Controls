@@ -37,7 +37,7 @@ Border — разрешены как есть), как в Unity, где реда
 | Что | Свойство | Значения |
 |---|---|---|
 | вид кнопки | `AxButton.Appearance`, `AxToggleButton.Appearance`, `AxSplitButton.Appearance` | `Default`, `Primary`, `Subtle`, `Danger`, `Toolbar` |
-| размер | `Size` у кнопки, переключателя, поля и списка | `Normal`, `Compact` |
+| размер | `Size` у кнопки, переключателя, поля, вектора, жетонов и списка | `Normal`, `Compact` |
 | роль и тон текста | `AxText.Role`, `AxText.Tone` у `TextBlock` | `Body`, `Small`, `Caption`, `Title`, `Section`, `Code`; `Primary`, `Secondary`, `Tertiary`, `Disabled`, `Accent`, `Error`, `Warning`, `Success` |
 | проверка поля | `AxValidation.State` | `None`, `Warning`, `Error` |
 | чип | `AxChip.Kind` | `Default`, `Accent`, `Key` |
@@ -116,6 +116,32 @@ view.CaretMoved += (_, e) => SelectElementAt(e.Offset);
 Строится только видимое: документ в десятки тысяч строк стоит столько же, сколько экран. Для
 сниппета в пару строк есть `AxCodeBlock`.
 
+## Поля инспектора
+
+| Контрол | База | Назначение |
+|---|---|---|
+| `AxNumberField` | `AxTextBox` | число: выражения и запятая, инвариантная запись, «авто» (`AllowsAuto`), разные значения (`IsMixed`), шаг стрелками; одна фиксация — `ValueCommitted` |
+| `AxScrubLabel` | `ContentControl` | подпись, за которую тянут число (`Target`): видно на ходу — `ValueChanging`, фиксация при отпускании, Esc возвращает |
+| `AxVectorField` | `TemplatedControl` | несколько чисел под общим именем — отступ, точка, размер; правка выходит вектором (`ValuesCommitted`), связанные (`IsLinked`) меняются разом |
+| `AxPropertyRow` | `ContentControl` | строка свойства: подпись колонкой по правилу Unity, поле, кнопки (`Actions`), заметка (`Note`), отметка «задано здесь» (`IsOverridden`) |
+| `AxTokenField` | `TemplatedControl` | слова чипами и строка ввода: классы стиля, теги; правка — `TokensChanged` со всем списком |
+
+Хозяин — инспектор или своё окно свойств — правит значение одной записью: протяжка и связанные ячейки
+показывают значение на ходу, а фиксируют одно. Колонка подписей одна на список — её ставят списку
+наследуемым `AxPropertyRow.LabelWidth`, — и вложенная строка (`Indent`) сужает подпись, а не сдвигает
+поле. Тесно — поле уходит под подпись само.
+
+```csharp
+var width = new AxNumberField { AllowsAuto = true, Minimum = 0, Size = AxControlSize.Compact };
+var row = new AxPropertyRow { Label = "Width", Content = width, ScrubTarget = width, IsOverridden = true };
+
+width.ValueChanging += (_, e) => preview.Show(AxNumberField.Format(e.Value));   // протяжка видна
+width.ValueCommitted += (_, e) => Write("Width", AxNumberField.Format(e.Value)); // одна правка
+width.ScrubCancelled += (_, _) => preview.Dispose();                             // Esc
+```
+
+Чип снимается крестиком и клавишей (`AxChip.IsRemovable`, `RemoveRequested`) — снимает его хозяин.
+
 ## Меню, диалоги, всплывающие
 
 | Контрол | База | Назначение |
@@ -161,7 +187,9 @@ view.CaretMoved += (_, e) => SelectElementAt(e.Offset);
 ## Галерея
 
 `samples/Controls.Gallery` — приложение с карточкой на каждый контрол:
-светлая и тёмная половины рядом, переключатель прячет одну из них. Наведение, нажатие и проход `Tab` — живые:
+светлая и тёмная половины рядом, переключатель прячет одну из них. Наведение, нажатие и проход `Tab` — живые.
+Поля инспектора — отдельным файлом карточек, `InspectorFieldCards.axaml`, с маленьким инспектором внизу;
+`check-coverage.py` читает все карточки папки:
 
 ```bash
 dotnet run --project samples/Controls.Gallery

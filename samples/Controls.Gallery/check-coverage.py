@@ -16,9 +16,13 @@ here = os.path.dirname(os.path.abspath(__file__))
 src = os.path.normpath(os.path.join(here, '..', '..', 'src'))
 
 # Что показывает галерея: теги XAML и то, что собирается в code-behind —
-# диалог, меню и попап живут не в разметке, а в обработчиках.
+# диалог, меню и попап живут не в разметке, а в обработчиках. Читаются все карточки
+# папки, а не список: карточка, заведённая новым файлом, иначе осталась бы невидимой
+# для проверки.
 shown = set()
-for name in ('GalleryCards.axaml', 'GalleryCards.axaml.cs', 'MainWindow.axaml', 'MainWindow.axaml.cs'):
+for name in sorted(os.listdir(here)):
+    if not name.endswith(('.axaml', '.axaml.cs')):
+        continue
     text = io.open(os.path.join(here, name), encoding='utf-8').read()
     shown |= set(re.findall(r'<ax:(Ax[A-Za-z]+)', text))
     shown |= set(re.findall(r'new (Ax[A-Za-z]+)', text))
@@ -29,6 +33,10 @@ for name in ('GalleryCards.axaml', 'GalleryCards.axaml.cs', 'MainWindow.axaml', 
 # AxUserControl — основание для чужих панелей: своего вида у него нет вовсе, и карточка вышла бы
 # пустым прямоугольником. Оба одеты темой и проверены её тестами — там, где это и проверяется.
 ROOTS = {'AxWindow', 'AxUserControl'}
+
+# Панели шаблонов: их раскладку показывают строка свойства и вектор, внутри которых они стоят, —
+# отдельной карточкой панель вышла бы пустым местом.
+PARTS = {'AxPropertyRowPanel', 'AxVectorPanel'}
 
 # Что есть в библиотеке. Конвертеры и аргументы событий не контролы и витрины не требуют.
 declared = []
@@ -42,9 +50,10 @@ for name in sorted(os.listdir(src)):
         if 'IValueConverter' not in m.group(2) and 'EventArgs' not in m.group(2):
             declared.append(m.group(1))
 
-missing = [name for name in declared if name not in shown and name not in ROOTS]
+missing = [name for name in declared if name not in shown and name not in ROOTS | PARTS]
 
-print('контролов:', len(declared), '· в галерее:', len(declared) - len(missing) - len(ROOTS), '· корней:', len(ROOTS))
+print('контролов:', len(declared), '· в галерее:', len(declared) - len(missing) - len(ROOTS) - len(PARTS),
+      '· корней:', len(ROOTS), '· панелей шаблонов:', len(PARTS))
 if missing:
     print('нет в галерее:')
     for name in missing:

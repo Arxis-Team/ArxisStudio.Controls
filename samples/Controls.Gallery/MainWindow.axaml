@@ -41,12 +41,18 @@
       <Grid x:Name="Halves" ColumnDefinitions="*,*">
         <ThemeVariantScope x:Name="LightHalf" RequestedThemeVariant="Light">
           <Border Background="{DynamicResource AxSurfaceBaseBrush}">
-            <g:GalleryCards/>
+            <StackPanel>
+              <g:GalleryCards/>
+              <g:InspectorFieldCards/>
+            </StackPanel>
           </Border>
         </ThemeVariantScope>
         <ThemeVariantScope x:Name="DarkHalf" Grid.Column="1" RequestedThemeVariant="Dark">
           <Border Background="{DynamicResource AxSurfaceBaseBrush}">
-            <g:GalleryCards/>
+            <StackPanel>
+              <g:GalleryCards/>
+              <g:InspectorFieldCards/>
+            </StackPanel>
           </Border>
         </ThemeVariantScope>
       </Grid>

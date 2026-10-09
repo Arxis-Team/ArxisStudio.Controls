@@ -1,0 +1,162 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ax="using:ArxisStudio.Controls"
+             xmlns:axi="using:ArxisStudio.Icons"
+             xmlns:sys="using:System"
+             xmlns:local="using:Controls.Gallery"
+             x:Class="Controls.Gallery.InspectorFieldCards">
+
+  <!--
+      Поля инспектора — отдельным файлом рядом с основными карточками: число с протяжкой, подпись,
+      за которую его тянут, вектор, строка свойства и жетоны. Внизу — маленький инспектор из них,
+      и строка под ним говорит, что зафиксировано последним: протяжка видна на ходу, а фиксируется
+      одна, при отпускании.
+  -->
+  <StackPanel Margin="22,0,22,18" Spacing="14">
+
+    <!--
+        Число: покой, каретка в поле, разные значения у выбранных, «авто», ошибка, выключенное и
+        только для чтения. Подпись слева тянет число: курсор — стрелки, Shift быстрее, Alt тоньше,
+        Esc возвращает прежнее.
+    -->
+    <ax:AxGroupHeader Content="Число"/>
+    <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="12">
+      <StackPanel Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Default"/>
+        <ax:AxNumberField Size="Compact" Value="128"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Focused"/>
+        <ax:AxNumberField x:Name="FocusedNumber" Size="Compact" Value="12.5"/>
+      </StackPanel>
+      <StackPanel Grid.Column="2" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Mixed"/>
+        <ax:AxNumberField Size="Compact" Value="4" IsMixed="True"/>
+      </StackPanel>
+      <StackPanel Grid.Column="3" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Auto"/>
+        <ax:AxNumberField Size="Compact" AllowsAuto="True" Value="{x:Static sys:Double.NaN}"/>
+      </StackPanel>
+      <StackPanel Grid.Column="4" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Invalid"/>
+        <ax:AxNumberField Size="Compact" Value="3" ax:AxValidation.State="Error"/>
+      </StackPanel>
+      <StackPanel Grid.Column="5" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Disabled"/>
+        <ax:AxNumberField Size="Compact" Value="64" IsEnabled="False"/>
+      </StackPanel>
+      <StackPanel Grid.Column="6" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Read-only"/>
+        <ax:AxTextBox Size="Compact" Text="Button" IsReadOnly="True"/>
+      </StackPanel>
+    </Grid>
+
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <ax:AxScrubLabel Content="Opacity" Target="{Binding #ScrubbedNumber}" VerticalAlignment="Center"/>
+      <ax:AxNumberField x:Name="ScrubbedNumber" Size="Compact" Width="96"
+                        Minimum="0" Maximum="1" Step="0.1" Decimals="2" Value="0.85"/>
+    </StackPanel>
+
+    <!--
+        Вектор: отступ с переключателем «одинаково со всех сторон», точка, расходящаяся
+        составляющая и тот же отступ в узкой колонке — ячейки переносятся поровну.
+    -->
+    <ax:AxGroupHeader Content="Вектор"/>
+    <StackPanel Spacing="10">
+      <ax:AxVectorField Size="Compact" Width="420" HorizontalAlignment="Left" CanLink="True"
+                        Labels="{x:Static local:InspectorFieldCards.Sides}" Values="{x:Static local:InspectorFieldCards.Offsets}"/>
+      <ax:AxVectorField Size="Compact" Width="260" HorizontalAlignment="Left"
+                        Labels="{x:Static local:InspectorFieldCards.Axes}" Values="{x:Static local:InspectorFieldCards.Location}"
+                        MixedMask="2"/>
+      <ax:AxVectorField Size="Compact" Width="150" HorizontalAlignment="Left" CanLink="True" IsLinked="True"
+                        Labels="{x:Static local:InspectorFieldCards.Sides}" Values="{x:Static local:InspectorFieldCards.Uniform}"/>
+    </StackPanel>
+
+    <!--
+        Жетоны: пустое поле с подсказкой, классы стиля и то же только для чтения. Пробел или запятая
+        заканчивают жетон, Backspace в пустой строке встаёт на последний, второй — снимает его.
+    -->
+    <ax:AxGroupHeader Content="Жетоны"/>
+    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+      <ax:AxTokenField Size="Compact" PlaceholderText="Классы стиля"/>
+      <ax:AxTokenField Grid.Column="1" Size="Compact" Tokens="{x:Static local:InspectorFieldCards.StyleClasses}"/>
+      <ax:AxTokenField Grid.Column="2" Size="Compact" IsReadOnly="True" Tokens="{x:Static local:InspectorFieldCards.StyleClasses}"/>
+    </Grid>
+    <StackPanel Orientation="Horizontal" Spacing="6">
+      <ax:AxChip Content="primary" IsRemovable="True"/>
+      <ax:AxChip Content="large" IsRemovable="True"/>
+      <ax:AxChip Content="Accent" Kind="Accent" IsRemovable="True"/>
+    </StackPanel>
+
+    <!--
+        Строки свойства — маленький инспектор. Колонка подписей одна на список, вложенные строки
+        съедают подпись, а не сдвигают поле; заданное здесь — полоса акцента и полужирная подпись;
+        только для чтения — подпись вторичная и значение выделяемым текстом; ошибка — заметкой под
+        полем. Справа тот же список в узкой колонке: полям тесно, и они уходят под подписи.
+    -->
+    <ax:AxGroupHeader Content="Строка свойства"/>
+    <Grid ColumnDefinitions="420,24,260">
+      <Border Background="{DynamicResource AxSurfacePanelBrush}" CornerRadius="{DynamicResource AxCornerRadius}" Padding="8">
+        <StackPanel x:Name="Inspector" Spacing="2">
+          <ax:AxPropertyRow Label="Name" IsReadOnly="True">
+            <ax:AxTextBox Size="Compact" Text="SaveButton" IsReadOnly="True"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow x:Name="WidthRow" Label="Width" IsOverridden="True" ScrubTarget="{Binding #WidthField}">
+            <ax:AxPropertyRow.Actions>
+              <ax:AxButton Appearance="Toolbar" AutomationProperties.Name="Действия со свойством"
+                           Width="{DynamicResource AxControlHeightCompact}" Height="{DynamicResource AxControlHeightCompact}">
+                <axi:AxIcon Size="Small" Data="{x:Static axi:AxIcons.MoreVertical}"/>
+                <ax:AxButton.Flyout>
+                  <ax:AxMenuFlyout>
+                    <ax:AxMenuItem Header="Сбросить"/>
+                    <ax:AxMenuItem Header="Копировать значение"/>
+                    <ax:AxMenuItem Header="Вставить значение"/>
+                    <ax:AxSeparator/>
+                    <ax:AxMenuItem Header="Показать в XAML"/>
+                  </ax:AxMenuFlyout>
+                </ax:AxButton.Flyout>
+              </ax:AxButton>
+            </ax:AxPropertyRow.Actions>
+            <ax:AxNumberField x:Name="WidthField" Size="Compact" AllowsAuto="True" Minimum="0" Value="120"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="Height" ScrubTarget="{Binding #HeightField}">
+            <ax:AxNumberField x:Name="HeightField" Size="Compact" AllowsAuto="True" Minimum="0"
+                              Value="{x:Static sys:Double.NaN}"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="Margin" IsOverridden="True">
+            <ax:AxVectorField Size="Compact" CanLink="True"
+                              Labels="{x:Static local:InspectorFieldCards.Sides}" Values="{x:Static local:InspectorFieldCards.Offsets}"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="Left" Indent="1" ScrubTarget="{Binding #LeftField}">
+            <ax:AxNumberField x:Name="LeftField" Size="Compact" Value="8"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="Opacity" ScrubTarget="{Binding #OpacityField}" ax:AxValidation.State="Error"
+                            Note="Прозрачность — от 0 до 1">
+            <ax:AxNumberField x:Name="OpacityField" Size="Compact" Minimum="0" Maximum="1" Step="0.1"
+                              Value="1" ax:AxValidation.State="Error"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="IsEnabled">
+            <ax:AxCheckBox IsChecked="True"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="Classes" Layout="Below">
+            <ax:AxTokenField Size="Compact" Tokens="{x:Static local:InspectorFieldCards.StyleClasses}"/>
+          </ax:AxPropertyRow>
+          <TextBlock x:Name="LastCommit" ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Фиксаций пока нет"/>
+        </StackPanel>
+      </Border>
+      <Border Grid.Column="2" Background="{DynamicResource AxSurfacePanelBrush}" CornerRadius="{DynamicResource AxCornerRadius}" Padding="8"
+              VerticalAlignment="Top">
+        <StackPanel Spacing="2">
+          <ax:AxPropertyRow Label="HorizontalContentAlignment" IsOverridden="True">
+            <ax:AxTextBox Size="Compact" Text="Stretch"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="Padding">
+            <ax:AxVectorField Size="Compact"
+                              Labels="{x:Static local:InspectorFieldCards.Sides}" Values="{x:Static local:InspectorFieldCards.Offsets}"/>
+          </ax:AxPropertyRow>
+        </StackPanel>
+      </Border>
+    </Grid>
+
+  </StackPanel>
+</UserControl>
