@@ -278,20 +278,41 @@ public class AxPropertyRowPanel : Panel
         return finalSize;
     }
 
-    /// <summary>Наименьшая ширина поля — его собственная, а не презентера, в котором оно стоит в шаблоне.</summary>
+    /// <summary>
+    /// Наименьшая ширина поля — его собственная, а не презентера, в котором оно стоит в шаблоне, и не обёрток, в
+    /// которые оно завёрнуто по одному.
+    /// </summary>
     /// <remarks>
+    /// <para>
     /// Презентер строит поле при первом замере, а решение о переносе принимается до него: поле строится здесь,
     /// иначе первый замер не знал бы его наименьшей ширины и поставил бы вектор рядом с подписью.
+    /// </para>
+    /// <para>
+    /// Обёртка с одним ребёнком — рамка, барьер, за которым студия ставит построенное плагином, — своего
+    /// наименьшего не знает: поле за ней стояло бы рядом с подписью там, где ему не встать. Поэтому наименьшее
+    /// берётся по всей цепочке таких обёрток.
+    /// </para>
     /// </remarks>
     private static double Floor(Control? value)
     {
-        if (value is null)
-            return 0;
+        var floor = 0d;
 
-        value.ApplyTemplate();
+        for (var at = value; at is not null; at = Wrapped(at))
+        {
+            at.ApplyTemplate();
+            floor = Math.Max(floor, at.MinWidth);
+        }
 
-        return Math.Max(value.MinWidth, (value as ContentPresenter)?.Child?.MinWidth ?? 0);
+        return floor;
     }
+
+    /// <summary>Единственный ребёнок обёртки; пусто — это уже само поле.</summary>
+    private static Control? Wrapped(Control wrapper) => wrapper switch
+    {
+        ContentPresenter presenter => presenter.Child,
+        Decorator decorator => decorator.Child,
+        _ => null,
+    };
 
     /// <summary>Сколько остаётся от ширины за вычетом занятого; бесконечность так и остаётся.</summary>
     private static double Rest(double width, double taken) =>
