@@ -44,6 +44,8 @@ public partial class InspectorFieldCards : UserControl
             Tell(e.Source, string.Join(",", e.Values.Select(value => AxNumberField.Format(value)))));
         Inspector.AddHandler(AxTokenField.TokensChangedEvent, (_, e) =>
             Tell(e.Source, string.Join(" ", e.Tokens)));
+        Inspector.AddHandler(AxColorPicker.ColorCommittedEvent, (_, e) =>
+            Tell(e.Source, e.Text ?? AxColorField.Format(e.Color)));
     }
 
     /// <summary>Пишет под инспектором, что и где зафиксировано.</summary>

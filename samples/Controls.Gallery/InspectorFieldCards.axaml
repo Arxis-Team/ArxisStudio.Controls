@@ -89,6 +89,36 @@
     </StackPanel>
 
     <!--
+        Цвет: поле — образец и запись, — прозрачный цвет на шахматке, разные значения, только для чтения и
+        без прозрачности. Щелчок по образцу открывает выбор под полем; справа тот же выбор открытым:
+        спектр насыщенности и яркости, оттенок, непрозрачность, запись и каналы RGB.
+    -->
+    <ax:AxGroupHeader Content="Цвет"/>
+    <Grid ColumnDefinitions="*,24,Auto">
+      <StackPanel Spacing="8">
+        <ax:AxColorField Size="Compact" Color="#3C6ECF"/>
+        <ax:AxColorField Size="Compact" Color="#803C6ECF"/>
+        <ax:AxColorField Size="Compact" Color="#3C6ECF" IsMixed="True"/>
+        <ax:AxColorField Size="Compact" Color="#E0A040" IsReadOnly="True"/>
+        <ax:AxColorField Size="Compact" Color="#20A060" AllowsAlpha="False"/>
+        <!-- Части выбора по отдельности: спектр и ползунки любого канала берут цвет моделью HSV. -->
+        <StackPanel Orientation="Horizontal" Spacing="16">
+          <ax:AxColorSpectrum Width="160" Height="96" Hsv="hsv(150, 70%, 80%)"/>
+          <StackPanel Width="200" Spacing="10" VerticalAlignment="Center">
+            <ax:AxColorSlider Channel="Saturation" Hsv="hsv(150, 70%, 80%)"/>
+            <ax:AxColorSlider Channel="Value" Hsv="hsv(150, 70%, 80%)"/>
+            <ax:AxColorSlider Channel="Alpha" Hsv="hsv(150, 70%, 80%)"/>
+          </StackPanel>
+        </StackPanel>
+      </StackPanel>
+      <Border Grid.Column="2" Background="{DynamicResource AxSurfaceOverlayBrush}"
+              BorderBrush="{DynamicResource AxStrokeControlBrush}" BorderThickness="1"
+              CornerRadius="{DynamicResource AxCornerRadiusLarge}" Padding="12">
+        <ax:AxColorPicker Color="#C04B8DE0"/>
+      </Border>
+    </Grid>
+
+    <!--
         Строки свойства — маленький инспектор. Колонка подписей одна на список, вложенные строки
         съедают подпись, а не сдвигают поле; заданное здесь — полоса акцента и полужирная подпись;
         только для чтения — подпись вторичная и значение выделяемым текстом; ошибка — заметкой под
@@ -134,6 +164,9 @@
                             Note="Прозрачность — от 0 до 1">
             <ax:AxNumberField x:Name="OpacityField" Size="Compact" Minimum="0" Maximum="1" Step="0.1"
                               Value="1" ax:AxValidation.State="Error"/>
+          </ax:AxPropertyRow>
+          <ax:AxPropertyRow Label="Background" IsOverridden="True">
+            <ax:AxColorField Size="Compact" Color="#2B3A55"/>
           </ax:AxPropertyRow>
           <ax:AxPropertyRow Label="IsEnabled">
             <ax:AxCheckBox IsChecked="True"/>

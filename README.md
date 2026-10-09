@@ -125,6 +125,10 @@ view.CaretMoved += (_, e) => SelectElementAt(e.Offset);
 | `AxVectorField` | `TemplatedControl` | несколько чисел под общим именем — отступ, точка, размер; правка выходит вектором (`ValuesCommitted`), связанные (`IsLinked`) меняются разом |
 | `AxPropertyRow` | `ContentControl` | строка свойства: подпись колонкой по правилу Unity, поле, кнопки (`Actions`), заметка (`Note`), отметка «задано здесь» (`IsOverridden`) |
 | `AxTokenField` | `TemplatedControl` | слова чипами и строка ввода: классы стиля, теги; правка — `TokensChanged` со всем списком |
+| `AxColorField` | `TemplatedControl` | цвет: образец и запись `#AARRGGBB`; образец открывает выбор под полем; набранное фиксируется с набранным текстом |
+| `AxColorPicker` | `TemplatedControl` | выбор цвета: спектр, оттенок, непрозрачность, запись и каналы RGB; источник — модель HSV |
+| `AxColorSpectrum` | `TemplatedControl` | насыщенность и яркость при оттенке; тянут мышью, шагают стрелками |
+| `AxColorSlider` | `TemplatedControl` | один канал: оттенок, насыщенность, яркость, непрозрачность (`Channel`); диктору — диапазон |
 
 Хозяин — инспектор или своё окно свойств — правит значение одной записью: протяжка и связанные ячейки
 показывают значение на ходу, а фиксируют одно. Колонка подписей одна на список — её ставят списку
@@ -141,6 +145,8 @@ width.ScrubCancelled += (_, _) => preview.Dispose();                            
 ```
 
 Чип снимается крестиком и клавишей (`AxChip.IsRemovable`, `RemoveRequested`) — снимает его хозяин.
+
+Цвет и его части шлют одни события — `AxColorPicker.ColorChangingEvent`, `ColorCommittedEvent`, `ColorCancelledEvent`: хозяин поля цвета слышит и запись, и протяжку в выборе под ним, а оттенок серого и чёрного держит модель HSV выбора.
 
 ## Меню, диалоги, всплывающие
 

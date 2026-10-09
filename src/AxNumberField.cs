@@ -106,7 +106,6 @@ public class AxNumberField : AxTextBox
     private bool _scrubMixed;
     private double _scrubbed;
     private bool _writing;
-    private bool _showing;
     private bool _dirty;
     private bool _invalid;
 
@@ -450,8 +449,8 @@ public class AxNumberField : AxTextBox
 
         base.OnPropertyChanged(change);
 
-        // Набранное — то, что написал человек, а не поле: текст, поставленный показом, черновиком не считается.
-        if (change.Property == TextProperty && !_showing)
+        // Набранное — текст, разошедшийся с тем, что поле написало бы о значении; показ снимает отметку сам.
+        if (change.Property == TextProperty)
             _dirty = !string.Equals(Text ?? string.Empty, Shown(), StringComparison.Ordinal);
     }
 
@@ -528,17 +527,7 @@ public class AxNumberField : AxTextBox
         if (!force && _dirty && IsKeyboardFocusWithin)
             return;
 
-        _showing = true;
-
-        try
-        {
-            SetCurrentValue(TextProperty, Shown());
-        }
-        finally
-        {
-            _showing = false;
-        }
-
+        SetCurrentValue(TextProperty, Shown());
         _dirty = false;
 
         if (_invalid)
