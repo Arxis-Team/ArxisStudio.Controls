@@ -77,7 +77,7 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxTabStrip` / `AxTabItem` | `ListBox` | вкладки документов и панелей (`Kind`): значок, метка правок, закрытие; диктору — набор вкладок и вкладка, а не список |
 | `AxTreeView` / `AxTreeViewItem` | `TreeView` | дерево иерархии и файлов; значок — путь `Icon` и цвет `IconBrush`; диктор слышит раскрытие узла и раскрывает его сам |
 | `AxBreadcrumb` / `AxBreadcrumbItem` | `ItemsControl` / `Button` | путь от корня до текущего места: сегмент — переход (`Navigated`), последний — текущий, ведущие при нехватке места уходят в меню |
-| `AxSlider` | `Slider` | ползунок значения |
+| `AxSlider` | `Slider` | ползунок значения; протяжка — сеансом, как у числового поля: на ходу `ValueChanging`, одна фиксация при отпускании `ValueCommitted`, Esc — `ScrubCancelled` |
 | `AxToolWindow` | `ContentControl` | панель инструментов: шапка с заголовком, вкладками и действиями |
 | `AxUserControl` | `UserControl` | корень разметки: с него начинается панель, написанная на `.axaml` |
 | `AxTitleBar` | `ContentControl` | полоса заголовка окна: перетаскивание, двойной щелчок, кнопки окна |
@@ -123,6 +123,7 @@ view.CaretMoved += (_, e) => SelectElementAt(e.Offset);
 | `AxNumberField` | `AxTextBox` | число: выражения и запятая, инвариантная запись, «авто» (`AllowsAuto`), разные значения (`IsMixed`), шаг стрелками; одна фиксация — `ValueCommitted` |
 | `AxScrubLabel` | `ContentControl` | подпись, за которую тянут число (`Target`): видно на ходу — `ValueChanging`, фиксация при отпускании, Esc возвращает |
 | `AxVectorField` | `TemplatedControl` | несколько чисел под общим именем — отступ, точка, размер; правка выходит вектором (`ValuesCommitted`), связанные (`IsLinked`) меняются разом |
+| `AxRangeField` | `TemplatedControl` | число в границах ползунком и полем рядом, как `Range` у Unity; ползунок идёт делениями шага (`Step`), события — те же, что у `AxNumberField` |
 | `AxPropertyRow` | `ContentControl` | строка свойства: подпись колонкой по правилу Unity, поле, кнопки (`Actions`), заметка (`Note`), отметка «задано здесь» (`IsOverridden`) |
 | `AxTokenField` | `TemplatedControl` | слова чипами и строка ввода: классы стиля, теги; правка — `TokensChanged` со всем списком |
 | `AxColorField` | `TemplatedControl` | цвет, как у Unity: полоса цвета с полоской прозрачности открывает окно «Цвет» — сеанс, который пишет одно значение, — пипетка (`ShowsEyedropper`) берёт пиксель экрана; «нет цвета» (`IsNone`), разные значения (`IsMixed`); код — `ColorText`, вид каналов окна — `PickerMode` |

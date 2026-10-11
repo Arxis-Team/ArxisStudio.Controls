@@ -73,6 +73,31 @@
     </StackPanel>
 
     <!--
+        Число в границах — ползунок и поле рядом, как Range у Unity: дробное с шагом 0.01, целое, разные значения
+        и только для чтения. Ползунок тянут и щёлкают по дорожке, клавиши шагают; протянутое видно в поле, а
+        фиксируется одно значение — при отпускании.
+    -->
+    <ax:AxGroupHeader Content="Число в границах"/>
+    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
+      <StackPanel Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="0…1, step 0.01"/>
+        <ax:AxRangeField Size="Compact" Minimum="0" Maximum="1" Step="0.01" Decimals="2" Value="0.85"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="0…10, whole"/>
+        <ax:AxRangeField Size="Compact" Minimum="0" Maximum="10" Step="1" Decimals="0" Value="4"/>
+      </StackPanel>
+      <StackPanel Grid.Column="2" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Mixed"/>
+        <ax:AxRangeField Size="Compact" Minimum="0" Maximum="1" Step="0.01" Decimals="2" Value="0.3" IsMixed="True"/>
+      </StackPanel>
+      <StackPanel Grid.Column="3" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Read-only"/>
+        <ax:AxRangeField Size="Compact" Minimum="0" Maximum="1" Step="0.01" Decimals="2" Value="0.5" IsReadOnly="True"/>
+      </StackPanel>
+    </Grid>
+
+    <!--
         Жетоны: пустое поле с подсказкой, классы стиля и то же только для чтения. Пробел или запятая
         заканчивают жетон, Backspace в пустой строке встаёт на последний, второй — снимает его.
     -->
