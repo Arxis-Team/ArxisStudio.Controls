@@ -134,7 +134,8 @@
         Строки свойства — маленький инспектор. Колонка подписей одна на список, вложенные строки
         съедают подпись, а не сдвигают поле; заданное здесь — полужирная подпись;
         только для чтения — подпись вторичная и значение выделяемым текстом; ошибка — заметкой под
-        полем. Справа тот же список в узкой колонке: полям тесно, и они уходят под подписи.
+        полем. Разделы — полосами компонентов, как у Unity: стрелка, значок, имя, счётчик заданного
+        и ⋮ справа. Справа тот же список в узкой колонке: полям тесно, и они уходят под подписи.
     -->
     <ax:AxGroupHeader Content="Строка свойства"/>
     <Grid ColumnDefinitions="420,24,260">
@@ -143,6 +144,21 @@
           <ax:AxPropertyRow Label="Name" IsReadOnly="True">
             <ax:AxTextBox Size="Compact" Text="SaveButton" IsReadOnly="True"/>
           </ax:AxPropertyRow>
+          <ax:AxGroupHeader Content="Макет" Appearance="Band" IsCollapsible="True" Counter="2"
+                            Icon="{x:Static axi:AxIcons.Grid}">
+            <ax:AxGroupHeader.Actions>
+              <ax:AxButton Appearance="Toolbar" Size="Compact" AutomationProperties.Name="Действия с разделом">
+                <axi:AxIcon Data="{x:Static axi:AxIcons.MoreVertical}"/>
+                <ax:AxButton.Flyout>
+                  <ax:AxMenuFlyout>
+                    <ax:AxMenuItem Header="Сбросить раздел"/>
+                    <ax:AxMenuItem Header="Копировать значения раздела"/>
+                    <ax:AxMenuItem Header="Вставить значения"/>
+                  </ax:AxMenuFlyout>
+                </ax:AxButton.Flyout>
+              </ax:AxButton>
+            </ax:AxGroupHeader.Actions>
+          </ax:AxGroupHeader>
           <ax:AxPropertyRow x:Name="WidthRow" Label="Width" IsOverridden="True" ScrubTarget="{Binding #WidthField}">
             <ax:AxPropertyRow.Actions>
               <ax:AxButton Appearance="Toolbar" AutomationProperties.Name="Действия со свойством"
@@ -172,6 +188,8 @@
           <ax:AxPropertyRow Label="Left" Indent="1" ScrubTarget="{Binding #LeftField}">
             <ax:AxNumberField x:Name="LeftField" Size="Compact" Value="8"/>
           </ax:AxPropertyRow>
+          <ax:AxGroupHeader Content="Вид" Appearance="Band" IsCollapsible="True" Counter="1"
+                            Icon="{x:Static axi:AxIcons.Preview}"/>
           <ax:AxPropertyRow Label="Opacity" ScrubTarget="{Binding #OpacityField}" ax:AxValidation.State="Error"
                             Note="Прозрачность — от 0 до 1">
             <ax:AxNumberField x:Name="OpacityField" Size="Compact" Minimum="0" Maximum="1" Step="0.1"
@@ -180,7 +198,7 @@
           <ax:AxPropertyRow Label="Background" IsOverridden="True">
             <ax:AxColorField Size="Compact" Color="#2B3A55"/>
           </ax:AxPropertyRow>
-          <ax:AxPropertyRow Label="IsEnabled">
+          <ax:AxPropertyRow Label="Is Enabled">
             <ax:AxCheckBox IsChecked="True"/>
           </ax:AxPropertyRow>
           <ax:AxPropertyRow Label="Classes" Layout="Below">
@@ -192,7 +210,7 @@
       <Border Grid.Column="2" Background="{DynamicResource AxSurfacePanelBrush}" CornerRadius="{DynamicResource AxCornerRadius}" Padding="8"
               VerticalAlignment="Top">
         <StackPanel Spacing="2">
-          <ax:AxPropertyRow Label="HorizontalContentAlignment" IsOverridden="True">
+          <ax:AxPropertyRow Label="Horizontal Content Alignment" IsOverridden="True">
             <ax:AxTextBox Size="Compact" Text="Stretch"/>
           </ax:AxPropertyRow>
           <ax:AxPropertyRow Label="Padding">

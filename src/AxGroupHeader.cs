@@ -2,11 +2,23 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Input;
+using Avalonia.Media;
 
 namespace ArxisStudio.Controls;
 
+/// <summary>Как выглядит заголовок группы.</summary>
+public enum AxGroupHeaderAppearance
+{
+    /// <summary>Подпись и линия до конца строки — группа настроек.</summary>
+    Rule,
+
+    /// <summary>Полоса во всю ширину, как заголовок компонента у Unity: значок, имя, счётчик и действия справа.</summary>
+    Band,
+}
+
 /// <summary>
-/// Заголовок группы настроек или секции: подпись слева и линия до конца строки.
+/// Заголовок группы настроек или секции: подпись слева и линия до конца строки — или полоса компонента
+/// (<see cref="Appearance"/>).
 /// </summary>
 /// <remarks>
 /// Сворачиваемый заголовок — тот же контрол со стрелкой слева и счётчиком
@@ -19,12 +31,21 @@ namespace ArxisStudio.Controls;
 /// грозит. Фокус контрол берёт, только когда сворачивается: у заголовка, который ничего не делает,
 /// остановке Tab взяться неоткуда.
 /// </para>
+/// <para>
+/// <b>Полоса</b> (<see cref="Appearance"/> — <see cref="AxGroupHeaderAppearance.Band"/>) — заголовок компонента у
+/// Unity: полоса во всю ширину вместо линии, значок (<see cref="Icon"/>) перед именем и действия справа
+/// (<see cref="Actions"/>) — кнопка ⋮ хозяина. Нажатие по действию до заголовка не доходит: группу оно не сворачивает.
+/// </para>
 /// </remarks>
-[PseudoClasses(":collapsible")]
+[PseudoClasses(":collapsible", ":band")]
 public class AxGroupHeader : ContentControl
 {
-    static AxGroupHeader() =>
+    static AxGroupHeader()
+    {
         IsCollapsibleProperty.Changed.AddClassHandler<AxGroupHeader>((header, change) => header.Mark(change.GetNewValue<bool>()));
+        AppearanceProperty.Changed.AddClassHandler<AxGroupHeader>((header, change) =>
+            header.PseudoClasses.Set(":band", change.GetNewValue<AxGroupHeaderAppearance>() == AxGroupHeaderAppearance.Band));
+    }
 
     /// <summary>Показывать стрелку раскрытия.</summary>
     public static readonly StyledProperty<bool> IsCollapsibleProperty =
@@ -37,6 +58,18 @@ public class AxGroupHeader : ContentControl
     /// <summary>Счётчик после подписи: сколько всего в группе.</summary>
     public static readonly StyledProperty<object?> CounterProperty =
         AvaloniaProperty.Register<AxGroupHeader, object?>(nameof(Counter));
+
+    /// <summary>Вид: линия или полоса компонента.</summary>
+    public static readonly StyledProperty<AxGroupHeaderAppearance> AppearanceProperty =
+        AvaloniaProperty.Register<AxGroupHeader, AxGroupHeaderAppearance>(nameof(Appearance));
+
+    /// <summary>Значок перед подписью — контур в клетке 16; пусто — значка нет.</summary>
+    public static readonly StyledProperty<Geometry?> IconProperty =
+        AvaloniaProperty.Register<AxGroupHeader, Geometry?>(nameof(Icon));
+
+    /// <summary>Действия справа — кнопка ⋮ или несколько; пусто — их нет.</summary>
+    public static readonly StyledProperty<object?> ActionsProperty =
+        AvaloniaProperty.Register<AxGroupHeader, object?>(nameof(Actions));
 
     /// <inheritdoc cref="IsCollapsibleProperty"/>
     public bool IsCollapsible
@@ -57,6 +90,27 @@ public class AxGroupHeader : ContentControl
     {
         get => GetValue(CounterProperty);
         set => SetValue(CounterProperty, value);
+    }
+
+    /// <inheritdoc cref="AppearanceProperty"/>
+    public AxGroupHeaderAppearance Appearance
+    {
+        get => GetValue(AppearanceProperty);
+        set => SetValue(AppearanceProperty, value);
+    }
+
+    /// <inheritdoc cref="IconProperty"/>
+    public Geometry? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+
+    /// <inheritdoc cref="ActionsProperty"/>
+    public object? Actions
+    {
+        get => GetValue(ActionsProperty);
+        set => SetValue(ActionsProperty, value);
     }
 
     /// <inheritdoc/>
