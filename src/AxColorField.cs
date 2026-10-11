@@ -14,13 +14,13 @@ namespace ArxisStudio.Controls;
 
 /// <summary>
 /// Поле цвета, как у Unity: полоса цвета во всю ширину с полоской прозрачности снизу и пипетка; щелчок по полосе
-/// открывает выбор цвета.
+/// открывает окно «Цвет».
 /// </summary>
 /// <remarks>
 /// <para>
 /// <b>Вид — шаблон темы.</b> Тема «Arxis» рисует поле полосой: цвет непрозрачным, прозрачность — полоской снизу
 /// (<see cref="AxColorSwatch"/>), справа — пипетка (<c>PART_Eyedropper</c>, <see cref="ShowsEyedropper"/>). Записи
-/// текстом в этом виде нет: код набирают в выборе цвета. Шаблон с записью (<c>PART_Text</c>) поле по-прежнему понимает.
+/// текстом в этом виде нет: код набирают в окне «Цвет». Шаблон с записью (<c>PART_Text</c>) поле по-прежнему понимает.
 /// </para>
 /// <para>
 /// <b>Пипетка</b> берёт цвет любого пикселя экрана (<see cref="AxEyedropper"/>) и фиксирует его сразу — одно
@@ -37,9 +37,17 @@ namespace ArxisStudio.Controls;
 /// набранным текстом: хозяин сам решает, писать ли «Red» или запись. Непрочитанное остаётся с отметкой ошибки.
 /// </para>
 /// <para>
-/// Выбор цвета (<see cref="AxColorPicker"/>) открывается под полем; его события идут сквозь поле: на ходу
-/// <see cref="ColorChanging"/>, одна фиксация на жест, Esc посреди протяжки — <see cref="ColorCancelled"/>.
-/// Esc вне протяжки и щелчок мимо закрывают выбор, и каретка возвращается к образцу.
+/// <b>Окно «Цвет».</b> Без попапа в шаблоне выбор цвета (<see cref="AxColorPicker"/>) открывается отдельным окном рядом
+/// с полем, как у Unity, — одним на процесс. Окно — сеанс правки: всё, что в нём меняется, поле показывает на ходу
+/// (<see cref="ColorChanging"/>), а фиксирует одно значение (<see cref="ColorCommitted"/>), когда окно закрывают
+/// крестиком или Enter и когда оно переходит к другому полю. Esc в окне возвращает цвет начала
+/// (<see cref="ColorCancelled"/>), как и уход поля из дерева. Вид каналов окна — <see cref="PickerMode"/>: выбранный в
+/// окне, он возвращается полю, и хозяин может его помнить.
+/// </para>
+/// <para>
+/// Шаблон с попапом (<c>PART_Popup</c>, <c>PART_Picker</c>) поле по-прежнему понимает: выбор встаёт под полем, его
+/// события идут сквозь поле — на ходу <see cref="ColorChanging"/>, одна фиксация на жест, Esc посреди протяжки —
+/// <see cref="ColorCancelled"/>; Esc вне протяжки и щелчок мимо закрывают выбор, и каретка возвращается к образцу.
 /// </para>
 /// <para>
 /// Разные значения у выбранных (<see cref="IsMixed"/>) — пустая запись с прочерком и образец без цвета.
@@ -97,6 +105,13 @@ public class AxColorField : TemplatedControl
     public static readonly DirectProperty<AxColorField, string?> ColorTextProperty =
         AvaloniaProperty.RegisterDirect<AxColorField, string?>(nameof(ColorText), field => field.ColorText);
 
+    /// <summary>
+    /// Вид каналов в окне «Цвет»: RGB 0…255, RGB 0…1 или HSV. Выбранный в окне возвращается сюда, а поставленный здесь,
+    /// пока окно открыто, встаёт в нём сразу.
+    /// </summary>
+    public static readonly StyledProperty<AxColorPickerMode> PickerModeProperty =
+        AxColorPicker.ModeProperty.AddOwner<AxColorField>();
+
     private const string TextPart = "PART_Text";
     private const string SwatchPart = "PART_Swatch";
     private const string PopupPart = "PART_Popup";
@@ -114,6 +129,7 @@ public class AxColorField : TemplatedControl
     private bool _dirty;
     private bool _invalid;
     private bool _byKeyboard;
+    private (Color Color, bool None, bool Mixed)? _session;
 
     static AxColorField()
     {
@@ -130,6 +146,12 @@ public class AxColorField : TemplatedControl
             field.Show();
         });
         IsPickerOpenProperty.Changed.AddClassHandler<AxColorField>((field, change) => field.OnPickerOpen(change.GetNewValue<bool>()));
+        PickerModeProperty.Changed.AddClassHandler<AxColorField>((field, change) =>
+        {
+            // Открытый выбор идёт за видом поля: хозяин может поставить его и тогда, когда окно уже встало.
+            if (field.Picker is { } picker)
+                picker.Mode = change.GetNewValue<AxColorPickerMode>();
+        });
         SizeProperty.Changed.AddClassHandler<AxColorField>((field, change) =>
             AxLook.Mark(field.PseudoClasses, change.GetNewValue<AxControlSize>()));
     }
@@ -234,14 +256,21 @@ public class AxColorField : TemplatedControl
         private set => SetAndRaise(ColorTextProperty, ref _colorText, value);
     }
 
+    /// <inheritdoc cref="PickerModeProperty"/>
+    public AxColorPickerMode PickerMode
+    {
+        get => GetValue(PickerModeProperty);
+        set => SetValue(PickerModeProperty, value);
+    }
+
     /// <summary>Запись поля: куда ставить каретку; у вида без записи — пусто.</summary>
     public TextBox? Input => _text;
 
     /// <summary>Полоса цвета — кнопка, которая открывает выбор: куда ставить каретку у вида без записи.</summary>
     public Button? Swatch => _swatch;
 
-    /// <summary>Выбор цвета под полем — когда шаблон поднят.</summary>
-    public AxColorPicker? Picker => _picker;
+    /// <summary>Выбор цвета: под полем, когда он есть в шаблоне, или в окне «Цвет», пока оно открыто для этого поля.</summary>
+    public AxColorPicker? Picker => _picker ?? AxColorPickerWindow.PickerFor(this);
 
     /// <summary>Цвет записью, которой его пишет разметка: <c>#RRGGBB</c>, а прозрачный — <c>#AARRGGBB</c>.</summary>
     /// <param name="color">Цвет.</param>
@@ -325,12 +354,15 @@ public class AxColorField : TemplatedControl
     }
 
     /// <inheritdoc/>
-    /// <remarks>Esc вне протяжки закрывает выбор цвета: протяжку Esc отменяет у самой части, и сюда он не доходит.</remarks>
+    /// <remarks>
+    /// Esc вне протяжки закрывает выбор цвета под полем: протяжку Esc отменяет у самой части, и сюда он не доходит.
+    /// Окно «Цвет» слушает Esc само.
+    /// </remarks>
     protected override void OnKeyDown(KeyEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        if (e.Key == Key.Escape && IsPickerOpen)
+        if (e.Key == Key.Escape && IsPickerOpen && _popup is not null)
         {
             SetCurrentValue(IsPickerOpenProperty, false);
             e.Handled = true;
@@ -346,6 +378,89 @@ public class AxColorField : TemplatedControl
         }
 
         base.OnKeyDown(e);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Поле, ушедшее из дерева насовсем, отменяет сеанс окна «Цвет». Насовсем — значит, не вернулось к следующему такту:
+    /// строку списка переносят в другую ячейку снятием и вставкой, и сеанс это переживает.
+    /// </remarks>
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+
+        if (_popup is not null || !IsPickerOpen)
+            return;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (!this.IsAttachedToVisualTree() && IsPickerOpen)
+                AxColorPickerWindow.Release(this, commit: false);
+        }, Avalonia.Threading.DispatcherPriority.Loaded);
+    }
+
+    /// <summary>Сеанс окна «Цвет» начался: поле помнит, с чего, — цвет, «нет цвета», разные значения.</summary>
+    internal void BeginSession() => _session = (Color, IsNone, IsMixed);
+
+    /// <summary>Цвет окна на ходу: поле показывает его, а хозяин — на объекте.</summary>
+    internal void ShowSession(Color color)
+    {
+        if (!AllowsAlpha)
+            color = Color.FromArgb(byte.MaxValue, color.R, color.G, color.B);
+
+        SetCurrentValue(IsMixedProperty, false);
+        SetCurrentValue(IsNoneProperty, false);
+        SetCurrentValue(ColorProperty, color);
+        RaiseEvent(new AxColorEventArgs(AxColorPicker.ColorChangingEvent, color));
+    }
+
+    /// <summary>
+    /// Сеанс кончился фиксацией: одно <see cref="ColorCommitted"/>. Вернувшийся к цвету начала ничего не пишет — он
+    /// возвращает показ к началу.
+    /// </summary>
+    internal void CommitSession(Color color, string? text)
+    {
+        if (!AllowsAlpha)
+            color = Color.FromArgb(byte.MaxValue, color.R, color.G, color.B);
+
+        if (_session is { None: false, Mixed: false } begun && begun.Color == color)
+        {
+            RevertSession(end: true);
+            return;
+        }
+
+        _session = null;
+        SetCurrentValue(IsMixedProperty, false);
+        SetCurrentValue(IsNoneProperty, false);
+        SetCurrentValue(ColorProperty, color);
+        Show(force: true);
+        RaiseEvent(new AxColorEventArgs(AxColorPicker.ColorCommittedEvent, color, text));
+    }
+
+    /// <summary>Поле возвращается к началу сеанса — <see cref="ColorCancelled"/>, — а сеанс кончается или идёт дальше.</summary>
+    internal void RevertSession(bool end)
+    {
+        if (_session is { } begun)
+        {
+            SetCurrentValue(ColorProperty, begun.Color);
+            SetCurrentValue(IsNoneProperty, begun.None);
+            SetCurrentValue(IsMixedProperty, begun.Mixed);
+        }
+
+        if (end)
+            _session = null;
+
+        RaiseEvent(new RoutedEventArgs(AxColorPicker.ColorCancelledEvent));
+    }
+
+    /// <summary>Сеанс кончился, ничего не изменив.</summary>
+    internal void EndSession() => _session = null;
+
+    /// <summary>Каретка — к полосе цвета, когда окно «Цвет» закрыли; с клавиатуры — с кольцом.</summary>
+    internal void ReturnFocus(bool byKeyboard)
+    {
+        if (this.IsAttachedToVisualTree())
+            _swatch?.Focus(byKeyboard ? NavigationMethod.Tab : NavigationMethod.Pointer);
     }
 
     /// <summary>Показывает цвет: запись — если в ней не набрано своё — и образец.</summary>
@@ -435,16 +550,41 @@ public class AxColorField : TemplatedControl
             return;
 
         _byKeyboard = _swatch?.IsKeyboardFocusWithin == true && _swatch.Classes.Contains(":focus-visible");
+
+        // Окно «Цвет», открытое для этого поля, встаёт вперёд, а не закрывается: щелчок по полосе его и ищет.
+        if (_popup is null && IsPickerOpen)
+        {
+            AxColorPickerWindow.Open(this, _byKeyboard);
+            return;
+        }
+
         SetCurrentValue(IsPickerOpenProperty, !IsPickerOpen);
     }
 
-    /// <summary>Выбор открылся — с цветом поля и кареткой в спектре; закрылся — каретка к образцу.</summary>
+    /// <summary>
+    /// Выбор открылся — с цветом поля и кареткой в спектре; закрылся — каретка к образцу. Без попапа в шаблоне выбор —
+    /// окно «Цвет»: открыть — начать в нём сеанс, закрыть снаружи — зафиксировать его.
+    /// </summary>
     private void OnPickerOpen(bool open)
     {
         PseudoClasses.Set(":open", open);
 
+        if (_popup is null)
+        {
+            if (!open)
+                AxColorPickerWindow.Release(this, commit: true);
+            else if (IsReadOnly || !this.IsAttachedToVisualTree())
+                SetCurrentValue(IsPickerOpenProperty, false);
+            else
+                AxColorPickerWindow.Open(this, _byKeyboard);
+
+            return;
+        }
+
         if (!open || _picker is null)
             return;
+
+        _picker.Mode = PickerMode;
 
         _picker.AllowsAlpha = AllowsAlpha;
         _picker.Color = Color;

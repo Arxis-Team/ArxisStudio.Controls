@@ -90,9 +90,9 @@
 
     <!--
         Цвет: поле, как у Unity, — полоса цвета с полоской прозрачности и пипетка, — прозрачный цвет, разные
-        значения, только для чтения, без прозрачности и «нет цвета». Щелчок по полосе открывает выбор под
-        полем; справа тот же выбор открытым: спектр насыщенности и яркости, оттенок, непрозрачность, запись и
-        каналы RGB. Ниже — сам образец: полоской прозрачности, шахматкой и «нет цвета».
+        значения, только для чтения, без прозрачности и «нет цвета». Щелчок по полосе открывает окно «Цвет»;
+        справа его выбор открытым: пипетка и образцы «стало | было», кольцо оттенков с квадратом, вид каналов,
+        ползунки каналов с числами и код. Ниже — сам образец: полоской прозрачности, шахматкой и «нет цвета».
     -->
     <ax:AxGroupHeader Content="Цвет"/>
     <Grid ColumnDefinitions="*,24,Auto">
@@ -108,10 +108,15 @@
           <ax:AxColorSwatch Width="48" Height="20" Color="#803C6ECF" AlphaDisplay="Checker"/>
           <ax:AxColorSwatch Width="48" Height="20" IsNone="True"/>
         </StackPanel>
-        <!-- Части выбора по отдельности: спектр и ползунки любого канала берут цвет моделью HSV. -->
+        <!--
+            Части выбора по отдельности: кольцо оттенков, спектр и ползунки любого канала — и RGB — берут цвет
+            моделью HSV.
+        -->
         <StackPanel Orientation="Horizontal" Spacing="16">
+          <ax:AxColorWheel Width="96" Height="96" Hsv="hsv(150, 70%, 80%)"/>
           <ax:AxColorSpectrum Width="160" Height="96" Hsv="hsv(150, 70%, 80%)"/>
           <StackPanel Width="200" Spacing="10" VerticalAlignment="Center">
+            <ax:AxColorSlider Channel="Red" Hsv="hsv(150, 70%, 80%)"/>
             <ax:AxColorSlider Channel="Saturation" Hsv="hsv(150, 70%, 80%)"/>
             <ax:AxColorSlider Channel="Value" Hsv="hsv(150, 70%, 80%)"/>
             <ax:AxColorSlider Channel="Alpha" Hsv="hsv(150, 70%, 80%)"/>

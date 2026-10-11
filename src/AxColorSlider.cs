@@ -27,16 +27,30 @@ public enum AxColorChannel
 
     /// <summary>Непрозрачность, 0…1.</summary>
     Alpha,
+
+    /// <summary>Красный, 0…1.</summary>
+    Red,
+
+    /// <summary>Зелёный, 0…1.</summary>
+    Green,
+
+    /// <summary>Синий, 0…1.</summary>
+    Blue,
 }
 
 /// <summary>
-/// Ползунок одного канала цвета: оттенок, насыщенность, яркость или непрозрачность — по градиенту этого канала.
+/// Ползунок одного канала цвета — оттенок, насыщенность, яркость, красный, зелёный, синий или непрозрачность — по
+/// градиенту этого канала.
 /// </summary>
 /// <remarks>
 /// <para>
-/// Дорожка — градиент канала при остальных составляющих цвета: оттенок — радугой, непрозрачность — цветом от
-/// прозрачного к плотному поверх шахматки, которую даёт тема (<c>:alpha</c>). Градиент ставит контрол: его
-/// цвета — данные модели, а не тема.
+/// Дорожка — градиент канала при остальных составляющих цвета, как у Unity: оттенок — радугой, красный — от
+/// (0, G, B) до (255, G, B), непрозрачность — цветом от прозрачного к плотному поверх шахматки, которую даёт тема
+/// (<c>:alpha</c>). Градиент ставит контрол: его цвета — данные модели, а не тема.
+/// </para>
+/// <para>
+/// Источник и у каналов RGB — модель HSV: красный, зелёный и синий читаются из её цвета и пишутся в него, а оттенок
+/// серого и чёрного остаётся прежним — ручка оттенка не прыгает, когда цвет проходит через серый.
 /// </para>
 /// <para>
 /// События те же, что у спектра и выбора цвета: на ходу — <see cref="AxColorPicker.ColorChangingEvent"/>, при
@@ -193,8 +207,12 @@ public class AxColorSlider : TemplatedControl
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        var step = (Channel == AxColorChannel.Hue ? 1 : 0.01) *
-                   (e.KeyModifiers.HasFlag(KeyModifiers.Shift) ? 10 : 1);
+        var step = Channel switch
+                   {
+                       AxColorChannel.Hue => 1,
+                       AxColorChannel.Red or AxColorChannel.Green or AxColorChannel.Blue => 1d / byte.MaxValue,
+                       _ => 0.01,
+                   } * (e.KeyModifiers.HasFlag(KeyModifiers.Shift) ? 10 : 1);
         var handled = e.Key switch
         {
             Key.Escape when _dragging => Finish(commit: false),
@@ -334,6 +352,9 @@ public class AxColorSlider : TemplatedControl
         AxColorChannel.Hue => hsv.H,
         AxColorChannel.Saturation => hsv.S,
         AxColorChannel.Value => hsv.V,
+        AxColorChannel.Red => hsv.ToRgb().R / (double)byte.MaxValue,
+        AxColorChannel.Green => hsv.ToRgb().G / (double)byte.MaxValue,
+        AxColorChannel.Blue => hsv.ToRgb().B / (double)byte.MaxValue,
         _ => hsv.A,
     };
 
@@ -346,8 +367,35 @@ public class AxColorSlider : TemplatedControl
         AxColorChannel.Hue => new HsvColor(hsv.A, Math.Min(value, 360 - 1e-6), hsv.S, hsv.V),
         AxColorChannel.Saturation => new HsvColor(hsv.A, hsv.H, value, hsv.V),
         AxColorChannel.Value => new HsvColor(hsv.A, hsv.H, hsv.S, value),
+        AxColorChannel.Red or AxColorChannel.Green or AxColorChannel.Blue => WriteRgb(hsv, channel, value),
         _ => new HsvColor(value, hsv.H, hsv.S, hsv.V),
     };
+
+    /// <summary>
+    /// Канал RGB — в цвет модели; у серого и чёрного, где оттенок цветом не задан, он остаётся прежним.
+    /// </summary>
+    internal static HsvColor WriteRgb(HsvColor hsv, AxColorChannel channel, double value)
+    {
+        var rgb = hsv.ToRgb();
+        var level = (byte)Math.Clamp(Math.Round(value * byte.MaxValue), 0, byte.MaxValue);
+        var color = channel switch
+        {
+            AxColorChannel.Red => Color.FromArgb(rgb.A, level, rgb.G, rgb.B),
+            AxColorChannel.Green => Color.FromArgb(rgb.A, rgb.R, level, rgb.B),
+            _ => Color.FromArgb(rgb.A, rgb.R, rgb.G, level),
+        };
+
+        return Keep(hsv, color.ToHsv(), hsv.A);
+    }
+
+    /// <summary>Новая модель цвета с прежним оттенком там, где цвет его не задаёт, — у серого и чёрного.</summary>
+    internal static HsvColor Keep(HsvColor previous, HsvColor next, double alpha)
+    {
+        if (next.V <= 0)
+            return new HsvColor(alpha, previous.H, previous.S, 0);
+
+        return next.S <= 0 ? new HsvColor(alpha, previous.H, 0, next.V) : new HsvColor(alpha, next.H, next.S, next.V);
+    }
 
     /// <summary>Диктору ползунок — диапазон со значением в единицах канала: градусы оттенка или доля.</summary>
     private sealed class SliderPeer(AxColorSlider owner) : ControlAutomationPeer(owner), IRangeValueProvider
@@ -362,7 +410,12 @@ public class AxColorSlider : TemplatedControl
 
         public double Value => Slider.Value;
 
-        public double SmallChange => Slider.Channel == AxColorChannel.Hue ? 1 : 0.01;
+        public double SmallChange => Slider.Channel switch
+        {
+            AxColorChannel.Hue => 1,
+            AxColorChannel.Red or AxColorChannel.Green or AxColorChannel.Blue => 1d / byte.MaxValue,
+            _ => 0.01,
+        };
 
         public double LargeChange => SmallChange * 10;
 
