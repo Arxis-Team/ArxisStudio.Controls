@@ -89,9 +89,10 @@
     </StackPanel>
 
     <!--
-        Цвет: поле — образец и запись, — прозрачный цвет на шахматке, разные значения, только для чтения и
-        без прозрачности. Щелчок по образцу открывает выбор под полем; справа тот же выбор открытым:
-        спектр насыщенности и яркости, оттенок, непрозрачность, запись и каналы RGB.
+        Цвет: поле, как у Unity, — полоса цвета с полоской прозрачности и пипетка, — прозрачный цвет, разные
+        значения, только для чтения, без прозрачности и «нет цвета». Щелчок по полосе открывает выбор под
+        полем; справа тот же выбор открытым: спектр насыщенности и яркости, оттенок, непрозрачность, запись и
+        каналы RGB. Ниже — сам образец: полоской прозрачности, шахматкой и «нет цвета».
     -->
     <ax:AxGroupHeader Content="Цвет"/>
     <Grid ColumnDefinitions="*,24,Auto">
@@ -101,6 +102,12 @@
         <ax:AxColorField Size="Compact" Color="#3C6ECF" IsMixed="True"/>
         <ax:AxColorField Size="Compact" Color="#E0A040" IsReadOnly="True"/>
         <ax:AxColorField Size="Compact" Color="#20A060" AllowsAlpha="False"/>
+        <ax:AxColorField Size="Compact" IsNone="True"/>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <ax:AxColorSwatch Width="48" Height="20" Color="#803C6ECF"/>
+          <ax:AxColorSwatch Width="48" Height="20" Color="#803C6ECF" AlphaDisplay="Checker"/>
+          <ax:AxColorSwatch Width="48" Height="20" IsNone="True"/>
+        </StackPanel>
         <!-- Части выбора по отдельности: спектр и ползунки любого канала берут цвет моделью HSV. -->
         <StackPanel Orientation="Horizontal" Spacing="16">
           <ax:AxColorSpectrum Width="160" Height="96" Hsv="hsv(150, 70%, 80%)"/>

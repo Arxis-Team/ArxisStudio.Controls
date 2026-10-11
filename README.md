@@ -125,7 +125,8 @@ view.CaretMoved += (_, e) => SelectElementAt(e.Offset);
 | `AxVectorField` | `TemplatedControl` | несколько чисел под общим именем — отступ, точка, размер; правка выходит вектором (`ValuesCommitted`), связанные (`IsLinked`) меняются разом |
 | `AxPropertyRow` | `ContentControl` | строка свойства: подпись колонкой по правилу Unity, поле, кнопки (`Actions`), заметка (`Note`), отметка «задано здесь» (`IsOverridden`) |
 | `AxTokenField` | `TemplatedControl` | слова чипами и строка ввода: классы стиля, теги; правка — `TokensChanged` со всем списком |
-| `AxColorField` | `TemplatedControl` | цвет: образец и запись `#AARRGGBB`; образец открывает выбор под полем; набранное фиксируется с набранным текстом |
+| `AxColorField` | `TemplatedControl` | цвет, как у Unity: полоса цвета с полоской прозрачности открывает выбор под полем, пипетка (`ShowsEyedropper`) берёт пиксель экрана; «нет цвета» (`IsNone`), разные значения (`IsMixed`); код — `ColorText` |
+| `AxColorSwatch` | `Control` | образец цвета, который рисует себя сам: цвет с полоской прозрачности или на шахматке (`AlphaDisplay`), кисть как есть (`Brush`), «нет цвета» (`IsNone`) |
 | `AxColorPicker` | `TemplatedControl` | выбор цвета: спектр, оттенок, непрозрачность, запись и каналы RGB; источник — модель HSV |
 | `AxColorSpectrum` | `TemplatedControl` | насыщенность и яркость при оттенке; тянут мышью, шагают стрелками |
 | `AxColorSlider` | `TemplatedControl` | один канал: оттенок, насыщенность, яркость, непрозрачность (`Channel`); диктору — диапазон |
@@ -145,6 +146,9 @@ width.ScrubCancelled += (_, _) => preview.Dispose();                            
 ```
 
 Чип снимается крестиком и клавишей (`AxChip.IsRemovable`, `RemoveRequested`) — снимает его хозяин.
+
+Пипетка — `AxEyedropper.PickAsync`: снимок экрана застывает, у курсора лупа, щелчок отдаёт цвет пикселя. На
+Windows снимаются все мониторы (GDI), на других системах — окно, из которого позвали.
 
 Цвет и его части шлют одни события — `AxColorPicker.ColorChangingEvent`, `ColorCommittedEvent`, `ColorCancelledEvent`: хозяин поля цвета слышит и запись, и протяжку в выборе под ним, а оттенок серого и чёрного держит модель HSV выбора.
 

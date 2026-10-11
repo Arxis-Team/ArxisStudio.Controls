@@ -13,9 +13,23 @@ using Avalonia.VisualTree;
 namespace ArxisStudio.Controls;
 
 /// <summary>
-/// Поле цвета: образец и запись <c>#AARRGGBB</c>; щелчок по образцу открывает выбор цвета.
+/// Поле цвета, как у Unity: полоса цвета во всю ширину с полоской прозрачности снизу и пипетка; щелчок по полосе
+/// открывает выбор цвета.
 /// </summary>
 /// <remarks>
+/// <para>
+/// <b>Вид — шаблон темы.</b> Тема «Arxis» рисует поле полосой: цвет непрозрачным, прозрачность — полоской снизу
+/// (<see cref="AxColorSwatch"/>), справа — пипетка (<c>PART_Eyedropper</c>, <see cref="ShowsEyedropper"/>). Записи
+/// текстом в этом виде нет: код набирают в выборе цвета. Шаблон с записью (<c>PART_Text</c>) поле по-прежнему понимает.
+/// </para>
+/// <para>
+/// <b>Пипетка</b> берёт цвет любого пикселя экрана (<see cref="AxEyedropper"/>) и фиксирует его сразу — одно
+/// <see cref="ColorCommitted"/>, без выбора цвета.
+/// </para>
+/// <para>
+/// <b>Нет цвета</b> (<see cref="IsNone"/>) — у кисти, которой нет вовсе: образец перечёркнут, а выбранный цвет снимает
+/// отметку.
+/// </para>
 /// <para>
 /// Запись правит текст разметки: поле пишет <c>#RRGGBB</c>, а прозрачный — <c>#AARRGGBB</c>, и читает то, что
 /// читает Avalonia, — имена («Red»), <c>#RGB</c>, <c>#ARGB</c>, восьмизначную запись, а без решётки —
@@ -39,7 +53,8 @@ namespace ArxisStudio.Controls;
 [TemplatePart(SwatchPart, typeof(Button))]
 [TemplatePart(PopupPart, typeof(Popup))]
 [TemplatePart(PickerPart, typeof(AxColorPicker))]
-[PseudoClasses(":mixed", ":open", ":compact")]
+[TemplatePart(EyedropperPart, typeof(Button))]
+[PseudoClasses(":mixed", ":open", ":compact", ":none")]
 public class AxColorField : TemplatedControl
 {
     /// <summary>Цвет поля.</summary>
@@ -70,16 +85,32 @@ public class AxColorField : TemplatedControl
     public static readonly DirectProperty<AxColorField, IBrush?> SwatchBrushProperty =
         AvaloniaProperty.RegisterDirect<AxColorField, IBrush?>(nameof(SwatchBrush), field => field.SwatchBrush);
 
+    /// <summary>Цвета нет вовсе — у кисти, которую не задали: образец перечёркнут.</summary>
+    public static readonly StyledProperty<bool> IsNoneProperty =
+        AvaloniaProperty.Register<AxColorField, bool>(nameof(IsNone));
+
+    /// <summary>Показывать ли пипетку.</summary>
+    public static readonly StyledProperty<bool> ShowsEyedropperProperty =
+        AvaloniaProperty.Register<AxColorField, bool>(nameof(ShowsEyedropper), true);
+
+    /// <summary>Цвет записью для диктора и подсказки: <c>#RRGGBB</c>; у разных значений и без цвета — пусто.</summary>
+    public static readonly DirectProperty<AxColorField, string?> ColorTextProperty =
+        AvaloniaProperty.RegisterDirect<AxColorField, string?>(nameof(ColorText), field => field.ColorText);
+
     private const string TextPart = "PART_Text";
     private const string SwatchPart = "PART_Swatch";
     private const string PopupPart = "PART_Popup";
     private const string PickerPart = "PART_Picker";
+    private const string EyedropperPart = "PART_Eyedropper";
 
     private TextBox? _text;
     private Button? _swatch;
     private Popup? _popup;
     private AxColorPicker? _picker;
+    private Button? _eyedropper;
     private IBrush? _swatchBrush;
+    private string? _colorText;
+    private bool _picking;
     private bool _dirty;
     private bool _invalid;
     private bool _byKeyboard;
@@ -91,6 +122,11 @@ public class AxColorField : TemplatedControl
         IsMixedProperty.Changed.AddClassHandler<AxColorField>((field, change) =>
         {
             field.PseudoClasses.Set(":mixed", change.GetNewValue<bool>());
+            field.Show();
+        });
+        IsNoneProperty.Changed.AddClassHandler<AxColorField>((field, change) =>
+        {
+            field.PseudoClasses.Set(":none", change.GetNewValue<bool>());
             field.Show();
         });
         IsPickerOpenProperty.Changed.AddClassHandler<AxColorField>((field, change) => field.OnPickerOpen(change.GetNewValue<bool>()));
@@ -177,8 +213,32 @@ public class AxColorField : TemplatedControl
         private set => SetAndRaise(SwatchBrushProperty, ref _swatchBrush, value);
     }
 
-    /// <summary>Запись поля: куда ставить каретку.</summary>
+    /// <inheritdoc cref="IsNoneProperty"/>
+    public bool IsNone
+    {
+        get => GetValue(IsNoneProperty);
+        set => SetValue(IsNoneProperty, value);
+    }
+
+    /// <inheritdoc cref="ShowsEyedropperProperty"/>
+    public bool ShowsEyedropper
+    {
+        get => GetValue(ShowsEyedropperProperty);
+        set => SetValue(ShowsEyedropperProperty, value);
+    }
+
+    /// <inheritdoc cref="ColorTextProperty"/>
+    public string? ColorText
+    {
+        get => _colorText;
+        private set => SetAndRaise(ColorTextProperty, ref _colorText, value);
+    }
+
+    /// <summary>Запись поля: куда ставить каретку; у вида без записи — пусто.</summary>
     public TextBox? Input => _text;
+
+    /// <summary>Полоса цвета — кнопка, которая открывает выбор: куда ставить каретку у вида без записи.</summary>
+    public Button? Swatch => _swatch;
 
     /// <summary>Выбор цвета под полем — когда шаблон поднят.</summary>
     public AxColorPicker? Picker => _picker;
@@ -233,7 +293,11 @@ public class AxColorField : TemplatedControl
         if (_popup is not null)
             _popup.Closed -= OnPopupClosed;
 
+        if (_eyedropper is not null)
+            _eyedropper.Click -= OnEyedropperClick;
+
         _text = e.NameScope.Find<TextBox>(TextPart);
+        _eyedropper = e.NameScope.Find<Button>(EyedropperPart);
         _popup = e.NameScope.Find<Popup>(PopupPart);
         _picker = e.NameScope.Find<AxColorPicker>(PickerPart);
 
@@ -253,6 +317,9 @@ public class AxColorField : TemplatedControl
 
         if (_popup is not null)
             _popup.Closed += OnPopupClosed;
+
+        if (_eyedropper is not null)
+            _eyedropper.Click += OnEyedropperClick;
 
         Show(force: true);
     }
@@ -284,7 +351,8 @@ public class AxColorField : TemplatedControl
     /// <summary>Показывает цвет: запись — если в ней не набрано своё — и образец.</summary>
     private void Show(bool force = false)
     {
-        SwatchBrush = IsMixed ? null : new ImmutableSolidColorBrush(Color);
+        SwatchBrush = IsMixed || IsNone ? null : new ImmutableSolidColorBrush(Color);
+        ColorText = IsMixed || IsNone ? null : Format(Color, AllowsAlpha);
 
         if (_text is null || (!force && _dirty && _text.IsKeyboardFocusWithin))
             return;
@@ -411,7 +479,39 @@ public class AxColorField : TemplatedControl
             return;
 
         SetCurrentValue(IsMixedProperty, false);
+        SetCurrentValue(IsNoneProperty, false);
         SetCurrentValue(ColorProperty, e.Color);
+    }
+
+    private void OnEyedropperClick(object? sender, RoutedEventArgs e) => _ = PickFromScreenAsync();
+
+    /// <summary>
+    /// Пипетка: цвет пикселя экрана — сразу в поле, одной фиксацией. Прозрачности экран не знает: взятый цвет плотный.
+    /// </summary>
+    private async Task PickFromScreenAsync()
+    {
+        if (IsReadOnly || _picking)
+            return;
+
+        _picking = true;
+        SetCurrentValue(IsPickerOpenProperty, false);
+
+        try
+        {
+            if (await AxEyedropper.PickAsync(this).ConfigureAwait(true) is not { } color)
+                return;
+
+            SetCurrentValue(IsMixedProperty, false);
+            SetCurrentValue(IsNoneProperty, false);
+            SetCurrentValue(ColorProperty, color);
+            Show(force: true);
+            RaiseEvent(new AxColorEventArgs(AxColorPicker.ColorCommittedEvent, color));
+        }
+        finally
+        {
+            _picking = false;
+            _eyedropper?.Focus(NavigationMethod.Pointer);
+        }
     }
 
     private void OnPickerCancelled(object? sender, RoutedEventArgs e)
