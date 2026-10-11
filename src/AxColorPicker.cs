@@ -7,6 +7,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 
 namespace ArxisStudio.Controls;
 
@@ -69,6 +70,12 @@ public enum AxColorPickerMode
 /// цвета не было вовсе, и вернуть его выбор не может.
 /// </para>
 /// <para>
+/// <b>Палитра и образцы</b> — разделы под каналами. Палитра (<see cref="Defaults"/>) встроена; образцы — библиотеки
+/// хранилища (<see cref="PresetStore"/>), которое даёт хозяин: последняя ячейка — текущий цвет, щелчок сохраняет его
+/// с именем; правая кнопка — «Заменить» и «Удалить»; тяга и Alt+стрелка меняют порядок; ⋮ — вид сеткой или списком,
+/// библиотеки и новая библиотека в профиле или в решении. Выбор из палитры и образцов — одна фиксация.
+/// </para>
+/// <para>
 /// Без прозрачности (<see cref="AllowsAlpha"/> выключено) цвет всегда плотный, и ползунка прозрачности нет.
 /// </para>
 /// </remarks>
@@ -83,8 +90,15 @@ public enum AxColorPickerMode
 [TemplatePart(NewPart, typeof(AxColorSwatch))]
 [TemplatePart(OriginalPart, typeof(Button))]
 [TemplatePart(OriginalSwatchPart, typeof(AxColorSwatch))]
-[PseudoClasses(":rgb255", ":rgb1", ":hsv")]
-public class AxColorPicker : TemplatedControl
+[TemplatePart(PalettePart, typeof(Panel))]
+[TemplatePart(PresetGridPart, typeof(Panel))]
+[TemplatePart(PresetListPart, typeof(Panel))]
+[TemplatePart(PresetsMenuPart, typeof(Button))]
+[TemplatePart(NamePopupPart, typeof(Popup))]
+[TemplatePart(NamePart, typeof(TextBox))]
+[TemplatePart(NameLabelPart, typeof(TextBlock))]
+[PseudoClasses(":rgb255", ":rgb1", ":hsv", ":presets", ":list", ":dragging")]
+public partial class AxColorPicker : TemplatedControl
 {
     /// <summary>Выбранный цвет.</summary>
     public static readonly StyledProperty<Color> ColorProperty =
@@ -169,6 +183,13 @@ public class AxColorPicker : TemplatedControl
             picker.Spread(force: true);
         });
         OriginalColorProperty.Changed.AddClassHandler<AxColorPicker>((picker, _) => picker.ShowOriginal());
+        PresetStoreProperty.Changed.AddClassHandler<AxColorPicker>((picker, _) =>
+        {
+            if (picker.IsAttachedToVisualTree())
+                picker.Listen(picker.PresetStore);
+
+            picker.ShowPresets();
+        });
     }
 
     /// <summary>Заводит выбор цвета: события частей слушаются здесь.</summary>
@@ -311,6 +332,7 @@ public class AxColorPicker : TemplatedControl
 
         Label();
         ShowOriginal();
+        ApplyPresetsTemplate(e);
         Spread(force: true);
     }
 
@@ -357,6 +379,8 @@ public class AxColorPicker : TemplatedControl
 
             if (_new is not null)
                 _new.Color = color;
+
+            ShowCurrentInPresets(color);
 
             for (var at = 0; at < Rows.Length; at++)
             {

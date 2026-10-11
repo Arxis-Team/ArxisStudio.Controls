@@ -25,6 +25,10 @@ namespace ArxisStudio.Controls;
 /// поля как его подчинённое; в панели задач его нет. Место ставится между первой раскладкой и показом: окно
 /// появляется сразу там, где ему стоять.
 /// </para>
+/// <para>
+/// <b>Образцы</b> окно берёт у поля — хранилище наследуется (<see cref="AxColorPicker.PresetStoreProperty"/>), — а
+/// раскрытость палитры и образцов помнит само, пока процесс жив: следующее окно открывается так, как закрыли прошлое.
+/// </para>
 /// </remarks>
 internal sealed class AxColorPickerWindow : AxWindow
 {
@@ -32,6 +36,8 @@ internal sealed class AxColorPickerWindow : AxWindow
     private const string TitleKey = "AxTextColorWindow";
 
     private static AxColorPickerWindow? _current;
+    private static bool _paletteExpanded;
+    private static bool _presetsExpanded = true;
 
     private readonly AxColorPicker _picker = new();
     private AxColorField? _field;
@@ -215,6 +221,9 @@ internal sealed class AxColorPickerWindow : AxWindow
         field.BeginSession();
 
         _picker.AllowsAlpha = field.AllowsAlpha;
+        _picker.PresetStore = AxColorPicker.GetPresetStore(field);
+        _picker.IsPaletteExpanded = _paletteExpanded;
+        _picker.ArePresetsExpanded = _presetsExpanded;
         _picker.Mode = field.PickerMode;
         _picker.Color = field.Color;
         _picker.OriginalColor = field.IsNone || field.IsMixed ? null : field.Color;
@@ -327,10 +336,17 @@ internal sealed class AxColorPickerWindow : AxWindow
         field.RevertSession(end: false);
     }
 
-    /// <summary>Вид каналов, выбранный в окне, — полю: хозяин помнит его для следующего раза.</summary>
+    /// <summary>
+    /// Вид каналов, выбранный в окне, — полю: хозяин помнит его для следующего раза; раскрытость разделов окно помнит
+    /// само.
+    /// </summary>
     private void OnPickerProperty(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property == AxColorPicker.ModeProperty && _field is { } field)
             field.SetCurrentValue(AxColorField.PickerModeProperty, _picker.Mode);
+        else if (e.Property == AxColorPicker.IsPaletteExpandedProperty)
+            _paletteExpanded = _picker.IsPaletteExpanded;
+        else if (e.Property == AxColorPicker.ArePresetsExpandedProperty)
+            _presetsExpanded = _picker.ArePresetsExpanded;
     }
 }
