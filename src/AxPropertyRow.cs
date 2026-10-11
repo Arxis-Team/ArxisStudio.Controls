@@ -32,9 +32,10 @@ public enum AxPropertyRowLayout
 /// прорезь.
 /// </para>
 /// <para>
-/// <b>Задано здесь</b> (<see cref="IsOverridden"/>) — полоса акцента у края и полужирная подпись: так Unity
-/// отмечает значение, переопределённое в экземпляре префаба, а инспектор студии — значение, которое написал
-/// сам элемент разметки, а не стиль или предок.
+/// <b>Задано здесь</b> (<see cref="IsOverridden"/>) — полужирная подпись: так Unity отмечает значение,
+/// переопределённое в экземпляре префаба, а инспектор студии — значение, которое написал сам элемент разметки,
+/// а не стиль или предок. Полосы у края, как у Unity, тема не ставит: в списке, где задана половина строк, они
+/// рябят столбиком и спорят с меткой выбранной строки.
 /// </para>
 /// <para>
 /// <b>Подпись тянет число</b> (<see cref="ScrubTarget"/>): числовое поле протягивается за подпись, как у Unity,
@@ -60,7 +61,7 @@ public class AxPropertyRow : ContentControl
     public static readonly StyledProperty<object?> ActionsProperty =
         AvaloniaProperty.Register<AxPropertyRow, object?>(nameof(Actions));
 
-    /// <summary>Значение задано здесь, а не пришло со стороны: полоса акцента и полужирная подпись.</summary>
+    /// <summary>Значение задано здесь, а не пришло со стороны: полужирная подпись.</summary>
     public static readonly StyledProperty<bool> IsOverriddenProperty =
         AvaloniaProperty.Register<AxPropertyRow, bool>(nameof(IsOverridden));
 
