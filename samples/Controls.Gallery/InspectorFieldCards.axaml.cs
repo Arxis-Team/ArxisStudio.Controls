@@ -1,6 +1,8 @@
 using System.Globalization;
 using ArxisStudio.Controls;
+using ArxisStudio.Icons;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 
 namespace Controls.Gallery;
@@ -30,6 +32,10 @@ public partial class InspectorFieldCards : UserControl
 
     /// <summary>Семейства списка шрифтов.</summary>
     public static readonly IReadOnlyList<string> Fonts = ["Arial", "Consolas", "Courier New", "Georgia", "Segoe UI", "Times New Roman"];
+
+    /// <summary>Миниатюра выбранного объекта — значок картинки набора.</summary>
+    public static IImage Thumbnail { get; } =
+        new DrawingImage(new GeometryDrawing { Geometry = AxIcons.Image, Pen = new Pen(Brushes.Gray) });
 
     /// <summary>Создаёт карточки и слушает фиксации маленького инспектора.</summary>
     public InspectorFieldCards()

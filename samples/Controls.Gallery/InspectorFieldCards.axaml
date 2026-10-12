@@ -121,6 +121,20 @@
     </StackPanel>
 
     <!--
+        Объект, как ObjectField у Unity: пустое поле с заглушкой, выбранное — миниатюрой и именем, разные значения, цель
+        броска и только для чтения. ⊙ и Enter просят выбор, крестик и Delete — снятие: выбирает и пишет хозяин.
+    -->
+    <ax:AxGroupHeader Content="Объект"/>
+    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="10">
+      <ax:AxObjectField Size="Compact" PlaceholderText="None (Image)"/>
+      <ax:AxObjectField Grid.Column="1" Size="Compact" PlaceholderText="None (Image)" Text="logo.png"
+                        Thumbnail="{x:Static local:InspectorFieldCards.Thumbnail}"/>
+      <ax:AxObjectField Grid.Column="2" Size="Compact" PlaceholderText="None (Image)" IsMixed="True"/>
+      <ax:AxObjectField Grid.Row="1" Size="Compact" PlaceholderText="None (Image)" IsDropTarget="True"/>
+      <ax:AxObjectField Grid.Row="1" Grid.Column="1" Size="Compact" PlaceholderText="None (Image)" Text="logo.png" IsReadOnly="True"/>
+    </Grid>
+
+    <!--
         Шрифт — список, в который можно набрать своё (IsEditable): каждое имя написано своим шрифтом, а каретка в поле
         зажигает рамку и кольцо всего списка, как у поля жетонов. Покой, каретка в поле и выключенное.
     -->
