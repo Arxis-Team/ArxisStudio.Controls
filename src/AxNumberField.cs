@@ -105,6 +105,9 @@ public class AxNumberField : AxTextBox
     private double _scrubOrigin;
     private bool _scrubMixed;
     private double _scrubbed;
+
+    // Протяжка уже показала значение на ходу (ValueChanging): хозяин начал показ и ждёт его конца.
+    private bool _previewed;
     private bool _writing;
     private bool _dirty;
     private bool _invalid;
@@ -331,6 +334,7 @@ public class AxNumberField : AxTextBox
         _scrubMixed = IsMixed;
         _scrubStart = double.IsNaN(Value) ? 0 : Value;
         _scrubbed = 0;
+        _previewed = false;
         PseudoClasses.Set(":scrubbing", true);
 
         return true;
@@ -364,11 +368,16 @@ public class AxNumberField : AxTextBox
         }
 
         Show(force: true);
+        _previewed = true;
         RaiseEvent(new AxNumberEventArgs(ValueChangingEvent, value));
     }
 
     /// <summary>Кончает протяжку.</summary>
     /// <param name="commit"><c>true</c> — зафиксировать протянутое; <c>false</c> — вернуть прежнее.</param>
+    /// <remarks>
+    /// Протяжка, вернувшаяся в точку начала, ничего не фиксирует; показала ли она что-то на ходу — кончается
+    /// отменой (<see cref="ScrubCancelledEvent"/>), чтобы хозяин закрыл показ.
+    /// </remarks>
     public void EndScrub(bool commit)
     {
         if (!_scrubbing)
@@ -377,13 +386,17 @@ public class AxNumberField : AxTextBox
         _scrubbing = false;
         PseudoClasses.Set(":scrubbing", false);
 
-        if (commit)
+        if (commit && _scrubbed != 0)
         {
-            if (_scrubbed != 0)
-                RaiseEvent(new AxNumberEventArgs(ValueCommittedEvent, Value));
-
+            RaiseEvent(new AxNumberEventArgs(ValueCommittedEvent, Value));
             return;
         }
+
+        // Туда и обратно — ноль точек, но показ на ходу хозяин уже начал, если значение по дороге менялось: такая
+        // протяжка кончается отменой, а не тишиной. Тишина оставляла показ висеть, а поле — при округлённом: 10,4 без
+        // знаков после точки протяжка к нулю ставила 10, а у хозяина оставалось 10,4.
+        if (commit && !_previewed)
+            return;
 
         // Возвращается то, что было, а не число, от которого тянули: «авто» остаётся «авто», разные — разными.
         _writing = true;
