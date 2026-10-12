@@ -405,12 +405,17 @@ public partial class AxColorPicker
     }
 
     /// <summary>Выбранный цвет — одной фиксацией.</summary>
+    /// <remarks>
+    /// Тот же цвет ничего не фиксирует, если цвет был: без цвета в начале — «было» пусто, у кисти, которой нет, и у
+    /// разных значений — показанный цвет лишь стоит на месте, и выбрать его значит выбрать. Иначе нельзя было задать
+    /// кисти, которой нет, показанный белый и свести разные значения к цвету первого.
+    /// </remarks>
     private void Choose(Color color)
     {
         if (!AllowsAlpha)
             color = Color.FromArgb(byte.MaxValue, color.R, color.G, color.B);
 
-        if (color == Color)
+        if (color == Color && OriginalColor is not null)
             return;
 
         Adopt(color);

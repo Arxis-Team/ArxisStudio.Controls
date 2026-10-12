@@ -652,7 +652,7 @@ public partial class AxColorPicker : TemplatedControl
 
         if (e.Key == Key.Enter)
         {
-            CommitHex();
+            CommitHex(chosen: true);
             e.Handled = true;
         }
         else if (e.Key == Key.Escape && _hex.Text != Hex(Color))
@@ -662,20 +662,24 @@ public partial class AxColorPicker : TemplatedControl
         }
     }
 
-    private void OnHexBlur(object? sender, FocusChangedEventArgs e) => CommitHex();
+    private void OnHexBlur(object? sender, FocusChangedEventArgs e) => CommitHex(chosen: false);
 
     /// <summary>
     /// Набранный код — в цвет: шесть цифр и имена ставят цвет, а прозрачность остаётся прежней; восьмизначная запись
     /// ставит и её. Непрочитанное остаётся с отметкой ошибки.
     /// </summary>
-    private void CommitHex()
+    /// <param name="chosen">
+    /// Код подтвердили Enter: без цвета в начале и показанный код — выбор, как у образца. Уход каретки из записи
+    /// выбором не считается.
+    /// </param>
+    private void CommitHex(bool chosen)
     {
         if (_hex is null)
             return;
 
         var text = (_hex.Text ?? string.Empty).Trim();
 
-        if (string.Equals(text.TrimStart('#'), Hex(Color), StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(text.TrimStart('#'), Hex(Color), StringComparison.OrdinalIgnoreCase) && (!chosen || OriginalColor is not null))
         {
             AxValidation.SetState(_hex, AxValidationState.None);
             return;
