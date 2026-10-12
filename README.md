@@ -59,7 +59,7 @@ Border — разрешены как есть), как в Unity, где реда
 | `AxSearchField` | `AxTextBox` | поле поиска со значком-лупой |
 | `AxCheckBox` | `CheckBox` | флажок 16×16 |
 | `AxToggleSwitch` | `ToggleButton` | тумблер 30×17 |
-| `AxComboBox` / `AxComboBoxItem` | `ComboBox` | выпадающий список |
+| `AxComboBox` / `AxComboBoxItem` | `ComboBox` | выпадающий список; с `IsEditable` в него набирают своё, и `:editing` говорит теме, что каретка в его поле |
 | `AxListBox` / `AxListBoxItem` | `ListBox` | список с выделением строк; `IsDropTarget` отмечает строку, в которую ляжет перетаскиваемое |
 | `AxSegmentedControl` / `AxSegmentItem` | `ListBox` | сегментный переключатель (Design/XAML/Split) |
 | `AxBadge` | `ContentControl` | бейдж-счётчик |

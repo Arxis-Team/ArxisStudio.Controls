@@ -28,15 +28,20 @@ public partial class InspectorFieldCards : UserControl
     /// <summary>Классы стиля кнопки.</summary>
     public static readonly IReadOnlyList<string> StyleClasses = ["primary", "large"];
 
+    /// <summary>Семейства списка шрифтов.</summary>
+    public static readonly IReadOnlyList<string> Fonts = ["Arial", "Consolas", "Courier New", "Georgia", "Segoe UI", "Times New Roman"];
+
     /// <summary>Создаёт карточки и слушает фиксации маленького инспектора.</summary>
     public InspectorFieldCards()
     {
         InitializeComponent();
 
-        // Колонка «Focused» показывает каретку в поле, а фокус в окне один на две половины галереи:
+        // Колонки «Focused» и «Editing» показывают каретку в поле, а фокус в окне один на две половины галереи:
         // состояние ставится тем же псевдоклассом, которым его включает тема.
         FocusedNumber.AttachedToVisualTree += (_, _) =>
             ((IPseudoClasses)FocusedNumber.Classes).Set(":focus", true);
+        EditingFont.Loaded += (_, _) =>
+            ((IPseudoClasses)EditingFont.Classes).Set(":editing", true);
 
         Inspector.AddHandler(AxNumberField.ValueCommittedEvent, (_, e) =>
             Tell(e.Source, AxNumberField.Format(e.Value)));

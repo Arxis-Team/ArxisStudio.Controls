@@ -12,6 +12,13 @@
       и строка под ним говорит, что зафиксировано последним: протяжка видна на ходу, а фиксируется
       одна, при отпускании.
   -->
+  <UserControl.Resources>
+    <!-- Строка списка шрифтов — имя, написанное своим шрифтом. -->
+    <DataTemplate x:Key="FontSample" x:DataType="sys:String">
+      <TextBlock Text="{Binding}" FontFamily="{Binding}"/>
+    </DataTemplate>
+  </UserControl.Resources>
+
   <StackPanel Margin="22,0,22,18" Spacing="14">
 
     <!--
@@ -112,6 +119,29 @@
       <ax:AxChip Content="large" IsRemovable="True"/>
       <ax:AxChip Content="Accent" Kind="Accent" IsRemovable="True"/>
     </StackPanel>
+
+    <!--
+        Шрифт — список, в который можно набрать своё (IsEditable): каждое имя написано своим шрифтом, а каретка в поле
+        зажигает рамку и кольцо всего списка, как у поля жетонов. Покой, каретка в поле и выключенное.
+    -->
+    <ax:AxGroupHeader Content="Шрифт"/>
+    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="16">
+      <StackPanel Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Editable"/>
+        <ax:AxComboBox Size="Compact" IsEditable="True" HorizontalAlignment="Stretch" Text="Segoe UI"
+                       ItemsSource="{x:Static local:InspectorFieldCards.Fonts}" ItemTemplate="{StaticResource FontSample}"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Editing"/>
+        <ax:AxComboBox x:Name="EditingFont" Size="Compact" IsEditable="True" HorizontalAlignment="Stretch" Text="Consolas"
+                       ItemsSource="{x:Static local:InspectorFieldCards.Fonts}" ItemTemplate="{StaticResource FontSample}"/>
+      </StackPanel>
+      <StackPanel Grid.Column="2" Spacing="6">
+        <TextBlock ax:AxText.Role="Small" ax:AxText.Tone="Secondary" Text="Disabled"/>
+        <ax:AxComboBox Size="Compact" IsEditable="True" HorizontalAlignment="Stretch" Text="Georgia" IsEnabled="False"
+                       ItemsSource="{x:Static local:InspectorFieldCards.Fonts}" ItemTemplate="{StaticResource FontSample}"/>
+      </StackPanel>
+    </Grid>
 
     <!--
         Цвет: поле, как у Unity, — полоса цвета с полоской прозрачности и пипетка, — прозрачный цвет, разные
