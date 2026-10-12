@@ -356,7 +356,7 @@ public partial class AxColorPicker
         if (PresetStore is not { } store)
             return;
 
-        var at = store.Current.Presets.IndexOf(preset);
+        var at = Place(store.Current.Presets, preset);
 
         if (at < 0)
             return;
@@ -367,10 +367,27 @@ public partial class AxColorPicker
 
     private void Delete(AxColorPreset preset)
     {
-        if (PresetStore is not { } store || !store.Current.Presets.Remove(preset))
+        if (PresetStore is not { } store || Place(store.Current.Presets, preset) is not (>= 0 and var at))
             return;
 
+        store.Current.Presets.RemoveAt(at);
         store.Save(store.Current);
+    }
+
+    /// <summary>Место образца в библиотеке — его самого, а не равного ему.</summary>
+    /// <remarks>
+    /// Образец — запись, и два одинаковых равны, но для человека это два образца: поиск по равенству находил первый
+    /// равный, и «Заменить», «Удалить», Alt+стрелка и тяга у второго из двух одинаковых правили первый.
+    /// </remarks>
+    private static int Place(IList<AxColorPreset> presets, AxColorPreset preset)
+    {
+        for (var at = 0; at < presets.Count; at++)
+        {
+            if (ReferenceEquals(presets[at], preset))
+                return at;
+        }
+
+        return -1;
     }
 
     /// <summary>Цвет палитры — в выбор; прозрачность остаётся прежней, как у пипетки: в палитре цвета плотные.</summary>
@@ -582,7 +599,7 @@ public partial class AxColorPicker
         };
 
         var presets = store.Current.Presets;
-        var from = presets.IndexOf(preset);
+        var from = Place(presets, preset);
         var to = from + step;
 
         if (step == 0 || from < 0 || to < 0 || to >= presets.Count)
@@ -681,7 +698,7 @@ public partial class AxColorPicker
 
         for (var at = 0; at < order.Count; at++)
         {
-            var from = presets.IndexOf(order[at]);
+            var from = Place(presets, order[at]);
 
             if (from >= 0 && from != at)
             {
